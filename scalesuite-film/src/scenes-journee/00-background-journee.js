@@ -1,19 +1,16 @@
 /* Background of « Une journée de courtier »: the identity's light ground, whose temperature follows
    the hours (ΔE ≤ 3 from the V3 ground), and two soft lights. The first one rides a sun arc
-   (low left at 7 h → zenith at 13 h → low right at 17 h) and is a pale sand at dawn and at dusk;
+   (morning at 10 h → zenith at 13 h → low right at 17 h) and turns pale sand at dusk;
    the second, mint, counter-drifts. Ambient layer only: colour and light fades are allowed here
    (skill, section 7); no content is ever transparent. Everything is a function of t. */
 (function () {
   const SS = window.SS;
-  const D = SS.DAY;
-  const END_T = 19.9; // the finale returns to the identity ground
-  // keys: [time, ground, sun position 0..1, warmth 0..1]
+  // keys: [time, ground, sun position 0..1, warmth 0..1] — 10 h, 13 h, 17 h, then the end card
   const KEYS = [
-    [-1, '#F8FAF6', 0.04, 1],
-    [D[1].at, '#F7FBFA', 0.3, 0.15],
-    [D[2].at, '#EEF9F6', 0.55, 0],
-    [D[3].at, '#F9F8F2', 0.92, 1],
-    [END_T, '#F7FBFA', 0.5, 0],
+    [-1, '#F7FBFA', 0.3, 0.1],
+    [5.3, '#EEF9F6', 0.55, 0],
+    [13.6, '#F9F8F2', 0.92, 1],
+    [17.9, '#F7FBFA', 0.5, 0],
   ];
   const TR = 1.0; // each change eases over 1 s from its key
   const inOut = SS.ease(SS.EZ.inOut);

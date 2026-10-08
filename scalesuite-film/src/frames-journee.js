@@ -18,7 +18,7 @@
     put(h.el, 540, kicker ? 452 : 420);
   }
   // full-frame moment card: the broker's life (icon, hour ≥ 150 px, sentence > 80 px)
-  function momentCard(stage, { icon, hour, line, warm }) {
+  function momentCard(stage, { icon, hour, line, warm, kicker }) {
     const card = SS.el('div', 'layer', stage);
     card.style.background = warm
       ? 'radial-gradient(130% 90% at 80% 95%, #F8EBD3 0%, #F1F7F1 45%, #E8F9F7 100%)'
@@ -26,8 +26,9 @@
     const ic = SS.el('div', 'a3', card, SS.dayIcon[icon](C.turq));
     Object.assign(ic.style, { width: '300px', height: '300px' });
     ic.querySelector('svg').setAttribute('stroke-width', '1.25');
-    put(ic, 540, 600);
-    txt(card, hour, 540, 930, { size: 230, weight: 800, tracking: -0.045 });
+    put(ic, 540, kicker ? 560 : 600);
+    if (kicker) txt(card, kicker, 540, 790, { size: 56, weight: 650, color: C.soft, tracking: -0.015 });
+    txt(card, hour, 540, kicker ? 950 : 930, { size: 230, weight: 800, tracking: -0.045 });
     const s = SS.text(card, line, { size: 96, maxW: 940, lh: 1.06 });
     if (s.size < 80) console.warn(`[lisibilité] « ${line} » réduit à ${s.size} px`);
     put(s.el, 540, 1270);
@@ -41,7 +42,7 @@
 
   const FRAMES = {
     // 1 · 10 h: the moment card (frame 0 of the film)
-    1: (stage) => momentCard(stage, { icon: 'house', hour: '10 h', line: 'Vous êtes\nen visite.' }),
+    1: (stage) => momentCard(stage, { icon: 'house', hour: '10 h', line: 'Vous êtes\nen visite.', kicker: 'Une journée de courtier' }),
     // 2 · 10 h proof: the ad is the first result of the search
     2: (stage) => {
       const w = world(stage, { s: 1.04, y: 1010 });
@@ -63,7 +64,7 @@
       proofHead(L, 'Votre annonce\n*s’affiche.*');
     },
     // 3 · 13 h: the moment card
-    3: (stage) => momentCard(stage, { icon: 'pen', hour: '13 h', line: 'Vous êtes chez\nle notaire.' }),
+    3: (stage) => momentCard(stage, { icon: 'docCheck', hour: '13 h', line: 'Vous êtes chez\nle notaire.' }),
     // 4 · 13 h proof (a): the buyer's form, filled, « Envoyer »
     4: (stage) => {
       const w = world(stage, { y: 970, s: 1 });
@@ -153,7 +154,7 @@
       const h = SS.text(L, 'Google Ads?\n*Pas* *ouvert*\n*de* *la* *journée.*', { size: 116, maxW: 940, lh: 1.04 });
       if (h.size < 116) console.warn('[lisibilité] titre 9 réduit à ' + h.size);
       put(h.el, 540, 420);
-      [['house', '10 h · Visite', 'Annonce affichée'], ['pen', '13 h · Notaire', 'Lead ajouté au CRM'], ['sunset', '17 h · Fin de journée', 'Rapport reçu']].forEach(([ic, a, b], i) => {
+      [['house', '10 h · Visite', 'Annonce affichée'], ['docCheck', '13 h · Notaire', 'Lead ajouté au CRM'], ['sunset', '17 h · Fin de journée', 'Rapport reçu']].forEach(([ic, a, b], i) => {
         const r = SS.el('div', 'a3', L);
         Object.assign(r.style, { width: '880px', height: '170px', borderRadius: '30px', background: '#fff', boxShadow: SS.SH.card });
         r.innerHTML = `<div style="position:absolute;left:30px;top:35px;width:100px;height:100px;border-radius:26px;background:${C.mint};display:grid;place-items:center"><div style="width:68px;height:68px">${SS.dayIcon[ic](C.turq)}</div></div>

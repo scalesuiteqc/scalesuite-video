@@ -1,11 +1,11 @@
 /* « Une journée de courtier » runner: builds every scene once fonts are ready, then exposes
    SS.renderFrame(t) (same contract as film-v3.js). index-journee.html?t=12.3 (static frame) ·
-   ?play&t=0&end=13.6 (real-time preview in a browser). The hour marker is built by scene 1 and
-   moved on top of every layer here, under the grain. */
+   ?play&t=0&end=25 (real-time preview in a browser). Layers stack by z-index: background, proofs
+   (1–2), moment cards (5), card nodes (6), grain (10). */
 (function () {
   const SS = window.SS;
   SS.DURATION = 25.0;
-  SS.POSTER_T = 2.1; // the 7 h notification and its headline: frame 0 of the master (thumbnail)
+  SS.POSTER_T = 1.2; // the settled 10 h card (« Une journée de courtier · 10 h · Vous êtes en visite. »): master frame 0
 
   async function boot() {
     const stage = document.getElementById('stage');
@@ -17,8 +17,8 @@
     await document.fonts.load('600 40px Inter');
     await document.fonts.ready;
     SS.scenes.forEach((s) => s.build(stage));
-    stage.appendChild(SS.marker.layer);
     const grain = SS.el('div', 'layer', stage);
+    grain.style.zIndex = 10;
     Object.assign(grain.style, { backgroundImage: `url(${SS.grain(256, 256, 9)})`, pointerEvents: 'none', opacity: 0.5 });
     SS.cues.sort((a, b) => a.t - b.t);
 

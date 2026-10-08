@@ -1,39 +1,40 @@
-/* ScaleSuite « Une journée de courtier » (9:16, 25 s): additions on top of core.js, logo.js (V2) and
-   core-v3.js (V3), all loaded read-only. Same rules as the V3 (see core-v3.js and the project skill):
-   fromTo() only, explicit initial states, one driver per property, procedural blur.
-   Adds: the day schedule, the hour marker (the film's metronome), a tinted scrim that follows the
-   background, and the reusable UI pieces of this film (phone, notification, sponsored ad, tap). */
+/* ScaleSuite « Une journée de courtier » (9:16, 25 s, plan v2): additions on top of core.js, logo.js
+   (V2) and core-v3.js (V3), all loaded read-only. Same rules as the V3 (see core-v3.js and the
+   project skill): fromTo() only, explicit initial states, one driver per property, procedural blur.
+   Adds: the moment cards (the broker's day, full frame), a sub-world with its own camera per proof,
+   a scrim that follows the background tint, and the UI pieces of this film (phone, notification,
+   « Commandité » result, tap). */
 (function () {
   const SS = window.SS;
   const C = SS.C;
 
-  // ---- The day: hour changes (marker + background tint share these times) ---------------------
-  // 6 h 59 → 7 h at the hook, then 10 h, 13 h and 17 h on the scene transitions.
-  SS.DAY = [
-    { at: 0.36, h: 7, label: 'Café', icon: 'mug' },
-    { at: 2.6, h: 10, label: 'Visite', icon: 'house' },
-    { at: 6.0, h: 13, label: 'Notaire', icon: 'doc' },
-    { at: 13.25, h: 17, label: 'Rapport', icon: 'sunset' },
-  ];
-
-  // ---- Line icons (24 × 24, round strokes; the hook's mug is the same drawing at 4.7×) ----------
+  // ---- Line icons (24 × 24, round strokes) ------------------------------------------------------
   const stroke = (c, w = 1.9) => `fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
   SS.dayIcon = {
-    mug: (c = C.turq) => `<svg viewBox="0 0 24 24" ${stroke(c)}><path d="M4.5 10.5h11v5a4.5 4.5 0 0 1-4.5 4.5h-2a4.5 4.5 0 0 1-4.5-4.5z"/><path d="M15.5 12h1.4a2.4 2.4 0 0 1 0 4.8h-1.6"/><path d="M3.5 22h14"/>
-      <g class="steam"><path d="M8 7.6c-.9-1 .9-2 0-3.2"/><path d="M11.2 7.6c-.9-1 .9-2 0-3.2"/></g></svg>`,
     house: (c = C.turq) => `<svg viewBox="0 0 24 24" ${stroke(c)}><path d="M3 11.2 12 3.8l9 7.4"/><path d="M5.6 9.4V20.2h12.8V9.4"/><path d="M10 20.2v-5.4h4v5.4"/></svg>`,
-    doc: (c = C.turq) => `<svg viewBox="0 0 24 24" ${stroke(c)}><path d="M5 3h9l4 4v10.5"/><path d="M14 3v4h4"/><path d="M5 3v18h8"/><path d="M8 11h7M8 14.5h4.5"/><path d="M14.6 21.4l.6-2.6 5.3-5.3 2 2-5.3 5.3z"/></svg>`,
+    // a signed deed: a document with a check (fixed icon, no signature animation)
+    docCheck: (c = C.turq) => `<svg viewBox="0 0 24 24" ${stroke(c)}><path d="M6 2.8h8.6L19 7.2V21.2H6z"/><path d="M14.6 2.8v4.4H19"/><path d="M9 10.4h7M9 13.4h4.6"/><path d="M9.2 17.1l1.9 1.9 3.9-3.9"/></svg>`,
     sunset: (c = C.turq) => `<svg viewBox="0 0 24 24" ${stroke(c)}><path d="M2.5 17.5h19"/><path d="M6.8 17.5a5.2 5.2 0 0 1 10.4 0"/><path d="M12 6.5v2.6M4.9 9.9l1.8 1.8M19.1 9.9l-1.8 1.8"/><path d="M7 21h10"/></svg>`,
-    pen: (c = C.ink2) => `<svg viewBox="0 0 24 24" ${stroke(c, 1.5)}><path d="M3.5 20.5l1.1-4.4L16.8 3.9a2.2 2.2 0 0 1 3.1 3.1L7.8 19.2z"/><path d="M14.8 5.9l3.1 3.1"/></svg>`,
   };
 
   // ---- Headlines: masked words, never under the skill's 116 px minimum ---------------------------
   SS.head = (layer, src, y, o = {}) => {
     const h = SS.text(layer, src, Object.assign({ size: 116, maxW: 940, lh: 1.04 }, o));
-    if (h.size < (o.min || 116)) console.warn(`[lisibilité] titre « ${src.replace(/\n/g, ' ')} » réduit à ${h.size} px`);
+    if (h.size < (o.min || 116)) console.warn(`[lisibilité] « ${src.replace(/\n/g, ' ')} » réduit à ${h.size} px`);
     SS.place(h.el, 540, y);
     SS.hideWords(h);
     return h;
+  };
+  // « Pendant ce temps… » + headline of a product proof (y 200–580)
+  SS.proofHead = (layer, title, kicker) => {
+    const out = {};
+    if (kicker) {
+      out.k = SS.text(layer, kicker, { size: 64, weight: 700, color: C.turqText, tracking: -0.02 });
+      SS.place(out.k.el, 540, 262);
+      SS.hideWords(out.k);
+    }
+    out.h = SS.head(layer, title, kicker ? 452 : 420);
+    return out;
   };
 
   // ---- Scrim that follows the background tint (the V3 scrim is hard-coded to #F7FBFA) ----------
@@ -60,6 +61,77 @@
   SS.clipR = (t, r, b, l, rad) => `inset(${t}px ${r}px ${b}px ${l}px round ${rad}px)`;
   SS.OPEN = SS.clipR(-80, -80, -80, -80, 114); // fully open, shadow kept
 
+  // ---- A layer with its own world and camera (one camera move per proof scene) ------------------
+  SS.subWorld = (layer, st = {}) => {
+    const wrap = SS.el('div', 'world-wrap', layer);
+    const w = SS.el('div', 'world', wrap);
+    const cam = SS.camera({ x: 540, y: 960, s: 1, r: 0, blur: 0 });
+    cam.set(Object.assign({ x: 540, y: 960, s: 1, r: 0 }, st));
+    return { wrap, w, cam, apply() { w.style.transform = SS.camMatrix(cam.p); SS.blur(wrap, cam.p.blur || 0); } };
+  };
+  // build-time world position of an element (worlds are untransformed while building)
+  SS.centerOf = (el) => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+
+  // ---- Moment card: the broker's life, full frame ------------------------------------------------
+  // Enters by a green node blooming into the mint disc (or is there from frame 0), composes its
+  // icon (drawn), its hour (≥ 150 px) and its sentence (> 80 px), holds, then leaves upward in one
+  // block, uncovering the proof underneath.
+  SS.momentCard = (stage, o) => {
+    const T = o.T; // {bloom, icon, hour, line, exit}
+    const layer = SS.el('div', 'layer', stage);
+    layer.style.zIndex = 5;
+    layer.style.background = o.warm
+      ? 'radial-gradient(130% 90% at 80% 95%, #F8EBD3 0%, #F1F7F1 45%, #E8F9F7 100%)'
+      : 'radial-gradient(120% 80% at 50% 45%, #F1FCFA 0%, #E8F9F7 62%, #DDF5F1 100%)';
+    const P = { blur: 0 };
+    let node = null;
+    if (o.from) { // bloom out of a node sitting on the previous scene's focal point
+      const at = T.bloom, { x, y } = o.from;
+      const c0 = `circle(0px at ${x}px ${y}px)`, c1 = `circle(2300px at ${x}px ${y}px)`;
+      gsap.set(layer, { clipPath: c0, autoAlpha: 0 });
+      SS.tl.set(layer, { autoAlpha: 1 }, at);
+      SS.tl.fromTo(layer, { clipPath: c0 }, { clipPath: c1, duration: 0.5, ease: 'power2.inOut' }, at);
+      node = SS.el('div', 'a3', stage);
+      node.style.zIndex = 6;
+      Object.assign(node.style, { width: '28px', height: '28px', borderRadius: '50%', background: C.green, boxShadow: '0 0 0 10px rgba(43,191,179,.22)' });
+      SS.place(node, x, y, { scale: 0 });
+      SS.tl.fromTo(node, { scale: 0 }, { scale: 1, duration: 0.22, ease: 'back.out(2.4)' }, at - 0.2);
+      SS.tl.fromTo(node, { scale: 1 }, { scale: 0, duration: 0.24, ease: SS.EZ.in }, at + 0.18);
+      SS.cue(at - 0.2, 'node'); SS.cue(at, 'bloom');
+    }
+    // icon, drawn stroke by stroke
+    const ic = SS.el('div', 'a3', layer, SS.dayIcon[o.icon](C.turq));
+    Object.assign(ic.style, { width: '300px', height: '300px' });
+    const svg = ic.querySelector('svg');
+    svg.setAttribute('stroke-width', '1.25');
+    svg.style.overflow = 'visible';
+    const paths = [...svg.querySelectorAll('path')];
+    paths.forEach((p) => { p.setAttribute('pathLength', 1); p.setAttribute('stroke-dasharray', '1 1'); p.setAttribute('stroke-dashoffset', 1); });
+    SS.place(ic, 540, o.kicker ? 560 : 600);
+    SS.tl.fromTo(paths, { attr: { 'stroke-dashoffset': 1 } }, { attr: { 'stroke-dashoffset': 0 }, duration: 0.45, stagger: 0.07, ease: SS.EZ.out }, T.icon);
+    // optional kicker, visible from frame 0 (« Une journée de courtier »)
+    if (o.kicker) {
+      const k = SS.text(layer, o.kicker, { size: 56, weight: 650, color: C.soft, tracking: -0.015 });
+      SS.place(k.el, 540, 790);
+    }
+    const hour = SS.text(layer, o.hour, { size: 230, weight: 800, tracking: -0.045 });
+    SS.place(hour.el, 540, o.kicker ? 950 : 930);
+    const line = SS.text(layer, o.line, { size: 96, maxW: 940, lh: 1.06 });
+    if (line.size < 80) console.warn(`[lisibilité] « ${o.line} » réduit à ${line.size} px`);
+    SS.place(line.el, 540, 1270);
+    if (T.hour != null) { SS.hideWords(hour); SS.wordsIn(hour, T.hour, { st: 0.06, dur: 0.5 }); }
+    SS.hideWords(line);
+    SS.wordsIn(line, T.line, { st: 0.05, dur: 0.5 });
+    // exit: the whole card goes up in one block (motion blur at speed)
+    SS.tl.fromTo(layer, { y: 0 }, { y: -1920, duration: 0.4, ease: SS.EZ.inOut }, T.exit);
+    SS.tl.fromTo(P, { blur: 0 }, { blur: 5, duration: 0.2, ease: 'power2.in' }, T.exit + 0.05);
+    SS.tl.fromTo(P, { blur: 5 }, { blur: 0, duration: 0.2, ease: 'power2.out' }, T.exit + 0.25);
+    SS.cue(T.icon, 'card', { k: o.k }); SS.cue(T.exit, 'slide');
+    return { layer, node, P, render() { SS.blur(layer, P.blur); }, range: [o.from ? T.bloom - 0.25 : -1, T.exit + 0.5] };
+  };
+  // a proof layer (under the cards)
+  SS.proofLayer = (stage, z = 1) => { const l = SS.el('div', 'layer', stage); l.style.zIndex = z; return l; };
+
   // ---- Phone (light, 820 × 1700, same drawing as the V3 phone) ----------------------------------
   SS.phone = (parent, { date, time }) => {
     const el = SS.el('div', 'a3', parent);
@@ -72,10 +144,10 @@
     return { el, scr: el.querySelector('.scr') };
   };
 
-  // ---- Notification header (logo mark + sender + "maintenant") ----------------------------------
+  // ---- Notification header (logo mark + sender + « maintenant ») --------------------------------
   SS.noteHead = (parent, sender = 'ScaleSuite') => {
     const hd = SS.el('div', 'a3', parent);
-    Object.assign(hd.style, { left: '30px', top: '24px', width: '700px', display: 'flex', alignItems: 'center', gap: '14px', fontSize: '30px', fontWeight: 750, color: C.ink, whiteSpace: 'nowrap' });
+    Object.assign(hd.style, { left: '30px', top: '24px', width: '720px', display: 'flex', alignItems: 'center', gap: '14px', fontSize: '30px', fontWeight: 750, color: C.ink, whiteSpace: 'nowrap' });
     hd.innerHTML = `<span class="mk" style="width:40px;height:40px;display:block"></span>${sender}<span style="margin-left:auto;font-weight:550;color:${C.soft}">maintenant</span>`;
     const m = SS.logo(hd.querySelector('.mk'), 40, { word: false });
     m.el.style.position = 'static';
@@ -95,7 +167,7 @@
     return { el, inner: el.querySelector('.in') };
   };
 
-  // ---- A tap: press (3 % squash, rebound) + ripple on `target` -----------------------------------
+  // ---- A tap: press (squash, rebound) + ripple on `target` ---------------------------------------
   SS.tapAt = (parent, target, x, y, at, o = {}) => {
     const rip = SS.el('div', 'a3', parent);
     const d = o.d || 180;
@@ -108,98 +180,5 @@
     }
     SS.cue(at, 'tap');
     return rip;
-  };
-
-  // ---- Hour marker: pill (icon · odometer time · label) + day rail with four nodes ---------------
-  // Screen space, y 196–296. The time is built with its own digit columns so every change is a
-  // GSAP fromTo on a column (yPercent), chained in time order.
-  const M = { y: 246, pillL: 100, pillW: 520, pillH: 100, railL: 676, railR: 900 };
-  SS.MARK = M;
-  SS.buildMarker = (stage) => {
-    const layer = SS.el('div', 'layer', stage);
-    const pill = SS.el('div', 'a3', layer);
-    Object.assign(pill.style, { left: M.pillL + 'px', top: M.y - M.pillH / 2 + 'px', width: M.pillW + 'px', height: M.pillH + 'px', borderRadius: '50px', background: '#fff', boxShadow: SS.SH.card, transformOrigin: '60px 50%' });
-    // icon slot (house, doc, sunset roll through it; the mug flies in from the hook)
-    const slot = SS.el('div', 'a3', layer);
-    Object.assign(slot.style, { left: M.pillL + 26 + 'px', top: M.y - 34 + 'px', width: '68px', height: '68px', overflow: 'hidden' });
-    const icons = {};
-    ['house', 'doc', 'sunset'].forEach((k) => {
-      const i = SS.el('div', 'a3', slot, SS.dayIcon[k]());
-      Object.assign(i.style, { left: '2px', top: '2px', width: '64px', height: '64px' });
-      gsap.set(i, { yPercent: 130 });
-      icons[k] = i;
-    });
-    // time: [H tens][H units] h [M tens][M units], 60 px tabular
-    const time = SS.el('div', 'a3', layer);
-    Object.assign(time.style, { left: M.pillL + 112 + 'px', top: M.y - 38 + 'px', height: '76px', display: 'flex', alignItems: 'center', fontSize: '60px', fontWeight: 800, letterSpacing: '-.03em',
-      color: C.ink, fontFeatureSettings: "'tnum' 1", whiteSpace: 'nowrap', transformOrigin: '0 50%' });
-    const col = (glyphs) => {
-      const win = SS.el('span', '', time);
-      Object.assign(win.style, { display: 'inline-block', height: '1.16em', overflow: 'hidden', lineHeight: '1.16em' });
-      const strip = SS.el('span', '', win);
-      strip.style.display = 'block';
-      glyphs.forEach((g) => { const d = SS.el('span', '', strip, g); d.style.display = 'block'; d.style.height = '1.16em'; });
-      return { win, strip, n: glyphs.length };
-    };
-    const digits = Array.from({ length: 20 }, (_, i) => String(i % 10));
-    const cHT = col(['', '1']), cHU = col(digits);
-    SS.el('span', '', time, ' h ').style.fontWeight = 700;
-    const cMT = col(digits), cMU = col(digits);
-    const setIdx = (c, i) => gsap.set(c.strip, { yPercent: (-100 * i) / c.n });
-    setIdx(cHT, 0); setIdx(cHU, 6); setIdx(cMT, 5); setIdx(cMU, 9);
-    gsap.set(cHT.win, { width: 0 });
-    M.tensW = 37; // width of the hour's tens digit at 60 px (tabular)
-    // label (masked words)
-    const lab = SS.el('div', 'a3', layer);
-    Object.assign(lab.style, { left: M.pillL + 370 + 'px', top: M.y - 26 + 'px', width: '140px', height: '52px', overflow: 'hidden' });
-    const labels = SS.DAY.map((d) => {
-      const s = SS.el('div', 'a3', lab, d.label);
-      Object.assign(s.style, { left: 0, top: '4px', fontSize: '34px', fontWeight: 650, color: C.soft, letterSpacing: '-.01em', whiteSpace: 'nowrap' });
-      gsap.set(s, { yPercent: 130 });
-      return s;
-    });
-    // day rail: grey track, turquoise progress, four nodes with their hour under them
-    const rail = SS.el('div', 'layer', layer);
-    rail.style.overflow = 'visible';
-    const svg = SS.svg('svg', { class: 'lines', width: 1080, height: 400 }, rail);
-    SS.svg('path', { d: `M${M.railL},${M.y - 10} H${M.railR}`, stroke: '#D7E3E1', 'stroke-width': 4, 'stroke-linecap': 'round', fill: 'none' }, svg);
-    const prog = SS.svg('path', { d: `M${M.railL},${M.y - 10} H${M.railR}`, stroke: C.turq, 'stroke-width': 6, 'stroke-linecap': 'round', fill: 'none', pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1 }, svg);
-    const nodeX = (i) => M.railL + ((M.railR - M.railL) * i) / 3;
-    const nodes = SS.DAY.map((d, i) => {
-      const n = SS.el('div', 'a3', rail);
-      Object.assign(n.style, { width: '22px', height: '22px', borderRadius: '50%', background: '#C9D6D4', boxShadow: '0 0 0 5px #fff' });
-      SS.place(n, nodeX(i), M.y - 10, { scale: 1 });
-      const t = SS.el('div', 'a3', rail, String(d.h));
-      Object.assign(t.style, { fontSize: '30px', fontWeight: 650, color: C.soft, fontFeatureSettings: "'tnum' 1" });
-      SS.place(t, nodeX(i), M.y + 30);
-      return n;
-    });
-    const R = { layer, pill, slot, icons, time, cols: { cHT, cHU, cMT, cMU }, labels, prog, nodes, svg, rail };
-    SS.marker = R;
-    return R;
-  };
-  // roll a digit column from index a to b (b > a: always forward, like a clock)
-  SS.roll = (c, a, b, at, dur = 0.42, ease = 'back.out(1.3)') =>
-    SS.tl.fromTo(c.strip, { yPercent: (-100 * a) / c.n }, { yPercent: (-100 * b) / c.n, duration: dur, ease }, at);
-  // the marker reaches hour k of SS.DAY (k ≥ 1; 7 h is set up by the hook)
-  SS.hourTo = (k, at) => {
-    const R = SS.marker, d = SS.DAY[k], prev = SS.DAY[k - 1];
-    const idx = { 7: 7, 10: 10, 13: 13, 17: 17 }; // index in the doubled 0–9 strip (forward rolls)
-    if (d.h >= 10 && prev.h < 10) {
-      // the tens digit appears when the units pass 9 → 0 (never shows « 19 »)
-      SS.tl.fromTo(R.cols.cHT.win, { width: 0 }, { width: M.tensW, duration: 0.32, ease: SS.EZ.out }, at + 0.3);
-      SS.roll(R.cols.cHT, 0, 1, at + 0.34, 0.36);
-    }
-    SS.roll(R.cols.cHU, idx[prev.h], idx[d.h], at + 0.06, 0.5);
-    // label and icon swap in their masks
-    SS.tl.fromTo(R.labels[k - 1], { yPercent: 0 }, { yPercent: -130, duration: 0.24, ease: SS.EZ.in }, at);
-    SS.tl.fromTo(R.labels[k], { yPercent: 130 }, { yPercent: 0, duration: 0.45, ease: SS.EZ.out }, at + 0.14);
-    if (prev.icon !== 'mug') SS.tl.fromTo(R.icons[prev.icon], { yPercent: 0 }, { yPercent: -130, duration: 0.24, ease: SS.EZ.in }, at);
-    SS.tl.fromTo(R.icons[d.icon], { yPercent: 130 }, { yPercent: 0, duration: 0.45, ease: SS.EZ.out }, at + 0.12);
-    // the rail line advances to the node, which lights up with a 10 % pop
-    SS.tl.fromTo(R.prog, { attr: { 'stroke-dashoffset': 1 - (k - 1) / 3 } }, { attr: { 'stroke-dashoffset': 1 - k / 3 }, duration: 0.5, ease: SS.EZ.inOut }, at);
-    SS.tl.fromTo(R.nodes[k], { scale: 1, backgroundColor: '#C9D6D4', boxShadow: '0 0 0 5px #fff' },
-      { scale: 1.25, backgroundColor: C.green, boxShadow: '0 0 0 7px rgba(43,191,179,.28)', duration: 0.4, ease: SS.EZ.pop }, at + 0.42);
-    SS.cue(at, 'hour', { k });
   };
 })();

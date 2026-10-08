@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build « Une journée de courtier » (9:16, 25 s). The V2 and V3 builds and outputs are left untouched.
 #   ./build-journee.sh preview         → whole film: 540×960 30 fps preview with sound + contact sheet (one row per scene)
-#   END=13.6 ./build-journee.sh preview → the same for 0–END only (scenes 1–3 review)
+#   END=7.3 ./build-journee.sh preview  → the same for 0–END only (a partial review)
 #   ./build-journee.sh final           → 1080×1920 60 fps master, H.264/yuv420p/faststart, poster frame 0, audio stems
 # Same pipeline as build-v3.sh: frames rendered at 1080×1920 and downscaled for the preview.
 # Output goes to ../brag-output (intermediates in ../brag-output/work-journee).
@@ -32,12 +32,16 @@ if [ "$MODE" = preview ]; then
   rm -rf "$WORK/frames-preview"
   # contact sheet: a few frames per scene, one row per scene
   ROWS=(
-    "Scène 1 · 7 h, Café (0–2,8 s)|0.00,0.45,0.90,1.30,1.75,2.10,2.45"
-    "Scène 2 · 10 h, Visite (2,8–6,4 s)|2.75,3.30,3.75,4.20,5.00,5.55"
-    "Scène 3 · 13 h, Notaire : le lead (6,4–13,6 s)|5.85,6.60,7.60,8.45,8.62,9.10,9.80,10.40,10.74,11.10,11.60,12.10,12.70,13.50"
-    "Scène 4 · 17 h, Rapport (13,6–16,6 s)|13.80,14.30,14.90,15.60,16.30"
-    "Scène 5 · Le bilan (16,6–20 s)|16.90,17.50,18.10,18.60,19.40"
-    "Scène 6 · Appel à l'action (20–25 s)|20.20,20.80,21.40,22.20,24.90"
+    "Scène 1 · Carte 10 h (0–2 s)|0.00,0.50,1.20,2.15"
+    "Scène 2 · Pendant ce temps : l'annonce (2–5,4 s)|2.45,3.00,3.60,4.60,5.15"
+    "Scène 3 · Carte 13 h (5,4–7,3 s)|5.40,5.60,6.30,7.40"
+    "Scène 4 · Pendant ce temps : le formulaire (7,3–9,4 s)|7.60,8.00,8.70,9.40,9.60"
+    "Scène 5 · Le lead arrive, climax (9,4–11,8 s)|9.90,10.15,10.60,11.40"
+    "Scène 6 · Déjà dans votre CRM (11,8–13,9 s)|11.95,12.30,12.70,13.60"
+    "Scène 7 · Carte 17 h (13,9–15,9 s)|13.85,14.10,14.80,16.05"
+    "Scène 8 · Pendant ce temps : le rapport (15,9–18,2 s)|16.30,16.70,17.40,18.25"
+    "Scène 9 · Le bilan (18,2–21,3 s)|18.55,19.00,19.50,20.60"
+    "Scène 10 · Fin (21,3–25 s)|21.40,21.70,22.20,22.80,24.90"
   )
   ALL="" NAMES="" ARGS=()
   for i in "${!ROWS[@]}"; do
@@ -52,7 +56,7 @@ if [ "$MODE" = preview ]; then
   python3 render/sheet-v3.py "$OUT/scalesuite-journee-contact-sheet$SUF.jpg" "$([ -z "$SUF" ] && echo 200 || echo 260)" "${ARGS[@]}"
 else
   # master: 60 fps, frame 0 = poster (platform thumbnail), poster JPEG, stems for a voiceover mix
-  POSTER=$(node -e "console.log(2.1)")
+  POSTER=1.2 # SS.POSTER_T: the settled 10 h card
   node render/stills-journee.mjs --times=$POSTER --names=poster-9x16-journee --out="$WORK"
   ffmpeg -hide_banner -loglevel error -y -i "$WORK/poster-9x16-journee.png" -q:v 2 "$OUT/scalesuite-journee-poster.jpg"
   rm -rf "$WORK/frames-final"

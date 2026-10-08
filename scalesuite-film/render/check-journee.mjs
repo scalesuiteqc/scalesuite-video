@@ -1,5 +1,6 @@
 // Quality checks for the « Journée » film (run before delivering a render):
 //   node render/check-journee.mjs determinism [t1,t2,...]   same frame after different seek histories → DOM + pixel diff
+//   node render/check-journee.mjs lisibilite [t1,…]          visible text under 30 px on screen (camera scale included)
 //   node render/check-journee.mjs motion [end]               frame-to-frame change at 30 fps → isolated spikes (jumps, pops)
 // Determinism must report "0 DOM differences" (pixel noise ≤ 2/255 is Chrome rasterisation, invisible).
 // Motion must report no spike: every big change has to ramp up and down over several frames.
@@ -36,7 +37,7 @@ const dump = (f) => f.page.evaluate(() => {
 
 try {
   if (mode === 'determinism') {
-    const times = (arg || '0,0.45,0.9,1.4,2.1,2.45,2.8,3.4,4.2,5.5,5.75,6.6,7.6,8.6,8.95,9.6,10.4,10.74,11.0,11.95,12.5,13.5,14.5,15.6,17.0,18.4,19.5,20.4,21.5,22.8,24.9').split(',').map(Number);
+    const times = (arg || '0,0.5,1.2,2.2,2.45,3.0,3.6,5.15,5.4,5.6,7.4,8.0,9.4,9.6,9.97,10.15,11.4,11.95,12.3,13.7,14.1,16.05,16.7,18.25,18.6,19.5,21.4,21.7,22.2,24.9').split(',').map(Number);
     const a = await openFilm(browser, base, 1), b = await openFilm(browser, base, 1);
     let worst = 0, domBad = 0;
     for (const t of times) {
@@ -50,6 +51,33 @@ try {
       console.log(`${t.toFixed(2)}s  DOM diffs ${dd}  pixel max ${px.max}/255`);
     }
     console.log(domBad ? `FAIL: ${domBad} DOM differences` : `OK: 0 DOM differences, worst pixel ${worst}/255`);
+  } else if (mode === 'lisibilite') {
+    // on-screen text size = computed font size × the element's on-screen scale (camera, card scale…).
+    // Reports every visible text under 30 px at the sampled times (states, not mid-animation).
+    const times = (arg || '1.2,4.6,6.3,8.7,11.4,13.4,15.2,17.4,20.6,24.9').split(',').map(Number);
+    const f = await openFilm(browser, base, 1);
+    let bad = 0;
+    for (const t of times) {
+      await f.shot(t);
+      const small = await f.page.evaluate(() => {
+        const out = [];
+        const walker = document.createTreeWalker(document.getElementById('stage'), NodeFilter.SHOW_TEXT);
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+          const s = n.textContent.trim(), el = n.parentElement;
+          if (!s || !el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) continue;
+          const r = el.getBoundingClientRect(), h = el.offsetHeight;
+          if (!h || r.bottom < 0 || r.top > 1920 || r.right < 0 || r.left > 1080) continue;
+          let o = 1; for (let e = el; e; e = e.parentElement) o *= +getComputedStyle(e).opacity;
+          if (o < 0.6) continue;
+          const px = parseFloat(getComputedStyle(el).fontSize) * (r.height / h);
+          if (px < 29.5) out.push(`${s.slice(0, 40)} → ${px.toFixed(1)} px`);
+        }
+        return out;
+      });
+      bad += small.length;
+      console.log(`${t.toFixed(2)}s  ${small.length ? small.join(' | ') : 'ok'}`);
+    }
+    console.log(bad ? `FAIL: ${bad} texts under 30 px` : 'OK: no text under 30 px on screen');
   } else {
     const end = parseFloat(arg) || 25;
     const f = await openFilm(browser, base, 1, 0.25);
