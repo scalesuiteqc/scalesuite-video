@@ -1,194 +1,100 @@
-# ScaleSuite « Une journée de courtier » : plan scène par scène (validé)
+# ScaleSuite « Une journée de courtier » : plan v2 scène par scène (à valider)
 
 Film d'acquisition · 9:16 (1080 × 1920) · 25,0 s · 60 fps · fonctionne sans le son · français (Québec)
 
-Même identité et même niveau que la V3 (`brag-output/design-dna-v3.json`), récit entièrement
-nouveau : un courtier seul vit sa journée pendant que sa campagne Google Ads travaille pour lui.
-Aucune personne représentée : sa journée passe par des icônes au trait, des objets et de l'interface.
+Même identité que la V3 (`brag-output/design-dna-v3.json`). Images clés de ce plan :
+`brag-output/scalesuite-journee-keyframes.jpg` (images fixes 540 × 960, aucune animation).
 
-Date affichée partout : **vendredi 16 octobre 2026** (vrai vendredi). Le rapport hebdomadaire couvre
-**du 12 au 16 octobre** (lundi au vendredi).
+Date affichée : **vendredi 16 octobre 2026** (vrai vendredi). Rapport : **du 12 au 16 octobre**.
+Lieu : **la Rive-Sud de Montréal** (« acheter maison Longueuil », « Maisons à vendre sur la Rive-Sud »).
 
-Lieu : **la Rive-Sud de Montréal** (recherche « acheter maison Longueuil », page « Maisons à vendre
-sur la Rive-Sud »).
+## Pourquoi un plan v2
 
-### Corrections validées (2e tour)
+Diagnostic de l'aperçu v1 (refusé) : le courtier était invisible (un petit libellé dans l'en-tête),
+trop d'idées par seconde, des images presque vides pendant les transitions (8,5 à 10,2 s), une
+scène du notaire incompréhensible (acte, signature, jeton qui vole) et des moments sans titre.
 
-1. Lieu : Lévis est remplacé partout par Longueuil et la Rive-Sud.
-2. Exactitude : ScaleSuite n'optimise pas automatiquement la nuit. L'optimisation est
-   **hebdomadaire, faite par notre IA avec approbation humaine**. La scène de 7 h montre la
-   notification « Optimisations de la semaine appliquées », sous-titre « Par notre IA et notre
-   équipe ». Aucune scène ne montre une fonction que ScaleSuite n'a pas.
-3. Expéditeur des notifications : « ScaleSuite » (option retenue par défaut, la consigne laissait
-   les deux options ouvertes ; « Follow Up Boss » reste un simple changement de texte).
-4. Rapport : hebdomadaire, le vendredi (option retenue par défaut, même remarque).
-5. Aucune phrase ne commence par « Et » ou « Mais », à l'écran comme dans la voix.
-6. Musique : pas de nouvelle partition. La musique de la V3 (signature, instruments, groove,
-   progression, drop) est adaptée au nouveau rythme dans `audio/music-journee.py`.
+Règles du plan v2 :
+1. **Trois moments seulement : 10 h, 13 h, 17 h.** La scène de 7 h est supprimée.
+2. **Chaque moment commence par une carte plein écran qui montre le courtier** : l'heure en très
+   grand (230 px), une grande icône au trait (300 px) et une phrase en 96 px. Tenue d'au moins 1,2 s.
+3. **Une seule preuve produit par moment**, précédée de « Pendant ce temps… » (64 px).
+4. **Une seule action et un seul mouvement de caméra par scène.** Chaque état important reste
+   immobile et lisible au moins 1,2 s.
+5. **Chaque image a un titre ou un point focal évident.** Aucune image de transition vide ou à
+   moitié coupée de plus de 0,3 s.
+6. **Plus de marqueur d'heure dans l'en-tête** : les cartes de moment le remplacent.
+7. On garde la fin, la Design DNA, Longueuil et la Rive-Sud, et les corrections validées :
+   « Commandité », optimisation hebdomadaire par notre IA et notre équipe (aucune optimisation
+   « la nuit »), expéditeur « ScaleSuite », rapport hebdomadaire du vendredi, aucune phrase qui
+   commence par « Et » ou « Mais », musique de la V3 adaptée (pas de nouvelle partition).
 
----
+## Grammaire des transitions (la même partout)
 
-## Fil conducteur : le marqueur d'heure
+- **Entrée d'une carte de moment** : un nœud vert éclot en disque menthe qui couvre le cadre
+  (motif de la V3), et la carte se compose dessus : icône, heure, phrase. Le disque est opaque, le
+  nœud est le point focal : aucune image vide.
+- **Sortie d'une carte** : la carte remonte d'un bloc hors du cadre (0,45 s, `inOut`) et découvre la
+  preuve déjà en place, avec « Pendant ce temps… » et le titre qui montent dans leur masque.
+- **À l'intérieur du moment 13 h** : la page glisse vers le bas pendant que le téléphone monte
+  (0,5 s), puis la notification s'ouvre sur le CRM (zoom à travers, dans le téléphone).
 
-Un composant persistant, en haut du cadre (y 200–290), 860 px de large :
-- à gauche, une pastille blanche avec l'icône du moment (tasse, maison et clé, document et stylo,
-  soleil couchant) et l'heure en odomètre, chiffres tabulaires de 64 px : « 7 h », « 10 h »,
-  « 13 h », « 17 h » ;
-- à droite, une frise du jour : quatre nœuds (7, 10, 13, 17, libellés de 30 px) reliés par la ligne
-  de routage turquoise, qui se trace jusqu'à l'heure courante ; le nœud atteint éclot avec un halo.
-
-À chaque changement d'heure, les chiffres roulent (départs espacés en loi de puissance, arrivée en
-`pop`), la ligne avance jusqu'au nœud suivant et l'icône bascule dans son masque. C'est le métronome
-du film. À la fin, la frise devient le bilan de la journée (élément partagé).
-
-## Le passage des heures (fond)
-
-Le fond reste clair et menthe ; seule la température varie, très légèrement (écart ΔE ≤ 3 avec le
-fond V3, vérifié avec `design-dna/scripts/verify.mjs`) :
-
-| Heure | Fond | Lumières ambiantes |
-|---|---|---|
-| 7 h | `#F8FAF6` (aube, à peine plus chaud) | une lumière sable très pâle `#F6EBD6` en bas à gauche, une menthe |
-| 10 h | `#F7FBFA` (référence V3) | deux menthes qui montent |
-| 13 h | `#EEF9F6` (menthe la plus fraîche, climax) | deux menthes au zénith, les plus lumineuses |
-| 17 h | `#F9F8F2` (fin de journée, doré très léger) | lumière sable en bas à droite |
-| Fin | `#F7FBFA` (identité) | deux menthes |
-
-Les deux lumières suivent un arc de soleil (gauche basse → zénith → droite basse). Les fondus de
-couleur sont admis ici (lumière ambiante, section 7 de la skill) ; aucun contenu n'est en transparence.
-
----
-
-## Règles appliquées
-
-### Lisibilité mobile
-- Interface d'au moins 760 px (70 %), cible 860 à 900 px. Téléphone clair 820 px, cadré serré et
-  coupé par le bas.
-- Texte d'au moins 30 px à l'écran (taille dans le monde × échelle caméra), libellés principaux à
-  40 px, titres de 116 à 124 px, mot seul à 150 px.
-- Zones sûres : marqueur d'heure y 200–290, titres y 320–580, produit y 640–1500, rien de critique
-  sous y 1500, texte critique à x < 930.
-- Zooms caméra (1,1 à 1,3) sur la notification, le formulaire, la ligne CRM et la tuile Leads.
-- `SS.scrim` derrière les titres posés sur une interface en mouvement, `SS.band` pour les mots qui
-  changent.
-
-### Mouvement
-- 90 % corporate/premium ; dépassement seulement sur les héros : notifications (`pop12`), lignes
-  CRM (`dock`), pastilles et bouton (`pop`). Jamais sur un titre ni sur le fond.
-- Courbes `SS.EZ` (out, inOut, in, cam), aucune interpolation linéaire hors frappe et proxys.
-- Entrées décalées de 35 à 80 ms (moins de 500 ms par groupe), enfants à 60–100 ms du parent.
-- Trois couches : primaire (interface), secondaire (ombres, halos, onde d'appui, vapeur de la
-  tasse), ambiante (lumières qui suivent le soleil, grain).
-- Règle du tiers : chaque coup de fouet suit un arc avec flou procédural.
-- Aucune transparence de scène, aucun fondu enchaîné ; chaque scène naît d'un objet de la
-  précédente.
-
-### Contenu
-- Valeurs ordinaires seulement, aucun pourcentage, aucune promesse chiffrée, aucun prix.
-- Annonce marquée « **Commandité** ». Domaine `votreagence.ca`, agence « Votre agence ».
-- Aucun nom réel ; l'acheteur reste « Acheteur ».
-
----
-
-## Courbe de rythme
-
-```
-énergie
-  ▲                               ★ notification + CRM
-  │                             ████
-  │                         ▄▄██████▄                                 ▄▄ CTA
-  │               ▄▄▄▄▄▄▄▄██████████████▄▄▄▄▄▄▄            ▄▄▄▄▄▄▄▄████████
-  │       ▄▄▄▄▄▄███████████████████████████████████▄  ▁▁ ███████████████████
-  │▄▄▄▄▄▄███████████████████████████████████████████▌ ▁▁████████████████████
-  └──────────────────────────────────────────────────────────────────────────▶ t
-   0  7 h   2,8  10 h   6,4      13 h (climax)    13,6 17 h 16,6 bilan 20,0 fin 25
-```
-
-- **Matin (0–2,8 s)** : calme, mouvements lents (650–900 ms), vapeur, le seul « bruit » est la
-  notification.
-- **Montée (2,8–6,4 s)** : frappe, résultats qui s'emboîtent, tempo qui s'installe.
-- **Climax (6,4–13,6 s)** : la scène la plus longue (7,2 s) ; accélère jusqu'au verrouillage du
-  jeton (gel de 80 ms), notification à ≈ 11,3 s, ligne CRM à ≈ 12,2 s.
-- **Détente (13,6–16,6 s)** : rapport, compteurs, barres.
-- **Respiration et révélation (16,6–20,0 s)** : 0,4 s de quasi-silence avant « Pas ouvert ».
-- **Résolution (20,0–25,0 s)** : logo, bouton, tenue finale d'au moins 2,0 s.
-
-Note : la chronologie imposée (13 h avant 17 h) place le climax vers 45 % du film, plus tôt que
-dans la V3 (73 %). Le bilan de 17 h sert de second accent, plus calme, avant l'appel à l'action.
+Aucun fondu enchaîné, aucune scène en transparence, aucun jeton qui vole.
 
 ---
 
 ## Scènes
 
-| # | Temps | Durée | Ce qu'on voit | Caméra | Transition vers la suivante |
-|---|---|---|---|---|---|
-| 1 | 0,0–2,8 | 2,8 s | **7 h · Café.** Image 0 (affiche) : grande heure « 6 h 59 » en 150 px au centre, une tasse au trait turquoise (360 px) dont la vapeur ondule. À 0,35 s les chiffres roulent à « 7 h », puis l'heure rétrécit et va se loger dans la pastille du marqueur (élément partagé) ; la frise se trace jusqu'au nœud 7. Le téléphone clair (820 px, écran verrouillé « vendredi 16 octobre », « 7:02 ») monte du bas. À 1,25 s, une notification tombe avec 12 % de dépassement et une vibration : « ScaleSuite · Optimisations de la semaine appliquées · Par notre IA et notre équipe ✓ ». Titre : « Optimisée *chaque semaine.* » | Lente avancée (1,00 → 1,04), puis poussée sur la notification (1,0 → 1,18, `cam`). | **Notification qui se déplie** : un appui (pression de 3 % et onde) l'ouvre en carte d'annonce (`SS.adCard`, 900 × 250). Le téléphone tombe hors du cadre (`in`) ; la carte d'annonce reste. Les chiffres roulent 7 → 10, l'icône tasse bascule en maison-clé, la ligne avance au nœud 10. |
-| 2 | 2,8–6,4 | 3,6 s | **10 h · Visite.** La carte d'annonce recule et devient **le premier résultat d'une recherche Google** (élément partagé). Une barre de 900 px glisse au-dessus et tape « acheter maison Longueuil ». Le résultat : « **Commandité** · votreagence.ca / Maisons à vendre à Longueuil \| Votre agence / Visites cette semaine. Parlez à un courtier local. » Les résultats naturels sont des squelettes qui s'emboîtent dessous. Un halo turquoise entoure l'annonce. Titre : « Votre annonce *s'affiche.* » | Recul de 1,18 à 1,0 pendant que la recherche se construit, puis légère poussée sur l'annonce (1,0 → 1,1). | **Zoom à travers** : un appui sur l'annonce (onde), puis la page de destination s'ouvre depuis le résultat (le cadre de l'annonce devient la page). Les chiffres roulent 10 → 13, l'icône bascule en document-stylo. |
-| 3 | 6,4–13,6 | **7,2 s** | **13 h · Notaire, LE LEAD (climax).** **a)** Page de destination de 900 px aux couleurs de l'agence (`#2F5D8C`) : « Maisons à vendre sur la Rive-Sud ». Le formulaire se remplit par frappe : Projet « Achat », Secteur « Longueuil », Délai « D'ici 6 mois », Courriel « acheteur@courriel.ca ». Titre : « Un *acheteur* écrit. » **b)** Un appui sur « Envoyer » compresse la page en **jeton d'encre « ● LEAD ACHETEUR »** (écrasement d'anticipation). **c)** Le jeton suit la route turquoise, traverse le nœud ScaleSuite (anneau qui pulse) et descend vers une table vue de dessus, en icônes : un document « Acte de vente » avec un stylo (le notaire), et le téléphone du courtier posé à côté. Gel de 80 ms au verrouillage. **d) Climax** : le téléphone vibre, le jeton se déplie en notification : « ScaleSuite · Nouveau lead acheteur · Acheteur · Longueuil — ✓ Ajouté à votre CRM ». **e)** La notification s'ouvre dans le CRM : la fiche « Acheteur · Longueuil · Achat · 13 h 04 » s'emboîte en tête de liste (4,5 % de dépassement), avec la pastille « Nouveau » et une coche qui se dessine. Titre (même case, `SS.band`) : « Déjà dans *votre CRM.* », tenu 1,0 s. | Cadre serré sur le formulaire (1,15), qui suit les champs ; recul au moment de l'envoi ; fouet vers le bas en arc avec flou pendant le trajet du jeton ; poussée sur le téléphone (1,0 → 1,22) ; zoom sur la ligne CRM (1,28). | **Élément partagé** : sur le même téléphone, les chiffres roulent 13 → 17 (l'icône bascule en soleil couchant). Une notification « Votre rapport hebdomadaire est prêt » tombe ; l'appui la déplie en carte de rapport. |
-| 4 | 13,6–16,6 | 3,0 s | **17 h · Rapport.** Carte de 900 px : « Rapport hebdomadaire · du 12 au 16 octobre », « Campagne acheteur · Rive-Sud ». Trois tuiles (Impressions 1 284, Clics 96, Leads 4) dont les odomètres grimpent (chiffres 72 px, libellés 30 px). Cinq barres L M M J V se lèvent en décalé, celle de vendredi reçoit un point turquoise. Une ligne « ✓ Optimisations appliquées : 3 ». Titre : « Votre semaine, *en clair.* » | Avancée lente sur les tuiles (1,0 → 1,08), puis poussée sur la tuile Leads (1,14). | **Élément partagé** : le rapport glisse vers le bas (`in`), la caméra recule et le marqueur d'heure grandit pour devenir la carte du bilan. |
-| 5 | 16,6–20,0 | 3,4 s | **Le bilan.** La frise se déploie en carte « Votre journée » de 860 px, quatre lignes avec leur icône et l'action de la campagne : « 7 h · Optimisations appliquées ✓ », « 10 h · Annonce affichée ✓ », « 13 h · Lead ajouté au CRM ✓ », « 17 h · Rapport reçu ✓ ». Respiration de 0,4 s, puis une cinquième ligne s'emboîte, en gris : « Google Ads · ouvert 0 fois ». Titre : « Google Ads? *Pas ouvert de la journée.* » | Fixe, dérive lente (1,00 → 1,02). | **Ligne contractée en nœud, puis en logo** : la carte se replie sur la ligne de routage, qui se contracte en nœud vert. |
-| 6 | 20,0–25,0 | 5,0 s | **Appel à l'action.** Le nœud éclot en logo complet (balayage de la marque, montée des lettres, reflet), slogan « Google Ads pour l'immobilier québécois. » (44 px). Le bouton naît d'un nœud et s'étire en « **Demander une démo →** » avec 10 % de dépassement, puis « scalesuiteqc.ca » (40 px). Tout est posé à ≈ 22,8 s et tenu jusqu'à 25,0 s (reflet sur le bouton, petite impulsion de la flèche). | Avancée de 1 %. | Fin. |
+| # | Temps | Durée | Ce qu'on voit (état tenu) | Action unique | Caméra (un seul mouvement) | Transition vers la suivante |
+|---|---|---|---|---|---|---|
+| 1 | 0,0–2,0 | 2,0 s | **Carte 10 h** (image 0 du film) : maison au trait, « **10 h** », « Vous êtes en visite. » sur le disque menthe. Tenue de 0,5 à 2,0 s (1,5 s). | L'icône se dessine, l'heure roule jusqu'à 10 h, la phrase monte (fini à 0,5 s). | Aucune (cadre fixe). | La carte remonte et découvre la recherche. |
+| 2 | 2,0–5,4 | 3,4 s | **Preuve 10 h** : « Pendant ce temps… » / « Votre annonce **s'affiche.** ». La barre tape « acheter maison Longueuil » ; l'annonce « Commandité · votreagence.ca / Maisons à vendre à Longueuil \| Votre agence » s'emboîte en premier résultat, avec un halo turquoise. Tenue de 3,9 à 5,4 s (1,5 s). | La recherche se fait et l'annonce s'emboîte en tête (2,3 à 3,9 s). | Lente avancée vers l'annonce (1,00 → 1,04), finie à 3,9 s. | Un nœud vert naît au centre du halo et éclot en disque : carte 13 h. |
+| 3 | 5,4–7,2 | 1,8 s | **Carte 13 h** : stylo au trait, « **13 h** », « Vous êtes chez le notaire. ». Tenue de 5,9 à 7,2 s (1,3 s). | Éclosion, puis l'icône, l'heure et la phrase (finie à 5,9 s). | Aucune. | La carte remonte et découvre la page de destination. |
+| 4 | 7,2–9,8 | 2,6 s | **Preuve 13 h (a)** : « Pendant ce temps… » / « Un acheteur **vous écrit.** ». Page « Maisons à vendre sur la Rive-Sud » aux couleurs de l'agence ; le formulaire se remplit : Projet « Achat », Secteur « Longueuil », Délai « D'ici 6 mois ». Tenue de 8,3 à 9,5 s (1,2 s), puis appui sur « Envoyer ». | Le formulaire se remplit (7,5 à 8,3 s). | Aucune (cadre fixe, page entière lisible). | « Envoyer » est appuyé (onde) : la page glisse vers le bas pendant que le téléphone monte. |
+| 5 | 9,8–11,6 | 1,8 s | **Preuve 13 h (b), climax** : « Le lead **arrive.** ». Le téléphone du courtier (« vendredi 16 octobre », « 13:04 ») ; la notification tombe avec 12 % de dépassement et une vibration : « ScaleSuite · Nouveau lead acheteur · Acheteur · Longueuil · Achat · ✓ Ajouté à votre CRM ». Tenue de 10,3 à 11,6 s (1,3 s). | La notification tombe (10,0 s). | Avancée sur la notification (1,00 → 1,10), finie à 10,4 s. | Appui sur la notification : le CRM s'ouvre à partir d'elle (zoom à travers). |
+| 6 | 11,6–13,4 | 1,8 s | **Preuve 13 h (c)** : « Déjà dans **votre CRM.** ». « Contacts · Votre CRM » : la fiche « Acheteur · Longueuil · Achat · aujourd'hui, 13 h 04 » s'emboîte en tête, avec un halo et la pastille « Nouveau ». Tenue de 12,2 à 13,4 s (1,2 s). | La fiche s'emboîte, les autres descendent (11,8 à 12,2 s). | Légère avancée (1,10 → 1,12). | Un nœud naît de la pastille « Nouveau » et éclot : carte 17 h. |
+| 7 | 13,4–15,2 | 1,8 s | **Carte 17 h** : soleil couchant au trait, « **17 h** », « Vous fermez la journée. » sur un disque menthe réchauffé de sable en bas. Tenue de 13,9 à 15,2 s (1,3 s). | Éclosion, puis l'icône, l'heure et la phrase. | Aucune. | La carte remonte et découvre le rapport. |
+| 8 | 15,2–17,6 | 2,4 s | **Preuve 17 h** : « Pendant ce temps… » / « Votre semaine, **en clair.** ». « Rapport hebdomadaire · Du 12 au 16 octobre · Campagne acheteur · Rive-Sud » ; tuiles Impressions 1 284, Clics 96, Leads 4 ; barres L M M J V ; « ✓ 3 optimisations appliquées · Par notre IA et notre équipe ». Tenue de 16,2 à 17,6 s (1,4 s). | Les compteurs montent et les barres se lèvent (15,4 à 16,2 s). | Aucune. | Le rapport descend hors du cadre pendant que les trois lignes du bilan s'emboîtent. |
+| 9 | 17,6–20,6 | 3,0 s | **Le bilan** : « Google Ads? **Pas ouvert de la journée.** » (trois lignes, 116 px). Trois lignes : « 10 h · Visite ✓ Annonce affichée », « 13 h · Notaire ✓ Lead ajouté au CRM », « 17 h · Fin de journée ✓ Rapport reçu ». Tenue de 18,6 à 20,6 s (2,0 s). | Les trois lignes s'emboîtent (décalage de 80 ms), puis le titre. | Aucune. | Les lignes se contractent en un nœud, qui devient la marque (motif de la V3). |
+| 10 | 20,6–25,0 | 4,4 s | **Fin** : logo complet, « Google Ads pour l'immobilier québécois. », bouton « **Demander une démo →** », « scalesuiteqc.ca ». Tout est posé à 22,6 s et tenu jusqu'à 25,0 s (2,4 s). | Le logo se révèle, puis le bouton naît d'un nœud. | Avancée de 1 %. | Fin. |
 
-Durées : 2,8 · 3,6 · **7,2** · 3,0 · 3,4 · 5,0 s. Les sous-temps internes varient de 0,25 à 1,2 s.
+Durées : 2,0 · 3,4 · 1,8 · 2,6 · **1,8** · 1,8 · 1,8 · 2,4 · 3,0 · 4,4 s. Le moment 13 h
+(scènes 3 à 6, 7,8 s) est le plus long ; le climax (la notification) tombe à 10,0 s.
 
----
+## Lisibilité
 
-## Raccords (au pixel près)
-
-- **2,8 s** : carte d'annonce dépliée de la notification → résultat commandité.
-- **6,4 s** : titre de l'annonce → titre de la page de destination.
-- **≈ 8,9 s** : bouton « Envoyer » rogné → jeton autonome.
-- **≈ 11,3 s** : jeton → notification.
-- **16,6 s** : marqueur d'heure → carte du bilan.
-- **20,0 s** : ligne → nœud → logo.
-
-## Voix hors champ (respirations prévues)
-
-Fenêtres prévues, à préciser sur les repères après le rendu (`voiceover-script.md`) :
-
-| # | Réplique (fr-CA) | Fenêtre (s) |
-|---|---|---|
-| 1 | « Sept heures. Les optimisations de la semaine sont en place. » | 0,3 – 2,7 |
-| 2 | « Dix heures, vous êtes en visite. Votre annonce, elle, s'affiche. » | 3,0 – 6,2 |
-| 3 | « Treize heures, chez le notaire. Un acheteur remplit le formulaire… » | 6,6 – 9,4 |
-| — | *(respiration : trajet du jeton, musique seule)* | 9,4 – 11,0 |
-| 4 | « Le lead arrive directement dans votre CRM. » | 11,3 – 13,2 |
-| 5 | « Dix-sept heures : votre rapport de la semaine. Clair. » | 13,8 – 16,3 |
-| — | *(respiration)* | 16,4 – 17,6 |
-| 6 | « Google Ads? Vous ne l'avez pas ouvert de la journée. » | 17,6 – 19,9 |
-| 7 | « ScaleSuite. Demandez une démo. » | 20,6 – 23,0 |
+- Cartes : heure 230 px, phrase 96 px, icône 300 px. Preuves : « Pendant ce temps… » 64 px, titres
+  116 px, interface de 900 px de large (83 %), texte d'interface de 30 à 46 px avant caméra.
+- Zones : titres entre y 200 et 580, produit entre y 640 et 1500, rien de critique plus bas.
+- Le voile clair n'est utilisé que si l'interface passe sous un titre (scènes 2, 4, 5, 6, 8).
 
 ## Son
 
-Pas de nouvelle partition : `audio/music-journee.py` reprend la musique de la V3 (signature do5, fa5,
-mi5, la5, mêmes instruments, même groove néo-soul, même progression, même drop) et la recale sur
-les repères de ce film :
-- **7 h** : kalimba seul, la signature jouée une fois, doucement ; la notification la chante.
-- **10 h** : le groove néo-soul entre (rim, shaker, basse ronde) ; clics de frappe, un tic par
-  résultat qui s'emboîte.
-- **13 h** : montée et glissando qui suivent le jeton, gel de 80 ms, **drop** sur la notification ;
-  marimba ascendant sur la ligne CRM.
-- **17 h** : le groove redescend d'un cran ; une note par barre.
-- **Bilan** : quasi-silence de 0,4 s, puis un accord suspendu sur « ouvert 0 fois ».
-- **Fin** : résolution en fa majeur sous le logo.
+Musique de la V3, recalée (`audio/music-journee.py`) :
+- cartes de moment : la signature au kalimba, une note de marimba par moment ;
+- 10 h : le groove de la V3 entre, frappe au clavier, emboîtement de l'annonce ;
+- 13 h : montée sur le formulaire, gel de 80 ms avant la notification, puis le **drop** (la
+  signature à la cloche) ; marimba sur la fiche CRM ;
+- 17 h : le groove redescend ; respiration de 0,4 s avant « Pas ouvert de la journée » ;
+- fin : résolution en fa majeur sous le logo.
 
-Un roulement de chiffres (odomètre) a son propre petit son, identique à chaque heure : c'est le
-métronome sonore. −15 LUFS, −1,5 dBTP.
+## Voix hors champ (fenêtres prévues)
 
-## Fichiers (rien d'existant n'est modifié)
-
-- `scalesuite-film/index-journee.html`, `src/core-journee.js` (ajouts : marqueur d'heure, fond
-  horaire), `src/film-journee.js`, `src/scenes-journee/*.js`, `src/styles-journee.css` ; `core.js`,
-  `logo.js`, `styles.css`, `styles-v3.css` et `core-v3.js` chargés en lecture seule.
-- `render/*-journee.mjs`, `audio/music-journee.py`, `build-journee.sh`.
-- Sorties : `brag-output/scalesuite-journee-9x16.mp4`,
-  `previews/scalesuite-journee-preview-9x16-30fps[-s1-3].mp4`,
-  `scalesuite-journee-contact-sheet[-s1-3].jpg`, `scalesuite-journee-poster.jpg`,
-  `audio-journee/`, `design-dna-journee.json`, `voiceover-script.md`.
+| # | Réplique (fr-CA) | Fenêtre (s) |
+|---|---|---|
+| 1 | « Dix heures. Vous êtes en visite. » | 0,2 – 1,9 |
+| 2 | « Pendant ce temps, votre annonce s'affiche dans Google. » | 2,2 – 5,2 |
+| 3 | « Treize heures. Vous êtes chez le notaire. » | 5,5 – 7,1 |
+| 4 | « Pendant ce temps, un acheteur remplit votre formulaire. » | 7,4 – 9,7 |
+| 5 | « Le lead arrive directement dans votre CRM. » | 10,1 – 13,2 |
+| 6 | « Dix-sept heures. Vous fermez la journée. » | 13,5 – 15,1 |
+| 7 | « Votre rapport de la semaine est prêt. » | 15,4 – 17,4 |
+| 8 | « Google Ads? Vous ne l'avez pas ouvert de la journée. » | 17,8 – 20,4 |
+| 9 | « ScaleSuite. Demandez une démo. » | 21,0 – 23,0 |
 
 ## Étapes
 
-1. Validation de ce plan.
-2. Aperçu 540 × 960 des scènes 1 à 3 (0–13,6 s) avec planche contact.
-3. Scènes 4 à 6, master 1080 × 1920 à 60 fps, contrôle qualité et relecture des textes.
+1. Validation de ce plan et des images clés.
+2. Animation, aperçu 540 × 960, planche contact.
+3. Master 1080 × 1920 à 60 fps, contrôle qualité et relecture des textes.
 4. 4:5 seulement sur demande.
