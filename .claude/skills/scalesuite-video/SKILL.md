@@ -380,8 +380,11 @@ montante, demi-ton descendant, quarte montante). C'est le logo sonore.
 Tout effet est posé sur un repère `SS.cue(t, 'type', …)` exporté par `render/cues-v3.mjs`. **Une
 nouvelle scène doit donc ajouter ses repères, et la partition doit les utiliser.** Le mix est à
 −15 LUFS / −1,5 dBTP ; `build-v3.sh` fait la normalisation en deux passes. Pour la voix off :
-`audio/mix_vo.py --stems ../brag-output/audio-v3`, avec atténuation de la musique (−9 dB) et des
-effets (−4 dB), à −14 LUFS. Les fenêtres sont dans `voiceover-timing-v3.md`.
+`audio/split_vo_v3.py` découpe la prise unique en une réplique par fichier (coupes fixes, jamais au
+compte des silences), puis `audio/mix_vo.py --stems ../brag-output/audio-v3`, avec atténuation de la
+musique (−9 dB) et des effets (−4 dB), à −14 LUFS, et `--tp -2.0` (l'AAC ajoute ≈ 0,4 dB de crête).
+Seule la piste audio est remplacée (`-c:v copy`) dans `scalesuite-social-9x16-v3-vo.mp4`. Les
+fenêtres, les coupes et le placement sont dans `voiceover-timing-v3.md`.
 
 ## 11. Contrôle qualité avant de livrer
 
