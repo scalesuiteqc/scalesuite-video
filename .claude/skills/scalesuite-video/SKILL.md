@@ -10,6 +10,11 @@ description: >-
   de la voix off du film, dans ce dépôt (dossier scalesuite-film/).
 ---
 
+> **Règle importante :** ce dépôt est un fork de `latent-spaces/brag`. Toute pull request doit
+> cibler `scalesuiteqc/scalesuite-video`, branche `main`, jamais `latent-spaces/brag`.
+> Commencer par `gh repo set-default scalesuiteqc/scalesuite-video`, puis ouvrir la PR avec
+> `gh pr create --repo scalesuiteqc/scalesuite-video --base main`.
+
 # ScaleSuite video (niveau V3)
 
 La V3 (`brag-output/scalesuite-social-9x16-v3.mp4`, 31 s, 9:16) est la référence de qualité. Ce
