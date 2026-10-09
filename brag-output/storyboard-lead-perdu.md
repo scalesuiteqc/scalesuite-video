@@ -175,3 +175,38 @@ la bascule et la notification).
 2. Une image fixe 540 × 960 par moment clé (9 images, une planche contact), sans animation. Validation.
 3. Aperçu animé complet 540 × 960 avec la musique. Validation.
 4. Master 1080 × 1920, 60 fps, contrôle qualité.
+
+---
+
+## Validation du plan et ajustements de l'étape 2 (images fixes)
+
+Plan, voix hors champ et les 6 recommandations validés. Ajout demandé à la scène 4 et ajustements de
+timing qui en découlent (la voix hors champ ne change pas) :
+
+- **Scène 4** : sous « Trop tard. », la ligne « **Le vendeur a signé ailleurs.** » (56 px, gris
+  `#6B7480` du monde du problème) apparaît 0,3 s après le titre (9,05 → 9,35 s) et reste lisible
+  jusqu'à 10,8 s (≈ 1,25 s). Le retour en arrière passe de 10,6 à **10,8 s**.
+- **Durée totale : 25,2 s** (+0,2 s). Tout ce qui suit la bascule est décalé d'environ 0,2 à 0,7 s
+  pour garder chaque état tenu au moins 1,2 s.
+- **Scène 3** : les nouveaux leads arrivent à 5,85, 6,45 et 7,05 s, pour que l'état « lendemain » soit
+  immobile de 7,7 à 10,8 s.
+- **Scène 7** : le titre « Chaque lead chez son courtier. » arrive avec le lead dans le CRM (17,55 s)
+  et reste jusqu'à 20,95 s, par-dessus la notification (19,4 s, ≈ 77 % du film). Une seule idée pour
+  les deux preuves (CRM, puis téléphone), au lieu d'un écran sans titre.
+
+| # | Temps | Scène |
+|---|---|---|
+| 1 | 0,0 – 3,0 | Accroche |
+| 2 | 3,0 – 5,6 | Boîte de l'équipe |
+| 3 | 5,6 – 8,4 | Toujours non lu |
+| 4 | 8,4 – 10,8 | Trop tard. / Le vendeur a signé ailleurs. |
+| 5 | 10,8 – 12,95 | Avec ScaleSuite. (tenu 11,6 – 12,8) |
+| 6 | 12,95 – 16,55 | Chaque courtier a sa campagne (tenu 13,5 – 14,75), annonce de Courtier 03 (tenue 15,35 – 16,55) |
+| 7 | 16,55 – 21,0 | Lead dans le CRM (tenu 17,8 – 19,0), notification (tenue 19,7 – 21,0) |
+| 8 | 21,0 – 25,2 | Fin, posée à ≈ 23,1 s et tenue jusqu'à 25,2 s |
+
+Effets sonores (inchangés, 4) : 10,8 s souffle inversé · 16,55 s clic feutré · 19,4 s vibration
+sourde · 22,2 s souffle doux.
+
+Planche des images clés : `brag-output/scalesuite-lead-perdu-9x16-keyframes.jpg` (11 images
+540 × 960 rendues depuis la timeline, sans animation).

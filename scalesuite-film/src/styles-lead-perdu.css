@@ -1,0 +1,14 @@
+/* « Le lead perdu » : additions on top of styles.css (V2) and styles-v3.css, both loaded read-only.
+   Two worlds: the problem (cool grey-blue, slate accent) and ScaleSuite (V3 mint identity).
+   No will-change (see styles-v3.css). */
+:root {
+  --p-bg: #EEF1F4; --p-card: #FAFBFC; --p-ink: #2B3138; --p-soft: #6B7480; --p-slate: #6E8092; --p-line: #E3E8ED;
+  --p-shadow: 0 1px 2px rgba(30,40,52,.07), 0 14px 34px -14px rgba(40,56,74,.26), 0 0 0 1px rgba(30,40,52,.05);
+}
+.lp-card { position: absolute; left: 0; top: 0; box-sizing: border-box; background: var(--p-card); border-radius: 30px; box-shadow: var(--p-shadow); }
+.lp-pill { display: inline-flex; align-items: center; gap: 14px; height: 60px; padding: 0 24px; border-radius: 30px; box-sizing: border-box;
+  background: #1A1A1A; color: #fff; font-size: 30px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; flex: none; }
+.lp-pill .dt { width: 16px; height: 16px; border-radius: 50%; background: #2BBFB3; box-shadow: 0 0 0 6px rgba(43,191,179,.28); }
+.lp-chip { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 18px; border-radius: 26px; box-sizing: border-box;
+  font-size: 30px; font-weight: 680; letter-spacing: -.01em; white-space: nowrap; flex: none; }
+.lp-row { position: absolute; left: 0; top: 0; box-sizing: border-box; display: flex; align-items: center; gap: 22px; white-space: nowrap; }
