@@ -1,0 +1,6 @@
+« Gardez vos courtiers. Attirez les prochains. » : bloc ElevenLabs (Multilingual v2), une seule prise
+Réglages suggérés : stabilité 50 à 60 %, similarité 75 %, style 0 à 10 %. Voix québécoise posée.
+Coller tout le texte entre les deux lignes de tirets.
+----------------------------------------------------------------
+Votre meilleur courtier vient de partir. <break time="1.5s" /> Les leads Google allaient dans un bassin commun. <break time="1.5s" /> Pour lui, les bons leads allaient toujours aux autres. <break time="1.5s" /> Avec ScaleSuite, vos leads Google ne se partagent plus. <break time="1.5s" /> Chaque courtier reçoit les leads de sa campagne. <break time="1.5s" /> Quand vous recrutez, vous offrez du concret. <break time="1.5s" /> Gardez vos courtiers. Attirez les prochains. <break time="1.5s" /> ScaleSuite. Demandez une démo.
+----------------------------------------------------------------

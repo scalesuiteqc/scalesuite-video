@@ -1,0 +1,12 @@
+« Gardez vos courtiers. Attirez les prochains. » : une prise par réplique (ElevenLabs, Multilingual v2)
+Générer chaque ligne séparément et nommer le fichier comme indiqué (mp3 ou wav).
+Réglages suggérés : stabilité 50 à 60 %, similarité 75 %, style 0 à 10 %. Voix québécoise posée.
+
+l1 (fenêtre 0,20 à 2,50 s) : Votre meilleur courtier vient de partir.
+l2 (fenêtre 2,70 à 5,70 s) : Les leads Google allaient dans un bassin commun.
+l3 (fenêtre 5,90 à 9,30 s) : Pour lui, les bons leads allaient toujours aux autres.
+l4 (fenêtre 11,20 à 14,55 s) : Avec ScaleSuite, vos leads Google ne se partagent plus.
+l5 (fenêtre 14,60 à 17,60 s) : Chaque courtier reçoit les leads de sa campagne.
+l6 (fenêtre 17,70 à 20,30 s) : Quand vous recrutez, vous offrez du concret.
+l7 (fenêtre 22,90 à 25,20 s) : Gardez vos courtiers. Attirez les prochains.
+l8 (fenêtre 25,50 à 28,00 s) : ScaleSuite. Demandez une démo.
