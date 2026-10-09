@@ -184,3 +184,16 @@ Planche `brag-output/scalesuite-equipe-9x16-keyframes.jpg` : 11 images 540 × 96
 timeline (sans animation), à 0,0 · 2,3 · 4,5 · 8,2 · 10,4 · 13,2 · 16,2 · 19,2 · 21,8 · 24,0 · 27,5 s.
 Pastilles de compteur (« 2 », « +1 ») posées au coin de leur pastille, sans couvrir le texte. Après le
 départ des leads, le bassin reste visible, vide, jusqu'à la bascule.
+
+## Étape 3 : aperçu animé
+
+- Réplique 2 de la voix : « Les leads Google allaient dans un bassin commun. » (8 mots, même fenêtre).
+- **Taille des pastilles à l'écran** (mesurée sur un rendu 1080 × 1920, zoom de la caméra compris,
+  `render/textsize-equipe.mjs`) : toutes étaient exactement à 30 px, donc à la limite. Elles sont
+  passées à 34 px (secteurs, pastilles du bassin) et 32 px (« Lead vendeur », « Demande d'info »,
+  « +1 », « 2 », pastilles de l'offre). Plus petit texte à l'écran : 32 px.
+- « Quelques mois plus tôt » : 1,4 s → 2,85 s, le bassin arrive à 3,1 s (plus de chevauchement).
+- Le « +1 » de Boucherville passe à Brossard pour que chaque pastille reste dans sa carte.
+- Son : effets à −11,6 (départ), −10,6 (bascule), −10,3 (arrivée) et −8,9 dB (bouton) sous la
+  musique ; mix −15,0 LUFS, crête −1,6 dBFS.
+- Contrôles : `determinism` OK (0 différence de DOM), `motion 28.2` OK (aucun saut isolé).

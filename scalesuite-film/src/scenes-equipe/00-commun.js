@@ -6,9 +6,9 @@
 
   SS.ET = {
     // 1 · hook (0–2.4): frame 0 = title + grid with the empty seat; « Quelques mois plus tôt », 04 comes back
-    chip: 1.6, back: 1.7, hookOut: 2.4, chipOut: 2.95, pan: 2.5,
+    chip: 1.4, back: 1.6, hookOut: 2.4, chipOut: 2.85, pan: 2.5,
     // 2 · the shared pool (2.4–5.2)
-    pool: 3.0, s2Head: 3.05, s2Out: 6.8,
+    pool: 3.1, s2Head: 3.1, s2Out: 6.8,
     // 3 · assignments, seen from Courtier 04 (5.2–8.7)
     focus: 4.9, push: 5.0, quote: 7.0, quoteOut: 8.7,
     // 4 · the departure (8.7–11.0)

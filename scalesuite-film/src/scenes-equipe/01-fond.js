@@ -3,7 +3,7 @@
    into (11.0 s), with two drifting mint lights. The team grid (02-equipe) stays above both. */
 (function () {
   const SS = window.SS, L = SS.ET, C = SS.C;
-  const NODE = { x: 540, y: 730 }; // centre of the shared pool (world = screen at the bascule)
+  const NODE = { x: 540, y: 740 }; // centre of the shared pool (world = screen at the bascule)
   SS.POOLNODE = NODE;
   let R;
   function build(stage) {

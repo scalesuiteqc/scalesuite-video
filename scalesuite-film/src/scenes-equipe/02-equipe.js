@@ -14,8 +14,8 @@
    8 · The grid gathers into the node of the end card (04-fin). */
 (function () {
   const SS = window.SS, L = SS.ET, P = SS.P, C = SS.C, G = SS.GRID;
-  const POOL = { cx: 540, cy: 730, w: 900, h: 260, top: 600 };
-  const SLOT = (k) => POOL.top + 74 + k * 60;
+  const POOL = { cx: 540, cy: 740, w: 900, h: 280, top: 600 };
+  const SLOT = (k) => POOL.top + 76 + k * 64;
   const PILLX = 126;
   const LEADS = [
     { t: 'Lead vendeur · Brossard', to: 1, chip: 'Lead vendeur' },
@@ -27,16 +27,16 @@
   const EVENTS = [[3.25, 'add', 0], [3.4, 'add', 1], [3.55, 'add', 2], [5.2, 'go', 0], [5.65, 'go', 1], [5.85, 'add', 3],
     [6.1, 'go', 2], [6.3, 'add', 4], [6.55, 'go', 3], [7.0, 'go', 4]];
   const FLY = 0.55;
-  const SPROUT = [1, 0, 6, 2]; // Laval, Montréal, Boucherville, Longueuil
+  const SPROUT = [1, 0, 5, 2]; // Laval, Montréal, Brossard, Longueuil (badges stay inside their card)
   const OFFER = { cx: 540, cy: 1198, w: 900, h: 330 };
   const SEAT = { x: G.cx(SS.LEAVER), y: G.cy(SS.LEAVER) };
 
   function campChip(parent, sector, dashed) {
     const c = SS.el('div', 'lp-chip', parent);
-    Object.assign(c.style, { position: 'absolute', left: '0px', top: '0px', height: '46px', padding: '0 16px', gap: '8px',
+    Object.assign(c.style, { position: 'absolute', left: '0px', top: '0px', height: '52px', padding: '0 18px', gap: '8px', fontSize: '34px',
       background: dashed ? 'transparent' : C.mint, color: '#0F6F66', boxShadow: dashed ? 'none' : 'inset 0 0 0 2px rgba(43,191,179,.45)',
       border: dashed ? '2px dashed #7FCFC6' : 'none' });
-    c.innerHTML = `<span style="width:28px;height:28px;display:block">${SS.icon.pin(dashed ? '#7FCFC6' : C.green)}</span>${sector}`;
+    c.innerHTML = `<span style="width:30px;height:30px;display:block">${SS.icon.pin(dashed ? '#7FCFC6' : C.green)}</span>${sector}`;
     return c;
   }
   function brokerCard(parent, i, name, sector) {
@@ -49,9 +49,9 @@
     const nm = SS.el('div', 'a3', el, `Courtier ${name}`);
     Object.assign(nm.style, { left: '116px', top: '18px', fontSize: '40px', fontWeight: 720, letterSpacing: '-.02em', color: P.ink, whiteSpace: 'nowrap' });
     const line = SS.el('div', 'a3', el);
-    Object.assign(line.style, { left: '116px', top: '80px', width: '300px', height: '46px' });
+    Object.assign(line.style, { left: '116px', top: '78px', width: '300px', height: '52px' });
     const skel = SS.el('div', 'a3 skel', line);
-    Object.assign(skel.style, { top: '16px', width: '150px', height: '14px', background: '#E3E8ED' });
+    Object.assign(skel.style, { top: '19px', width: '150px', height: '14px', background: '#E3E8ED' });
     const camp = campChip(line, sector, false);
     gsap.set(camp, { autoAlpha: 0, scale: 0.8, transformOrigin: 'left center' });
     return { el, avG, avM, nm, line, skel, camp };
@@ -76,7 +76,7 @@
     const seatTx = SS.el('div', 'a3', seat, 'Poste à combler');
     Object.assign(seatTx.style, { left: '30px', top: '20px', fontSize: '36px', fontWeight: 650, letterSpacing: '-.015em', color: P.soft, whiteSpace: 'nowrap' });
     const seatLine = SS.el('div', 'a3', seat);
-    Object.assign(seatLine.style, { left: '30px', top: '78px', width: '300px', height: '46px' });
+    Object.assign(seatLine.style, { left: '30px', top: '76px', width: '300px', height: '52px' });
     const seatChip = campChip(seatLine, SS.TEAM[SS.LEAVER].s, true);
     gsap.set(seatChip, { autoAlpha: 0, scale: 0.8, transformOrigin: 'left center' });
     SS.place(seat, SEAT.x, SEAT.y);
@@ -98,7 +98,7 @@
     LEADS.forEach((d) => {
       if (!d.chip || probChips[d.to]) return;
       const ch = SS.el('div', 'lp-chip', cards[d.to].line);
-      Object.assign(ch.style, { position: 'absolute', left: '0px', top: '0px', height: '46px', padding: '0 16px',
+      Object.assign(ch.style, { position: 'absolute', left: '0px', top: '1px', height: '50px', padding: '0 16px', fontSize: '32px',
         background: d.to === SS.LEAVER ? '#E9ECEF' : '#DCE3EA', color: d.to === SS.LEAVER ? P.soft : P.ink });
       ch.textContent = d.chip;
       gsap.set(ch, { autoAlpha: 0, scale: 0.9, transformOrigin: 'left center' });
@@ -118,7 +118,7 @@
     SS.tl.fromTo(pool, { autoAlpha: 0, y: POOL.cy - 40 }, { autoAlpha: 1, y: POOL.cy, duration: 0.5, ease: SS.EZ.out }, L.pool);
     const pills = LEADS.map((d) => {
       const p = SS.el('div', 'lp-chip', w);
-      Object.assign(p.style, { position: 'absolute', left: '0px', top: '0px', background: '#E3E8ED', color: P.ink, fontWeight: 650, boxShadow: '0 0 0 1px rgba(30,40,52,.05)' });
+      Object.assign(p.style, { position: 'absolute', left: '0px', top: '0px', height: '56px', padding: '0 20px', fontSize: '34px', background: '#E3E8ED', color: P.ink, fontWeight: 650, boxShadow: '0 0 0 1px rgba(30,40,52,.05)' });
       p.textContent = d.t;
       gsap.set(p, { x: PILLX, y: SLOT(0), autoAlpha: 0 });
       return p;
@@ -138,7 +138,7 @@
       q.forEach((j, s) => { if (s >= from) SS.tl.fromTo(pills[j], { y: SLOT(s + 1) }, { y: SLOT(s), duration: 0.3, ease: SS.EZ.inOut }, t + 0.08); });
       // the flight: an arc (x eased in-out, y eased in) from the pool to the card's second line
       const d = LEADS[k], i = d.to;
-      const tx = G.cx(i) - G.w / 2 + 116, ty = G.cy(i) - G.h / 2 + 80 - 3;
+      const tx = G.cx(i) - G.w / 2 + 116, ty = G.cy(i) - G.h / 2 + 78;
       SS.tl.fromTo(pills[k], { x: PILLX }, { x: tx, duration: FLY, ease: 'power2.inOut' }, t);
       SS.tl.fromTo(pills[k], { y: SLOT(from) }, { y: ty, duration: FLY, ease: 'power2.in' }, t);
       SS.tl.fromTo(pills[k], { scale: 1 }, { scale: 0.92, duration: FLY, ease: 'power2.inOut' }, t);
@@ -194,7 +194,7 @@
     SPROUT.forEach((i, k) => {
       const at = L.sprouts[k], c = cards[i];
       const dot = SS.el('div', 'a3', c.line);
-      Object.assign(dot.style, { left: c.camp.offsetWidth / 2 - 8 + 'px', top: '15px', width: '16px', height: '16px', borderRadius: '50%', background: C.green });
+      Object.assign(dot.style, { left: c.camp.offsetWidth / 2 - 8 + 'px', top: '18px', width: '16px', height: '16px', borderRadius: '50%', background: C.green });
       gsap.set(dot, { autoAlpha: 0, x: 0, y: 0, scale: 0.5 });
       const bx = c.camp.offsetWidth - 8;
       const b = badge(c.line, '+1', C.green, bx);
@@ -209,9 +209,9 @@
     const offer = SS.el('div', 'lp-card', w);
     Object.assign(offer.style, { width: OFFER.w + 'px', height: OFFER.h + 'px', borderRadius: '34px', background: '#fff', boxShadow: SS.SHADOW.mHi });
     offer.innerHTML = `<div class="oc" style="position:absolute;inset:0">
-        <div class="lp-chip" style="position:absolute;left:36px;top:30px;background:${C.mint};color:#0F6F66;box-shadow:inset 0 0 0 2px rgba(43,191,179,.45)">Offre · Nouveau courtier</div>
+        <div class="lp-chip" style="position:absolute;left:36px;top:28px;height:54px;font-size:32px;background:${C.mint};color:#0F6F66;box-shadow:inset 0 0 0 2px rgba(43,191,179,.45)">Offre · Nouveau courtier</div>
         <div style="position:absolute;left:36px;top:104px;font-size:46px;font-weight:780;letter-spacing:-.025em;line-height:1.16;color:${C.ink};white-space:nowrap">Votre propre campagne<br>Google Ads, dans votre secteur.</div>
-        <div class="lp-chip" style="position:absolute;left:36px;top:246px;background:#F2F7F6;color:${C.soft};gap:10px"><span style="width:30px;height:30px;display:block">${SS.icon.target(C.green)}</span>Optimisée chaque semaine</div></div>`;
+        <div class="lp-chip" style="position:absolute;left:36px;top:244px;height:54px;font-size:32px;background:#F2F7F6;color:${C.soft};gap:10px"><span style="width:30px;height:30px;display:block">${SS.icon.target(C.green)}</span>Optimisée chaque semaine</div></div>`;
     const oc = offer.querySelector('.oc');
     SS.place(offer, OFFER.cx, OFFER.cy + 70, { autoAlpha: 0 });
     SS.tl.fromTo(offer, { autoAlpha: 0, y: OFFER.cy + 70 }, { autoAlpha: 1, y: OFFER.cy, duration: 0.55, ease: SS.EZ.out }, L.offer);
@@ -224,7 +224,7 @@
     SS.tl.fromTo(offer, { x: OFFER.cx, y: OFFER.cy, scaleX: 1, scaleY: 1 },
       { x: SEAT.x, y: SEAT.y, scaleX: G.w / OFFER.w, scaleY: G.h / OFFER.h, duration: 0.5, ease: SS.EZ.inOut }, L.contract);
     SS.tl.set(offer, { autoAlpha: 0 }, L.arrive);
-    SS.tl.set(seat, { autoAlpha: 0 }, L.arrive);
+    SS.tl.set(seat, { visibility: 'hidden' }, L.arrive); // visibility only: its opacity is still driven by the undim tween
     const c09 = brokerCard(w, 8, '09', SS.TEAM[SS.LEAVER].s);
     Object.assign(c09.el.style, { background: '#fff', boxShadow: SS.SHADOW.m });
     c09.nm.style.color = C.ink;
