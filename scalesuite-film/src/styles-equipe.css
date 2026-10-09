@@ -1,0 +1,5 @@
+/* « Gardez vos courtiers » : additions on top of styles.css, styles-v3.css and styles-lead-perdu.css
+   (all loaded read-only). No will-change (see styles-v3.css). */
+.eq-card { position: absolute; left: 0; top: 0; box-sizing: border-box; border-radius: 26px; }
+.eq-badge { position: absolute; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+  font-size: 30px; font-weight: 800; letter-spacing: -.03em; font-feature-settings: 'tnum' 1; line-height: 1; box-shadow: 0 0 0 4px #fff; }
