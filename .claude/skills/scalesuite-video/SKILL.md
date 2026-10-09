@@ -394,6 +394,30 @@ vidéo :
 Lister les effets prévus (instant, nature, niveau) dans le plan, et les vérifier au contrôle
 qualité (section 11, point 5).
 
+**Réglage de référence (validé sur « Le lead perdu », à reprendre tel quel)** :
+`scalesuite-film/audio/music-lead-perdu.py`. Quatre effets sur des repères `sfx-*`, chacun mesuré en
+RMS sur sa durée contre la musique au même moment (le script imprime ce contrôle à chaque rendu) :
+
+| Moment | Effet (synthèse) | Gain dans le script | Sous la musique |
+|---|---|---|---|
+| Bascule | souffle montant 250 → 1 800 Hz, passe-bas 2,5 kHz (`breath`, `'rise'`) | 0,34 | −9,7 dB |
+| Appui sur une annonce | clic feutré, bruit passe-bas 1,5 kHz + 180 Hz (`feltclick`) | 0,22 | −11,8 dB |
+| Notification | double vibration sourde 150 Hz, passe-bas 380 Hz, 0,22 s ×2 à 0,3 s d'écart (`mutedbuzz`) | 0,30 / 0,24 | −7,7 dB |
+| Bouton d'appel | souffle doux 300 → 1 500 Hz, en cloche (`breath`, `'swell'`) | 0,36 | −10,2 dB |
+
+Cible : de −8 à −12 dB sous la musique (jamais moins de 6 dB). Avec la voix (`mix_vo.py`, musique
+−9 dB et effets −4 dB sous la parole), les effets sont de 7 à 15 dB sous la voix. Le son de la
+notification ScaleSuite est la vibration ; la signature de quatre notes reste dans la musique, au
+piano feutré, en registre médium.
+
+**Voix ElevenLabs en une seule prise** : les balises `<break time="1.5s" />` peuvent être ignorées
+(pauses réelles de 0,2 à 0,46 s, comme certaines pauses internes). Ne pas couper en comptant les
+silences : partir de points de coupe repérés à l'oreille et les aligner sur le point le plus
+silencieux à ± 60 ms (`audio/split-vo-lead-perdu.py`). Pour la version avec voix, ne pas refaire
+l'image : copier la vidéo du master et remplacer l'audio (`build-lead-perdu-vo.sh`). L'encodage AAC
+ajoute environ 0,3 dB de crête : passer un limiteur suréchantillonné ×4 avant l'encodage et mesurer
+la crête sur le MP4 lui-même.
+
 Tout effet est posé sur un repère `SS.cue(t, 'type', …)` exporté par `render/cues-v3.mjs`. **Une
 nouvelle scène doit donc ajouter ses repères, et la partition doit les utiliser.** Le mix est à
 −15 LUFS / −1,5 dBTP ; `build-v3.sh` fait la normalisation en deux passes. Pour la voix off :

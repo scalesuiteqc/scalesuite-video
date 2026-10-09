@@ -226,3 +226,14 @@ Planche des images clés : `brag-output/scalesuite-lead-perdu-9x16-keyframes.jpg
   (plus de chevauchement). L'éclosion menthe dure 0,5 s.
 - Son : 4 effets (contrôle automatique dans `audio/music-lead-perdu.py`) : bascule −9,7 dB, appui
   −11,8 dB, notification −7,7 dB, bouton −10,2 dB sous la musique. Mix −15,0 LUFS, crête −1,8 dBFS.
+
+## Master et version avec voix
+
+- Master `scalesuite-lead-perdu-9x16.mp4` : 1080 × 1920, 60 fps, H.264 High yuv420p bt709, 25,2 s
+  (1 512 images), image 0 = affiche (t = 2,4 s), AAC 48 kHz, −15,0 LUFS, −1,9 dBTP.
+- Version avec voix `scalesuite-lead-perdu-9x16-vo.mp4` : même flux vidéo (copié), voix posée selon
+  `voiceover-lead-perdu.md`, −14,0 LUFS, −1,8 dBTP.
+- Contrôle qualité : `check-lead-perdu.mjs determinism` OK (0 différence de DOM), `motion 25.2` OK
+  (aucun saut isolé, pic au coup de fouet vers le téléphone à 19,17 s), texte relu sur des images
+  extraites du MP4 (dates : mar. 13 oct., mer. 14 oct., lun. 12 oct., ven. 9 oct. 2026 ; tous les
+  jours de semaine sont justes).
