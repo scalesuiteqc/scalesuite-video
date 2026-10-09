@@ -377,6 +377,23 @@ montante, demi-ton descendant, quarte montante). C'est le logo sonore.
   signature.
 - **Fin** : résolution en fa majeur.
 
+### Effets sonores (règle obligatoire après la V3)
+
+Les effets sonores de la V3 étaient trop forts et trop nombreux : les « ding » et notifications
+devenaient agressants. Les puces ci-dessus qui donnent un son à chaque ligne, champ ou compteur, et
+les pings de notification du chaos, décrivent la V3 : **ne pas les reproduire**. Pour toute nouvelle
+vidéo :
+
+- **4 à 6 effets sonores au maximum dans toute la vidéo**, réservés aux moments clés (le point
+  culminant et l'appel à l'action).
+- **Sons doux et feutrés seulement** (clic léger, souffle discret). Aucune cloche, aucun « ding »
+  aigu ou brillant.
+- Les effets restent **au moins 6 dB sous la musique**, et toujours sous la voix hors champ.
+- **Pas d'effet sonore pour chaque élément qui apparaît** : le mouvement suffit.
+
+Lister les effets prévus (instant, nature, niveau) dans le plan, et les vérifier au contrôle
+qualité (section 11, point 5).
+
 Tout effet est posé sur un repère `SS.cue(t, 'type', …)` exporté par `render/cues-v3.mjs`. **Une
 nouvelle scène doit donc ajouter ses repères, et la partition doit les utiliser.** Le mix est à
 −15 LUFS / −1,5 dBTP ; `build-v3.sh` fait la normalisation en deux passes. Pour la voix off :
@@ -394,6 +411,8 @@ effets (−4 dB), à −14 LUFS. Les fenêtres sont dans `voiceover-timing-v3.md
    doivent rester faibles (de l'ordre de 1 au plus).
 4. **Lisibilité** : aucun texte sous 30 px à l'écran, interface d'au moins 760 px de large.
 5. **Son** : courbe de sonie (ebur128) cohérente avec le récit (chaos qui monte, silence,
-   soulagement doux, climax le plus fort, fin légèrement en dessous) et −15 LUFS intégrés.
+   soulagement doux, climax le plus fort, fin légèrement en dessous) et −15 LUFS intégrés. Effets
+   sonores : 6 au plus, doux, sans cloche ni « ding », au moins 6 dB sous la musique (mesurer la
+   piste d'effets contre la piste musique).
 6. **Master** : `ffprobe` doit donner 1080×1920, 60 fps, yuv420p et la bonne durée. Extraire
    quelques images du MP4 lui-même.
