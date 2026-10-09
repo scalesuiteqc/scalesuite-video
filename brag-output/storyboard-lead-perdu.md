@@ -210,3 +210,19 @@ sourde · 22,2 s souffle doux.
 
 Planche des images clés : `brag-output/scalesuite-lead-perdu-9x16-keyframes.jpg` (11 images
 540 × 960 rendues depuis la timeline, sans animation).
+
+## Ajustements après la planche des images clés (étape 3, aperçu animé)
+
+- **Scène 4** : la ligne sous « Trop tard. » devient « **Il a déjà choisi un autre courtier.** »
+  (≈ 54 px, ramenée à 940 px de large), de 9,35 à 10,8 s.
+- **Scène 7** : sous « Chaque lead chez son courtier. », « **Le soir même. Pas le lendemain.** » (56 px,
+  `#5E6B69`) apparaît à 17,85 s, 0,3 s après le titre, et reste jusqu'à 20,97 s (≈ 3 s), donc aussi
+  sur la notification.
+- **Scène 6** : à l'écran (caméra à 1,0), les noms faisaient 38 px, sous les 40 px exigés pour les
+  libellés principaux ; secteurs et « Active » étaient à 30 px, au plancher. Passage à **quatre
+  lignes** (Montréal, Brossard, Longueuil, Saint-Lambert) : noms 42 px, secteurs 34 px, « Active »
+  32 px, avatars 64 px, lignes de 112 px.
+- Titres : « Une boîte pour toute l'équipe. » sort à 5,42 s et « Toujours non lu. » entre à 5,8 s
+  (plus de chevauchement). L'éclosion menthe dure 0,5 s.
+- Son : 4 effets (contrôle automatique dans `audio/music-lead-perdu.py`) : bascule −9,7 dB, appui
+  −11,8 dB, notification −7,7 dB, bouton −10,2 dB sous la musique. Mix −15,0 LUFS, crête −1,8 dBFS.

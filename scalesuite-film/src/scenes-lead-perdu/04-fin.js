@@ -21,8 +21,8 @@
     const node = SS.el('div', 'a3', layer);
     Object.assign(node.style, { width: '26px', height: '26px', borderRadius: '50%', background: C.green, boxShadow: '0 0 0 9px rgba(43,191,179,.2)' });
     SS.place(node, markX, G.LY, { scale: 0 });
-    SS.tl.fromTo(node, { scale: 0 }, { scale: 2.6, duration: 0.3, ease: SS.EZ.out }, L.merge + 0.28);
-    SS.tl.fromTo(node, { scale: 2.6 }, { scale: 0, duration: 0.28, ease: SS.EZ.in }, L.endMark + 0.08);
+    SS.tl.fromTo(node, { scale: 0 }, { scale: 2.6, duration: 0.22, ease: SS.EZ.out }, L.merge + 0.26);
+    SS.tl.fromTo(node, { scale: 2.6 }, { scale: 0, duration: 0.26, ease: SS.EZ.in }, L.merge + 0.49);
     // lockup
     const logo = SS.logo(layer, G.LH);
     SS.place(logo.el, 540, G.LY);

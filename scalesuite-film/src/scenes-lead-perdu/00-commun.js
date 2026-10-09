@@ -9,8 +9,8 @@
     // Act 1 · hook (0–3.0)
     tap0: 0.5, squeeze0: 0.6, lead0: 0.82, ask: 1.25, look: 1.45, hookOut: 3.0,
     // Act 2 · shared inbox (3.0–5.6), time passes (5.6–8.4), too late (8.4–10.8)
-    inbox: 3.05, inboxHead: 3.2, rows: 3.3, unread: 3.62, inboxOut: 5.55,
-    stillHead: 5.7, c1: 5.85, c2: 6.45, c3: 7.05, stillOut: 8.32,
+    inbox: 3.05, inboxHead: 3.2, rows: 3.3, unread: 3.62, inboxOut: 5.42,
+    stillHead: 5.8, c1: 5.9, c2: 6.45, c3: 7.05, stillOut: 8.32,
     tapLate: 8.45, opened: 8.55, gray: 8.62, late: 9.05, signed: 9.35, rewind: 10.8,
     // Act 3 · with ScaleSuite (10.8–12.95)
     contract: 11.05, bloom: 11.2, mark: 11.3, avec: 11.32, meme: 11.5, letters: 11.45, avecOut: 12.82,

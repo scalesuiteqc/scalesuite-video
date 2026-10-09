@@ -16,12 +16,12 @@
   const LOGO = { h: 150, y: 900 };
   LOGO.w = (LOGO.h * SS.LOGO.w) / SS.LOGO.h;
   const markX = (h, cx) => cx - (h * SS.LOGO.w) / SS.LOGO.h / 2 + 58 * (h / SS.LOGO.h);
-  const CAMP = { top: 600, w: 900, headH: 152, rowH: 96, pitch: 108, logoH: 56 };
+  const CAMP = { top: 600, w: 900, headH: 152, rowH: 112, pitch: 126, logoH: 56 };
   CAMP.rowsTop = CAMP.top + CAMP.headH + 16;
   CAMP.rowY = (i) => CAMP.rowsTop + CAMP.rowH / 2 + i * CAMP.pitch;
-  CAMP.h = CAMP.headH + 16 + 4 * CAMP.pitch + CAMP.rowH + 20;
+  CAMP.h = CAMP.headH + 16 + 3 * CAMP.pitch + CAMP.rowH + 20;
   CAMP.logoW = (CAMP.logoH * SS.LOGO.w) / SS.LOGO.h;
-  const BROKERS = [['01', 'Montréal'], ['02', 'Brossard'], ['03', 'Longueuil'], ['04', 'Saint-Lambert'], ['05', 'Boucherville']];
+  const BROKERS = [['01', 'Montréal'], ['02', 'Brossard'], ['03', 'Longueuil'], ['04', 'Saint-Lambert']]; // 4 rows: names 42 px, sectors 34 px, status 32 px
   const HOT = 2;
   const ADY = CAMP.rowY(HOT);
   const CRM = { top: 1500, w: 900, headH: 150, rowH: 120, gap: 14 };
@@ -58,14 +58,14 @@
     SS.place(node, NODE.x, NODE.y, { scale: 0 });
     SS.tl.fromTo(node, { scale: 0 }, { scale: 1.3, duration: 0.18, ease: SS.EZ.out }, L.contract + 0.16);
     SS.tl.set(disc, { autoAlpha: 1 }, L.bloom);
-    SS.tl.fromTo(disc, { scale: 0.004 }, { scale: 1, duration: 0.62, ease: 'power2.inOut' }, L.bloom);
+    SS.tl.fromTo(disc, { scale: 0.004 }, { scale: 1, duration: 0.5, ease: 'power2.inOut' }, L.bloom);
     SS.tl.fromTo(blobs, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8, ease: 'power1.out' }, L.bloom + 0.3);
     SS.tl.fromTo(glow, { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 0.85, scale: 1, duration: 0.9, ease: SS.EZ.soft }, L.bloom + 0.15);
     SS.tl.fromTo(glow, { autoAlpha: 0.85 }, { autoAlpha: 0, duration: 0.5, ease: 'power1.inOut' }, L.dock);
     // the node travels into the mark of the logo and hands over to it
     const mx = markX(LOGO.h, 540);
-    SS.tl.fromTo(node, { x: NODE.x, y: NODE.y, scale: 1.3 }, { x: mx, y: LOGO.y, scale: 2.2, duration: 0.32, ease: SS.EZ.inOut }, L.bloom + 0.02);
-    SS.tl.fromTo(node, { scale: 2.2 }, { scale: 0, duration: 0.24, ease: SS.EZ.in }, L.mark + 0.1);
+    SS.tl.fromTo(node, { x: NODE.x, y: NODE.y }, { x: mx, y: LOGO.y, duration: 0.32, ease: SS.EZ.inOut }, L.bloom + 0.02);
+    SS.tl.fromTo(node, { scale: 1.3 }, { scale: 0, duration: 0.24, ease: SS.EZ.in }, L.contract + 0.37);
     SS.cue(L.bloom, 'm-bloom');
 
     // ================================================================ 5 · logo + "Avec ScaleSuite."
@@ -111,11 +111,11 @@
     SS.tl.set(logo.el, { autoAlpha: 0 }, L.dock + 0.56);
     const rows = BROKERS.map(([n, area], i) => {
       const el = SS.el('div', 'lp-row', w);
-      Object.assign(el.style, { width: '864px', height: CAMP.rowH + 'px', borderRadius: '18px', background: i % 2 ? '#F6FBFA' : '#fff', padding: '0 22px 0 14px', gap: '18px' });
-      el.innerHTML = `<span style="width:56px;height:56px;flex:none">${SS.icon.person()}</span>
-        <span style="font-size:38px;font-weight:720;letter-spacing:-.02em;color:${C.ink};flex:none">Courtier ${n}</span>
-        <span class="chip3" style="position:static;font-size:30px;height:48px;padding:0 16px;box-sizing:border-box;box-shadow:none"><span style="width:28px;height:28px;display:block">${SS.icon.pin(C.green)}</span>${area}</span>
-        <span style="margin-left:auto;display:flex;align-items:center;gap:10px;font-size:30px;font-weight:650;color:${C.green}"><span style="width:14px;height:14px;border-radius:50%;background:${C.green}"></span>Active</span>`;
+      Object.assign(el.style, { width: '864px', height: CAMP.rowH + 'px', borderRadius: '18px', background: i % 2 ? '#F6FBFA' : '#fff', padding: '0 24px 0 16px', gap: '18px' });
+      el.innerHTML = `<span style="width:64px;height:64px;flex:none">${SS.icon.person()}</span>
+        <span style="font-size:42px;font-weight:730;letter-spacing:-.02em;color:${C.ink};flex:none">Courtier ${n}</span>
+        <span class="chip3" style="position:static;font-size:34px;height:56px;padding:0 18px;box-sizing:border-box;box-shadow:none"><span style="width:32px;height:32px;display:block">${SS.icon.pin(C.green)}</span>${area}</span>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:10px;font-size:32px;font-weight:680;color:${C.green}"><span style="width:16px;height:16px;border-radius:50%;background:${C.green}"></span>Active</span>`;
       SS.place(el, 540, CAMP.rowY(i) + 30, { autoAlpha: 0 });
       SS.tl.fromTo(el, { y: CAMP.rowY(i) + 30, autoAlpha: 0 }, { y: CAMP.rowY(i), autoAlpha: 1, duration: 0.42, ease: SS.EZ.dock }, L.campRows + 0.3 + i * 0.06);
       return el;
@@ -125,7 +125,8 @@
     const halo = SS.el('div', 'a3', w);
     Object.assign(halo.style, { width: '880px', height: CAMP.rowH + 16 + 'px', borderRadius: '24px', boxShadow: `0 0 0 4px ${C.turq}, 0 0 44px 6px rgba(43,191,179,.4)` });
     SS.place(halo, 540, ADY, { autoAlpha: 0, scale: 1.04 });
-    SS.tl.fromTo(halo, { autoAlpha: 0, scale: 1.04 }, { autoAlpha: 1, scale: 1, duration: 0.36, ease: SS.EZ.out }, L.halo);
+    SS.tl.fromTo(halo, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.14, ease: 'power1.out' }, L.halo);
+    SS.tl.fromTo(halo, { scale: 1.04 }, { scale: 1, duration: 0.36, ease: SS.EZ.out }, L.halo);
     SS.tl.fromTo(rows.filter((r, i) => i !== HOT), { opacity: 1 }, { opacity: 0.3, duration: 0.3, ease: 'power1.out' }, L.halo + 0.04);
     SS.tl.fromTo(halo, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.2, ease: 'power1.in' }, L.adMorph);
     // the row opens into Courtier 03's ad
@@ -264,6 +265,11 @@
     SS.hideWords(h7);
     SS.wordsIn(h7, L.chezHead, { st: 0.06 });
     SS.wordsOut(h7, L.chezOut, { st: 0.02 });
+    const h7b = SS.text(layer, 'Le soir même. Pas le lendemain.', { size: 56, weight: 600, color: C.soft, tracking: -0.02, maxW: 940 });
+    SS.place(h7b.el, 540, 490);
+    SS.hideWords(h7b);
+    SS.wordsIn(h7b, L.chezHead + 0.3, { st: 0.04, dur: 0.6 });
+    SS.wordsOut(h7b, L.chezOut + 0.02, { st: 0.015 });
     SS.cue(L.avec, 'm-avec'); SS.cue(L.chezHead, 'm-chez');
 
     R = { bg, blobs, logo, wrap, w, cam, layer, stageL, chk, shakeBox };

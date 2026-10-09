@@ -6,7 +6,7 @@
    3 · Time passes (5.6–8.4): the clock rolls from Tuesday evening to Wednesday afternoon; new leads
        land on top and push ours down. It stays unread.
    4 · Too late (8.4–10.8): someone finally opens it; the card turns grey and sags.
-       "Trop tard." / "Le vendeur a signé ailleurs."
+       "Trop tard." / "Il a déjà choisi un autre courtier."
    Exit (10.8): rewind to Tuesday 21 h 04 (rows unwind, colour returns), the card contracts into the
    node that blooms into the ScaleSuite world (03-solution). Slow, heavy motion; no overshoot here. */
 (function () {
@@ -223,7 +223,7 @@
     SS.hideWords(h4);
     SS.wordsIn(h4, L.late, { st: 0.08, dur: 0.8 });
     SS.wordsOut(h4, L.rewind, { st: 0.02 });
-    const h5 = SS.text(layer, 'Le vendeur a signé ailleurs.', { size: 56, weight: 600, color: P.soft, tracking: -0.02, maxW: 940 });
+    const h5 = SS.text(layer, 'Il a déjà choisi un autre courtier.', { size: 56, weight: 600, color: P.soft, tracking: -0.02, maxW: 940 });
     SS.place(h5.el, 540, 452);
     SS.hideWords(h5);
     SS.wordsIn(h5, L.signed, { st: 0.04, dur: 0.6 });
