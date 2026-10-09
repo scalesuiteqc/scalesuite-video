@@ -16,7 +16,8 @@ The full production guide (process, rules, components) is the project skill `.cl
 
 Outputs (in `../brag-output`): `scalesuite-social-9x16-v3.mp4`, `previews/scalesuite-preview-9x16-30fps-v3.mp4`,
 `scalesuite-contact-sheet-v3.jpg`, `scalesuite-preview-v3.jpg`, `audio-v3/` (music + bed/sfx stems for
-`audio/mix_vo.py`, see `voiceover-timing-v3.md`). Intermediates go to `../brag-output/work-v3`.
+`audio/mix_vo.py`, see `voiceover-timing-v3.md`), `audio-v3/vo/l1-l9.wav` (lines cut from
+`../voiceover-v3.mp3` by `audio/split_vo_v3.py`) and `scalesuite-social-9x16-v3-vo.mp4` (V3 picture + voiceover mix). Intermediates go to `../brag-output/work-v3`.
 
 Scenes: `src/scenes-v3/01-hook` (S1), `02-chaos` (S2), `03-relief` (S3), `04-structure` (S4),
 `05-campaign` (S5–S7, one world: campaign card + optimisation panel), `06-lead` (S8, its own world and
