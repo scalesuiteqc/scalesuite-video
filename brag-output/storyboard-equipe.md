@@ -197,3 +197,13 @@ départ des leads, le bassin reste visible, vide, jusqu'à la bascule.
 - Son : effets à −11,6 (départ), −10,6 (bascule), −10,3 (arrivée) et −8,9 dB (bouton) sous la
   musique ; mix −15,0 LUFS, crête −1,6 dBFS.
 - Contrôles : `determinism` OK (0 différence de DOM), `motion 28.2` OK (aucun saut isolé).
+
+## Master et version avec voix
+
+- Master `scalesuite-equipe-9x16.mp4` : 1080 × 1920, 60 fps, H.264 High yuv420p bt709, 28,2 s
+  (1 692 images), image 0 = affiche (t = 0,8 s), −15,0 LUFS, −1,7 dBTP.
+- Version avec voix `scalesuite-equipe-9x16-vo.mp4` : même flux vidéo (copié), voix posée selon
+  `voiceover-equipe.md`, −14,0 LUFS, −1,9 dBTP.
+- Contrôle qualité : `determinism` OK, `motion 28.2` OK, `textsize-equipe` OK (32 px minimum), texte
+  relu sur des images extraites du MP4 (aucune date affichée, 8 secteurs distincts, « Commandité »
+  absent car aucune annonce n'est montrée dans ce film).
