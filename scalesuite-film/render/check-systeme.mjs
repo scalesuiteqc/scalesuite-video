@@ -51,7 +51,7 @@ try {
     }
     console.log(domBad ? `FAIL: ${domBad} DOM differences` : `OK: 0 DOM differences, worst pixel ${worst}/255`);
   } else {
-    const end = parseFloat(arg) || 34.0;
+    const end = parseFloat(arg) || 40.0;
     const f = await openFilmV3(browser, base, 1, 0.25);
     const rows = []; let prev = null;
     for (let i = 0; i <= Math.round(end * 30); i++) {

@@ -2,8 +2,8 @@
    then exposes SS.renderFrame(t). index-systeme.html?t=12.3 (static frame) · ?play (real time). */
 (function () {
   const SS = window.SS;
-  SS.DURATION = 34.0;
-  SS.POSTER_T = 0.3; // the hook, readable at frame 0 (title + Commandité ad)
+  SS.DURATION = 40.0;
+  SS.POSTER_T = 3.0; // the complete hook (both lines, the ruler, « Lue à 17 h 04 »), baked in as frame 0
 
   async function boot() {
     const stage = document.getElementById('stage');

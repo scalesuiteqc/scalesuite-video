@@ -1,4 +1,4 @@
-# « Le Système Vendeurs 5 minutes » (film de lancement) : voix hors champ (v2, à valider)
+# « Le Système Vendeurs 5 minutes » (film de lancement) : voix hors champ (v2, validée)
 
 Vidéo `scalesuite-systeme-9x16` · 40,0 s · français québécois, vouvoiement, ton posé et assuré.
 Fenêtres calées sur les repères du plan v2 (`storyboard-systeme.md`). Elles seront **recalées sur les
@@ -20,12 +20,12 @@ d'accélérer (voir les notes). Aucune phrase ne commence par « Et » ou « Mai
 | 5 | Pas de rappel en 10 minutes? L'équipe est relancée. | 18,30 – 21,65 | 3,35 | 9 | 2,69 | ligne « Relance après 10 minutes » 18,3 ; 14 h 22 vers 19,5 ; Leader 19,95 |
 | 6 | Pas prêt à vendre? On le suit pendant 90 jours. | 21,75 – 25,10 | 3,35 | 9 | 2,69 | composante 5 21,8 ; pile complète 23,45 – 25,0 |
 | — | *(musique seule)* | 25,10 – 27,85 | 2,75 | — | — | preuve : 124, Groupe Mackay (se lit à l'écran) |
-| 7 | Un engagement manqué, le mois n'est pas facturé. Aucun contrat. | 27,85 – 31,65 | 3,80 | 10 | 2,63 | titre 27,9 ; sceau 28,3 ; « Aucun contrat. » 28,8 |
-| 8 | Trois nouvelles équipes par mois. | 31,75 – 33,75 | 2,00 | 5 | 2,50 | « 3 nouvelles équipes par mois. » 31,45 ; « Il reste 3 places fondatrices. » 32,0 |
+| 7 | Si on ne livre pas, vous ne payez pas. Aucun contrat. | 27,80 – 31,90 | 4,10 | 11 | 2,68 | titre 27,9 ; sceau 28,3 ; « Aucun contrat. » 28,8 |
+| 8 | Trois nouvelles équipes par mois. | 32,00 – 33,90 | 1,90 | 5 | 2,63 | « 3 nouvelles équipes par mois. » 31,45 ; « Il reste 3 places fondatrices. » 32,0 |
 | — | *(musique seule)* | 33,75 – 36,60 | 2,85 | — | — | thèse et rencontre ; logo 34,7 – 36,0 ; nom du système 36,2 |
 | 9 | Obtenez votre diagnostic gratuit. | 36,60 – 38,40 | 1,80 | 4 | 2,22 | bouton 36,5 ; URL 36,8 ; tenue jusqu'à 40,0 |
 
-Total : 70 mots dits.
+Total : 71 mots dits.
 
 **Coupes et retouches par rapport à votre texte de départ :**
 - **Réplique 1** (choix 9 du plan) : « Le vendeur écrit à 14 h 12. Votre courtier le voit à 17 h. » fait 14 mots
@@ -37,12 +37,13 @@ Total : 70 mots dits.
 - **Réplique 2** : elle finit pendant l'éclosion (5,95 – 6,45 s), voulu : la voix termine « quelqu'un d'autre »
   au moment où le monde bascule. Le souffle d'ouverture reste 14 dB sous la voix.
 - **Réplique 8** : si `SS.OFFRE.equipesParMois` change, cette réplique doit être réenregistrée.
+- **Réplique 7** (choix 3) : la phrase du site mot pour mot, « Si on ne livre pas, vous ne payez pas. Aucun contrat. » (11 mots, 4,1 s) ; la réplique 8 est décalée à 32,0 s.
 - Les autres répliques sont mot pour mot les vôtres.
 
 ## Bloc ElevenLabs (Multilingual v2)
 
 ```
-Quatorze heures douze : le vendeur écrit. Dix-sept heures : votre courtier le voit. <break time="1.0s" /> Trois heures pour appeler quelqu'un d'autre. <break time="1.0s" /> Voici le Système Vendeurs cinq minutes. <break time="1.5s" /> En moins d'une minute, le vendeur reçoit un texto. <break time="1.5s" /> Pas de rappel en dix minutes? L'équipe est relancée. <break time="1.0s" /> Pas prêt à vendre? On le suit pendant quatre-vingt-dix jours. <break time="1.5s" /> Un engagement manqué, le mois n'est pas facturé. Aucun contrat. <break time="1.0s" /> Trois nouvelles équipes par mois. <break time="1.5s" /> Obtenez votre diagnostic gratuit.
+Quatorze heures douze : le vendeur écrit. Dix-sept heures : votre courtier le voit. <break time="1.0s" /> Trois heures pour appeler quelqu'un d'autre. <break time="1.0s" /> Voici le Système Vendeurs cinq minutes. <break time="1.5s" /> En moins d'une minute, le vendeur reçoit un texto. <break time="1.5s" /> Pas de rappel en dix minutes? L'équipe est relancée. <break time="1.0s" /> Pas prêt à vendre? On le suit pendant quatre-vingt-dix jours. <break time="1.5s" /> Si on ne livre pas, vous ne payez pas. Aucun contrat. <break time="1.0s" /> Trois nouvelles équipes par mois. <break time="1.5s" /> Obtenez votre diagnostic gratuit.
 ```
 
 Notes :

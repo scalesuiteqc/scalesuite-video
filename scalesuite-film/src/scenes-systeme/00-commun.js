@@ -6,31 +6,33 @@
 (function () {
   const SS = window.SS;
 
+  // ---- Real scarcity (scalesuiteqc.ca/fr): change here, then ./build-systeme.sh final. No date, no countdown.
+  SS.OFFRE = { equipesParMois: 3, placesFondatrices: 3 };
+
   SS.ST = {
-    // 1 · hook (0–3.0): Commandité ad → team page → form → token
-    tap0: 0.55, open0: 0.62, type0: 1.18, send0: 2.0, squeeze0: 2.12, token0: 2.32, born: 2.95, hookOut: 2.95,
-    // 2 · « en visite » (3.0–5.6)
-    team: 3.0, drop: 3.02, sub: 3.5, visite: 3.1, nonlue: 3.72, jump1: 4.4, jump2: 5.1,
-    // 3 · 17 h (5.6–9.4)
-    lue: 5.6, ruler: 5.68, voit: 5.75, voitOut: 7.3, trois: 7.45, sag: 7.6, troisOut: 9.45,
-    // 4 · bascule (9.4–12.1)
-    rewind: 9.5, bloom: 10.05, repr: 10.4, avec: 10.6, reprOut: 12.0,
-    // 5 · 14 h 12 (12.1–13.8)
-    page1: 11.95, h5: 12.1, send1: 12.3, squeeze1: 12.42, token1: 12.62, h5Out: 13.7,
-    // 6 · 14 h 13, the text message (13.8–17.6)
-    tick13: 13.85, travel: 13.95, whip: 13.95, notif: 14.55, h6: 14.25, mention: 14.8, h6Out: 17.55,
-    // 7 · 14 h 13, Courtier 03 alerted (17.6–20.2)
-    toTeam: 17.6, h7: 17.9, fil7: 18.05, halo7: 18.4, sub7: 18.45, h7Out: 20.15,
-    // 8 · 14 h 22, relance → leader (20.2–22.8)
-    ticks: 20.3, h8: 20.35, relance: 21.0, shift: 21.05, route: 21.2, leader: 21.45, h8Out: 22.75,
-    // 9 · 90 days (22.8–25.0)
-    suivi: 22.8, h9: 22.9, dateMode: 22.95, ribbon: 23.15, dateRoll: 23.45, h9Out: 24.95,
-    // 10 · proof (25.0–27.8)
-    proof: 25.1, count: 25.25, seule: 26.1, proofOut: 27.72,
-    // 11 · thesis (27.8–30.4)
-    th1: 27.85, th2: 28.35, meet: 28.6, thOut: 30.3,
-    // 12 · end card (30.4–34.0)
-    merge: 30.4, endMark: 30.72, endLetters: 30.9, tag: 31.05, cta: 31.25, url: 31.6, sheen: 32.6, end: 34.0,
+    // 1 · hook (0–3.5): readable at t = 0; poster (frame 0 of the master) at 3.0
+    roll: 1.9, h1b: 2.3, lue: 2.6, hookOut: 3.5,
+    // 2 · cost (3.5–6.0)
+    cost: 3.55, sag: 3.7, rewind: 5.45, bloom: 5.95,
+    // 3 · reveal (6.0–10.1)
+    logo: 6.1, nouveau: 6.25, w1: 6.6, w2: 6.9, w3: 7.2, w4: 7.4, pour: 7.7, toCard: 10.1,
+    // 4 · the stack (10.1–25.0): sheet (card view) in/out, then one demo per component
+    dock1: 10.5, out1: 10.8,
+    c1: 10.8, tap1: 11.05, page1: 11.12, send1: 12.05, tok1: 12.3,
+    in2: 12.8, out2: 13.3, c2: 13.3, tick13: 13.45, texto: 13.8,
+    in3: 16.0, out3: 16.5, c3: 16.5, fil3: 16.6, alert3: 16.95,
+    in4: 18.1, out4: 18.6, c4: 18.6, ticks: 18.7, relance: 19.35, shift: 19.4, route: 19.52, leader: 19.75,
+    in5: 21.1, out5: 21.6, c5: 21.6, dateMode: 21.7, ribbon: 21.8, dateRoll: 22.1,
+    in6: 23.25, full: 23.5,
+    // 5 · proof (25.0–27.8)
+    proof: 25.0, count: 25.25, seule: 25.9, proofOut: 27.72,
+    // 6 · risk reversed (27.8–31.4)
+    risk: 27.85, seal: 28.3, contrat: 28.8, partage: 29.3, riskOut: 31.35,
+    // 7 · scarcity (31.4–33.8)
+    rare: 31.45, places: 31.75, reste: 32.0, rareOut: 33.75,
+    // 8 · end (33.8–40.0)
+    th1: 33.85, th2: 34.35, meet: 34.55, thOut: 35.8, merge: 35.85, endMark: 36.15, endLetters: 36.3, name: 36.35,
+    cta: 36.6, url: 36.9, sheen: 38.0, end: 40.0,
   };
 
   // Problem world (from « Le lead perdu ») and the site identity (design-dna-systeme.json).
@@ -121,17 +123,20 @@
     };
   };
 
-  // ---- The team card « Votre équipe » (list: Leader + Courtier 01–05), same geometry in both worlds.
-  const TEAM = { top: 690, w: 900, headH: 96, rowH: 88, gapL: 12, subH: 84 };
-  TEAM.rows0 = TEAM.top + TEAM.headH + 8;
-  // centre y of row i (0 = Leader, 1–5 = Courtier 01–05) given open subcards {L, C3}
-  TEAM.rowY = (i, ins = {}) => TEAM.rows0 + TEAM.rowH / 2 + i * TEAM.rowH + (i >= 1 ? TEAM.gapL : 0)
-    + (ins.L && i >= 1 ? TEAM.subH : 0) + (ins.C3 && i >= 4 ? TEAM.subH : 0);
-  TEAM.subY = (i, ins = {}) => TEAM.rowY(i, ins) + TEAM.rowH / 2 + 4 + 38;
-  TEAM.h = (ins = {}) => TEAM.headH + 8 + 6 * TEAM.rowH + TEAM.gapL + ((ins.L ? 1 : 0) + (ins.C3 ? 1 : 0)) * TEAM.subH + 18;
-  SS.TEAM = TEAM;
+  // ---- The team card « Votre équipe » (list: Leader + Courtier 01–05). Geometry factory: the hook uses
+  // top 770, the stack top 720; rows of 80 in both.
+  SS.teamGeo = (top, rowH = 80) => {
+    const T = { top, w: 900, headH: 96, rowH, gapL: 12, subH: 84 };
+    T.rows0 = T.top + T.headH + 8;
+    // centre y of row i (0 = Leader, 1–5 = Courtier 01–05) given open subcards {L, C3}
+    T.rowY = (i, ins = {}) => T.rows0 + T.rowH / 2 + i * T.rowH + (i >= 1 ? T.gapL : 0)
+      + (ins.L && i >= 1 ? T.subH : 0) + (ins.C3 && i >= 4 ? T.subH : 0);
+    T.subY = (i, ins = {}) => T.rowY(i, ins) + T.rowH / 2 + 4 + 38;
+    T.h = (ins = {}) => T.headH + 8 + 6 * T.rowH + T.gapL + ((ins.L ? 1 : 0) + (ins.C3 ? 1 : 0)) * T.subH + 18;
+    return T;
+  };
 
-  SS.teamCard = (parent, world) => {
+  SS.teamCard = (parent, world, TEAM) => {
     const K = world === 'P' ? SS.P : SS.M;
     const card = SS.el('div', 'sy-card', parent);
     Object.assign(card.style, { width: TEAM.w + 'px', height: TEAM.h() + 'px', background: world === 'P' ? SS.P.card : '#fff', boxShadow: world === 'P' ? SS.SHADOW.pHi : SS.SHADOW.mHi });
@@ -145,6 +150,7 @@
     const rows = names.map((n, i) => {
       const el = SS.el('div', 'sy-row', parent);
       Object.assign(el.style, { width: '864px', height: TEAM.rowH + 'px', padding: '0 22px', gap: '20px', borderRadius: '20px' });
+      el.dataset.row = i;
       el.innerHTML = `<span style="width:60px;height:60px;flex:none">${SS.icon.person(avFg, avBg)}</span>
         <span style="font-size:42px;font-weight:730;letter-spacing:-.02em;color:${K.ink};flex:none">${n}</span><span class="st" style="margin-left:auto;display:flex;align-items:center"></span>`;
       SS.place(el, 540, TEAM.rowY(i));
@@ -216,5 +222,60 @@
       <div style="margin-top:14px;font-size:46px;font-weight:650;letter-spacing:-.02em;color:${world === 'P' ? SS.P.link : SS.M.link};white-space:nowrap">Vendre votre maison à Longueuil</div>
       <div style="margin-top:26px;width:74%;height:14px;border-radius:7px;background:${world === 'P' ? SS.P.skel : '#E6EEEC'}"></div></div>`;
     return { el, ct: el.querySelector('.ct') };
+  };
+
+  // ---- The product card « Le Système Vendeurs 5 minutes »: header + five named lines, each checked in turn.
+  SS.STACK = [
+    ['Campagne Google Vendeurs', 'et une page aux couleurs de votre équipe'],
+    ['Réponse 60 secondes', 'Un texto au vendeur dans la minute'],
+    ['Le bon courtier alerté', 'La demande va direct au bon courtier'],
+    ['Relance après 10 minutes', "Si personne n'a rappelé, l'équipe est relancée"],
+    ['Suivi 90 jours', 'Les vendeurs pas encore prêts'],
+  ];
+  SS.PCARD = { w: 900, headH: 150, rowH: 136 };
+  SS.PCARD.h = SS.PCARD.headH + 5 * SS.PCARD.rowH + 26;
+  SS.productCard = (parent, o = {}) => {
+    const M = SS.M;
+    const rowH = o.compact ? 96 : SS.PCARD.rowH;
+    const PC = { w: SS.PCARD.w, headH: SS.PCARD.headH, h: SS.PCARD.headH + 5 * rowH + 26 };
+    const el = SS.el('div', 'sy-card', parent);
+    Object.assign(el.style, { width: PC.w + 'px', height: PC.h + 'px', background: '#fff', boxShadow: SS.SHADOW.mHi });
+    const head = SS.el('div', '', el);
+    Object.assign(head.style, { position: 'absolute', left: '40px', top: '0px', height: PC.headH + 'px', display: 'flex', alignItems: 'center', gap: '20px', whiteSpace: 'nowrap' });
+    const mk = SS.el('span', '', head);
+    Object.assign(mk.style, { position: 'relative', width: '58px', height: '64px', display: 'block', flex: 'none' });
+    const lg = SS.logo(mk, 64, { word: false });
+    lg.el.style.left = '0px'; lg.el.style.top = '0px'; lg.mark(1);
+    const ht = SS.el('span', '', head);
+    Object.assign(ht.style, { fontSize: '46px', fontWeight: 800, letterSpacing: '-.035em', color: M.ink });
+    ht.innerHTML = 'Le Système Vendeurs 5&nbsp;minutes';
+    const div = SS.el('div', '', el);
+    Object.assign(div.style, { position: 'absolute', left: '22px', right: '22px', top: PC.headH + 'px', height: '2px', background: '#E6EFED' });
+    const rows = SS.STACK.map(([n, sub], i) => {
+      const r = SS.el('div', '', el);
+      Object.assign(r.style, { position: 'absolute', left: '0px', top: PC.headH + 8 + i * rowH + 'px', width: PC.w + 'px', height: rowH + 'px' });
+      const ny = o.compact ? rowH / 2 - 26 : rowH / 2 - 46;
+      r.innerHTML = `<span class="ring" style="position:absolute;left:40px;top:${(rowH - 60) / 2}px;width:60px;height:60px;border-radius:50%;box-sizing:border-box;border:4px solid #C4D6D3"></span>
+        <span class="ck" style="position:absolute;left:40px;top:${(rowH - 60) / 2}px;width:60px;height:60px"></span>
+        <div class="sk" style="position:absolute;left:128px;top:${rowH / 2 - 22}px"><div style="width:${[380, 330, 350, 400, 260][i]}px;height:18px;border-radius:9px;background:#E6EFED"></div>${o.compact ? '' : `<div style="margin-top:16px;width:${[460, 400, 420, 480, 330][i]}px;height:14px;border-radius:7px;background:#EEF4F3"></div>`}</div>
+        <div class="tx" style="position:absolute;left:128px;top:0;width:740px;height:${rowH}px">
+          <div style="position:absolute;left:0;top:${ny}px;font-size:42px;font-weight:760;letter-spacing:-.025em;color:${M.ink};white-space:nowrap">${n}</div>
+          ${o.compact ? '' : `<div style="position:absolute;left:0;top:${rowH / 2 + 6}px;font-size:32px;font-weight:560;color:${M.soft};white-space:nowrap">${sub}</div>`}</div>`;
+      const chk = SS.check(r.querySelector('.ck'), 60, M.teal);
+      const k = { k: 0 };
+      SS.proc(() => chk.set(k.k));
+      return { el: r, k, tx: r.querySelector('.tx'), sk: r.querySelector('.sk') };
+    });
+    return { el, head, rows, h: PC.h };
+  };
+
+  // Step label in the site's style (« 1 sur 6 » + segmented bar): « Système Vendeurs 5 minutes · n sur 5 »
+  SS.stepLabel = (parent, n) => {
+    const M = SS.M;
+    const el = SS.el('div', 'a3', parent);
+    Object.assign(el.style, { width: '900px', height: '80px' });
+    el.innerHTML = `<div style="display:flex;gap:10px">${[1, 2, 3, 4, 5].map((i) => `<span style="display:block;flex:1;height:8px;border-radius:4px;background:${i <= n ? M.turq : '#DCE8E6'}"></span>`).join('')}</div>
+      <div style="margin-top:20px;text-align:center;font-size:36px;font-weight:760;letter-spacing:-.015em;color:${M.teal};white-space:nowrap">Système Vendeurs 5 minutes · ${n} sur 5</div>`;
+    return el;
   };
 })();

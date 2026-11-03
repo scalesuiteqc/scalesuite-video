@@ -1,60 +1,125 @@
-/* « Système Vendeurs 5 minutes » · proof, thesis and end card (25.0–34.0 s), screen space on the mint.
-   10 · Proof (25.0–27.8): « Groupe Mackay », 124 counted from 0 (0.8 s), « demandes en moins de 7 mois. »,
-        « Avec la campagne seule. » (the only real name in the film, as published on the site).
-   11 · Thesis (27.8–30.4): the number flattens into a line; « Vos courtiers rencontrent des vendeurs. »
-        above it, « Nous, on vous les amène. » below it (deep teal); Courtier 03's card shows
-        « Rencontre · Vendeur · Longueuil » (the destination, discreet, no date, no promise).
-   12 · End (30.4–34.0): the line contracts into a node, the node grows the ScaleSuite mark, the wordmark
-        rises, « Le Système Vendeurs 5 minutes », the ink button « Obtenir mon diagnostic gratuit » grows
-        out of a node (≈ 10 % overshoot), « scalesuiteqc.ca ». Settled at 31.8 s, held to 34.0 s.
+/* « Système Vendeurs 5 minutes » (launch film) · proof, risk reversed, real scarcity, end (25.0–40.0 s),
+   screen space on the mint.
+   5 · Proof (25.0–27.8): « Groupe Mackay », 124 counted from 0, « demandes en moins de 7 mois. », « Avec la
+       campagne seule. », source label « Chiffres tirés de Google Ads » (the only real name in the film).
+   6 · Risk reversed (27.8–31.4): the full product card comes back (five checks) and receives a seal drawn with a
+       stroke (two rings and a check, no text, no shine). « Si on ne livre pas, vous ne payez pas. » (site,
+       verbatim), « Aucun contrat. », « Vos demandes ne sont jamais partagées ni revendues. »
+   7 · Scarcity (31.4–33.8): numbers from SS.OFFRE: « 3 nouvelles équipes par mois. », « Il reste 3 places
+       fondatrices. », one open seat drawn per place. No date, no countdown.
+   8 · End (33.8–40.0): the seats contract into a line; thesis above and below it with Courtier 03's discreet
+       « Rencontre » row; the line → node → ScaleSuite logo; the system's name large under the logo; the ink
+       button « Obtenir mon diagnostic gratuit » grows out of a node; « scalesuiteqc.ca ». Held 37.3–40.0.
    Also re-appends the clock layer on top of the stage. */
 (function () {
-  const SS = window.SS, S = SS.ST, M = SS.M;
+  const SS = window.SS, S = SS.ST, M = SS.M, O = SS.OFFRE;
   const LINE = { y: 600, w: 780 };
-  const G = { LH: 190, LY: 740, tagY: 935, cta: { y: 1110, w: 840, h: 136, size: 42 }, urlY: 1282 };
+  const G = { LH: 190, LY: 520, nameY: 800, cta: { y: 1045, w: 840, h: 136, size: 42 }, urlY: 1210 };
   const LW = (G.LH * SS.LOGO.w) / SS.LOGO.h;
   const markX = 540 - LW / 2 + 58 * (G.LH / SS.LOGO.h);
+  const RK = { s: 0.76, y: 790 }; // the product card in the risk scene
+  const P = { mark: 0, sheen: 0, seal: 0 };
 
   let R;
   function build(stage) {
     const layer = SS.el('div', 'layer', stage);
 
-    // ================================================================ 10 · proof
+    // ================================================================ 5 · proof
     const gm = SS.text(layer, 'Groupe Mackay', { size: 56, weight: 760, color: M.ink, tracking: -0.025 });
-    SS.place(gm.el, 540, 600);
-    SS.say(gm, S.proof, S.proofOut, { st: 0.05 });
-    const numM = SS.el('div', 'a3', layer); // mask
+    SS.place(gm.el, 540, 520);
+    SS.say(gm, S.proof + 0.1, S.proofOut, { st: 0.05 });
+    const numM = SS.el('div', 'a3', layer);
     Object.assign(numM.style, { width: '900px', height: '300px', overflow: 'hidden' });
-    SS.place(numM, 540, 830);
+    SS.place(numM, 540, 750);
     const num = SS.el('div', 'a3 sy-tnum', numM);
     Object.assign(num.style, { fontSize: '270px', fontWeight: 800, letterSpacing: '-.05em', color: M.teal, lineHeight: 1, whiteSpace: 'nowrap' });
     num.textContent = '124';
-    SS.place(num, 450, 150, { yPercent: -50 });
+    SS.place(num, 450, 150);
     gsap.set(num, { y: 400 });
     SS.tl.fromTo(num, { y: 400 }, { y: 150, duration: 0.6, ease: SS.EZ.out }, S.count - 0.1);
     SS.counter(num, [{ at: S.count, dur: 0.8, from: 0, to: 124, ease: 'power3.out' }]);
     const dm = SS.text(layer, 'demandes en moins de 7 mois.', { size: 60, weight: 760, color: M.ink, tracking: -0.03, maxW: 960 });
-    SS.place(dm.el, 540, 1040);
+    SS.place(dm.el, 540, 960);
     SS.say(dm, S.count + 0.25, S.proofOut + 0.02, { st: 0.05 });
     const se = SS.text(layer, 'Avec la campagne seule.', { size: 42, weight: 600, color: M.soft, tracking: -0.015 });
-    SS.place(se.el, 540, 1130);
+    SS.place(se.el, 540, 1050);
     SS.say(se, S.seule, S.proofOut + 0.04, { st: 0.04 });
+    const src = SS.el('div', 'a3', layer);
+    Object.assign(src.style, { height: '64px', padding: '0 26px', borderRadius: '32px', background: '#fff', boxShadow: `inset 0 0 0 2px ${M.line}`, color: M.teal, fontSize: '32px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap' });
+    src.innerHTML = `<svg viewBox="0 0 24 24" style="width:30px;height:30px" fill="none" stroke="${M.teal}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Chiffres tirés de Google Ads`;
+    SS.place(src, 540, 1160, { autoAlpha: 0, scale: 0.94 });
+    SS.tl.fromTo(src, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.4, ease: SS.EZ.out }, S.seule + 0.2);
+    SS.tl.fromTo(src, { autoAlpha: 1, y: 1160 }, { autoAlpha: 0, y: 1190, duration: 0.24, ease: SS.EZ.in }, S.proofOut);
+    SS.tl.fromTo(num, { yPercent: -50 }, { yPercent: -200, duration: 0.3, ease: SS.EZ.in }, S.proofOut);
     SS.cue(S.count, 'm-count');
-    // the number flattens into the thesis line
+
+    // ================================================================ 6 · risk reversed
+    const pc = SS.productCard(layer, { compact: true });
+    pc.rows.forEach((r) => { r.k.k = 1; gsap.set(r.sk, { autoAlpha: 0 }); });
+    const cx = 540 - SS.PCARD.w / 2, cy = RK.y - pc.h / 2;
+    gsap.set(pc.el, { x: cx, y: cy + 1300, scale: RK.s, transformOrigin: '50% 50%', autoAlpha: 0 });
+    SS.tl.set(pc.el, { autoAlpha: 1 }, S.proofOut + 0.08);
+    SS.tl.fromTo(pc.el, { y: cy + 1300 }, { y: cy, duration: 0.55, ease: SS.EZ.out }, S.proofOut + 0.08);
+    // the seal: two rings and a check, drawn with a stroke
+    const seal = SS.el('div', 'a3', layer);
+    Object.assign(seal.style, { width: '220px', height: '220px' });
+    const ss = SS.svg('svg', { viewBox: '0 0 220 220', width: 220, height: 220 }, seal);
+    SS.svg('circle', { cx: 110, cy: 110, r: 100, fill: '#ffffff' }, ss);
+    const sp = [
+      SS.svg('circle', { cx: 110, cy: 110, r: 100, fill: 'none', stroke: M.teal, 'stroke-width': 7, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1, transform: 'rotate(-90 110 110)' }, ss),
+      SS.svg('circle', { cx: 110, cy: 110, r: 82, fill: 'none', stroke: M.teal, 'stroke-width': 3, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1, transform: 'rotate(-90 110 110)' }, ss),
+      SS.svg('path', { d: 'M70 114l26 26 56-58', fill: 'none', stroke: M.teal, 'stroke-width': 12, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1 }, ss),
+    ];
+    SS.place(seal, 840, 1000, { autoAlpha: 0, scale: 0.9, rotation: -8 });
+    SS.tl.fromTo(seal, { autoAlpha: 0, scale: 0.9, rotation: -8 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.45, ease: SS.EZ.out }, S.seal);
+    SS.tl.fromTo(P, { seal: 0 }, { seal: 1, duration: 0.8, ease: 'none' }, S.seal);
+    SS.cue(S.seal, 'm-seal');
+    const rt = SS.head(layer, 'Si on ne livre pas,\n*vous* *ne* *payez* *pas.*', { size: 100 });
+    SS.place(rt.el, 540, 330);
+    SS.say(rt, S.risk, S.riskOut);
+    const ac = SS.text(layer, 'Aucun contrat.', { size: 56, weight: 780, color: M.ink, tracking: -0.03 });
+    SS.place(ac.el, 540, 1170);
+    SS.say(ac, S.contrat, S.riskOut + 0.02, { st: 0.05 });
+    const vd = SS.text(layer, 'Vos demandes ne sont jamais\npartagées ni revendues.', { size: 44, weight: 600, color: M.soft, tracking: -0.02, lh: 1.22 });
+    SS.place(vd.el, 540, 1290);
+    SS.say(vd, S.partage, S.riskOut + 0.04, { st: 0.025 });
+    SS.tl.fromTo([pc.el, seal], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
+    SS.tl.fromTo(pc.el, { y: cy }, { y: cy - 160, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
+    SS.tl.fromTo(seal, { y: 1000 }, { y: 840, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
+
+    // ================================================================ 7 · real scarcity (SS.OFFRE)
+    const nE = O.equipesParMois, nP = O.placesFondatrices;
+    const rr = SS.head(layer, `*${nE}* nouvelles équipes\npar mois.`, { size: 104 });
+    SS.place(rr.el, 540, 330);
+    SS.say(rr, S.rare, S.rareOut);
+    const reste = SS.text(layer, nP > 1 ? `Il reste ${nP} places fondatrices.` : 'Il reste 1 place fondatrice.', { size: 54, weight: 720, color: M.teal, tracking: -0.025 });
+    SS.place(reste.el, 540, 560);
+    SS.say(reste, S.reste, S.rareOut + 0.02, { st: 0.04 });
+    const PW = 260, GAP = 30, cnt = Math.max(1, Math.min(5, nP));
+    const seats = Array.from({ length: cnt }, (_, i) => {
+      const el = SS.el('div', 'a3', layer);
+      Object.assign(el.style, { width: PW + 'px', height: '300px', borderRadius: '30px', background: '#fff', boxShadow: `inset 0 0 0 4px ${M.teal}, ${SS.SHADOW.m}` });
+      el.innerHTML = `<div style="position:absolute;left:50%;top:46px;width:76px;height:76px;margin-left:-38px;border-radius:50%;box-sizing:border-box;border:5px solid ${M.teal}"></div>
+        <div style="position:absolute;left:0;right:0;top:150px;text-align:center;font-size:34px;font-weight:760;letter-spacing:-.02em;color:${M.ink};line-height:1.2">Place<br>fondatrice</div>`;
+      const x = 540 + (i - (cnt - 1) / 2) * (PW + GAP);
+      SS.place(el, x, 920, { autoAlpha: 0, y: 960 });
+      SS.tl.fromTo(el, { autoAlpha: 0, y: 960 }, { autoAlpha: 1, y: 920, duration: 0.42, ease: SS.EZ.dock }, S.places + i * 0.06);
+      SS.tl.fromTo(el, { y: 920, scaleY: 1, autoAlpha: 1 }, { y: LINE.y, scaleY: 0.03, autoAlpha: 0, duration: 0.32, ease: SS.EZ.in }, S.rareOut + i * 0.03);
+      return el;
+    });
+    SS.cue(S.places, 'm-places');
+
+    // ================================================================ 8 · thesis, then the end card
     const line = SS.el('div', 'a3', layer);
     Object.assign(line.style, { width: LINE.w + 'px', height: '6px', borderRadius: '3px', background: M.turq });
-    SS.place(line, 540, 830, { autoAlpha: 0, scaleX: 0.5 });
-    SS.tl.fromTo(num, { scaleY: 1, autoAlpha: 1 }, { scaleY: 0.03, autoAlpha: 0, duration: 0.26, ease: SS.EZ.in }, S.proofOut);
-    SS.tl.set(line, { autoAlpha: 1 }, S.proofOut + 0.2);
-    SS.tl.fromTo(line, { y: 830, scaleX: 0.5 }, { y: LINE.y, scaleX: 1, duration: 0.5, ease: SS.EZ.inOut }, S.proofOut + 0.2);
-
-    // ================================================================ 11 · thesis + the meeting
+    SS.place(line, 540, LINE.y, { autoAlpha: 0, scaleX: 0.3 });
+    SS.tl.fromTo(line, { autoAlpha: 0, scaleX: 0.3 }, { autoAlpha: 1, scaleX: 1, duration: 0.45, ease: SS.EZ.out }, S.rareOut + 0.22);
     const t1 = SS.head(layer, 'Vos courtiers rencontrent\ndes vendeurs.', { size: 92 });
     SS.place(t1.el, 540, 440);
     SS.say(t1, S.th1, S.thOut);
     const t2 = SS.head(layer, 'Nous, on vous\nles amène.', { size: 92, color: M.teal });
     SS.place(t2.el, 540, 760);
-    SS.say(t2, S.th2, S.thOut + 0.03, { dir: -1 });
+    SS.say(t2, S.th2, S.thOut + 0.03);
     const meet = SS.el('div', 'sy-card', layer);
     Object.assign(meet.style, { width: '900px', height: '196px', background: '#fff', boxShadow: SS.SHADOW.mHi });
     meet.innerHTML = `<div style="position:absolute;left:30px;top:20px;display:flex;align-items:center;gap:20px;white-space:nowrap">
@@ -62,12 +127,11 @@
         <span style="font-size:42px;font-weight:730;letter-spacing:-.02em;color:${M.ink}">Courtier 03</span></div>
       <div style="position:absolute;left:50px;right:50px;top:104px;height:72px;border-radius:20px;background:${M.band};display:flex;align-items:center;gap:16px;padding:0 24px;font-size:32px;font-weight:720;color:${M.ink};white-space:nowrap">
         <svg viewBox="0 0 24 24" style="width:34px;height:34px;flex:none" fill="none" stroke="${M.teal}" stroke-width="2.3" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Rencontre · Vendeur · Longueuil</div>`;
-    gsap.set(meet, { x: 90, y: 1100, autoAlpha: 0 });
-    SS.tl.fromTo(meet, { y: 1160, autoAlpha: 0 }, { y: 1100, autoAlpha: 1, duration: 0.5, ease: SS.EZ.dock }, S.meet);
-    SS.tl.fromTo(meet, { y: 1100, autoAlpha: 1 }, { y: 1260, autoAlpha: 0, duration: 0.32, ease: SS.EZ.in }, S.thOut);
+    gsap.set(meet, { x: 90, y: 1020, autoAlpha: 0 });
+    SS.tl.fromTo(meet, { y: 1080, autoAlpha: 0 }, { y: 1020, autoAlpha: 1, duration: 0.5, ease: SS.EZ.dock }, S.meet);
+    SS.tl.fromTo(meet, { y: 1020, autoAlpha: 1 }, { y: 1180, autoAlpha: 0, duration: 0.32, ease: SS.EZ.in }, S.thOut);
     SS.cue(S.th1, 'm-thesis');
-
-    // ================================================================ 12 · end card
+    // the line contracts into a node, the node grows the mark
     SS.tl.fromTo(line, { x: 540, scaleX: 1 }, { x: markX, scaleX: 0.008, duration: 0.34, ease: SS.EZ.in }, S.merge);
     SS.tl.fromTo(line, { y: LINE.y }, { y: G.LY, duration: 0.34, ease: SS.EZ.inOut }, S.merge);
     SS.tl.fromTo(line, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.06, ease: 'none' }, S.merge + 0.3);
@@ -79,27 +143,18 @@
     const logo = SS.logo(layer, G.LH);
     SS.place(logo.el, 540, G.LY);
     gsap.set(logo.letters, { y: 150 });
-    const P = { mark: 0, sheen: 0 };
     SS.tl.fromTo(P, { mark: 0 }, { mark: 1, duration: 0.66, ease: 'none' }, S.endMark);
     SS.tl.fromTo(logo.letters, { y: 150 }, { y: 0, duration: 0.6, stagger: 0.03, ease: SS.EZ.out }, S.endLetters);
     SS.tl.fromTo(P, { sheen: 0 }, { sheen: 1, duration: 0.7, ease: 'sine.inOut' }, S.sheen - 0.3);
     SS.cue(S.endMark, 'm-endmark');
-    // the system's name in the site's soft, static label (no dot, no pulse)
-    const tag = SS.el('div', 'a3', layer);
-    Object.assign(tag.style, { height: '76px', padding: '0 34px', borderRadius: '38px', background: M.band, color: M.teal, fontSize: '40px', fontWeight: 740, letterSpacing: '-.015em',
-      display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', overflow: 'hidden' });
-    tag.innerHTML = '<span class="w" style="display:inline-block">Le Système Vendeurs 5 minutes</span>';
-    SS.place(tag, 540, G.tagY, { autoAlpha: 0, scale: 0.92 });
-    const tw = tag.querySelector('.w');
-    gsap.set(tw, { yPercent: 130 });
-    SS.tl.fromTo(tag, { autoAlpha: 0, scale: 0.92 }, { autoAlpha: 1, scale: 1, duration: 0.45, ease: SS.EZ.out }, S.tag);
-    SS.tl.fromTo(tw, { yPercent: 130 }, { yPercent: 0, duration: 0.55, ease: SS.EZ.out }, S.tag + 0.08);
-    // call to action: a node that grows into the ink button (site style: plain ink, white text, no arrow)
+    const nm = SS.head(layer, 'Système Vendeurs\n5 *minutes.*', { size: 96 });
+    SS.place(nm.el, 540, G.nameY);
+    SS.say(nm, S.name, null, { st: 0.06 });
+    // call to action: a node that grows into the ink button (site style)
     const clip = SS.clipR;
     const cta = SS.el('div', 'a3', layer);
     const rad = 26;
-    Object.assign(cta.style, { width: G.cta.w + 'px', height: G.cta.h + 'px', borderRadius: rad + 'px', overflow: 'hidden', background: M.ink,
-      boxShadow: '0 22px 44px -22px rgba(21,21,21,.55)' });
+    Object.assign(cta.style, { width: G.cta.w + 'px', height: G.cta.h + 'px', borderRadius: rad + 'px', overflow: 'hidden', background: M.ink, boxShadow: '0 22px 44px -22px rgba(21,21,21,.55)' });
     cta.innerHTML = `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:${G.cta.size}px;font-weight:760;letter-spacing:-.02em">
         <span style="display:inline-block;overflow:hidden;padding:.16em .06em .22em;margin:-.16em -.06em -.22em"><span class="w" style="display:inline-block">Obtenir mon diagnostic gratuit</span></span></div>
       <div class="sh" style="position:absolute;top:-20%;left:-140px;width:80px;height:140%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.16),rgba(255,255,255,0));transform:skewX(-18deg)"></div>`;
@@ -116,14 +171,16 @@
     const url = SS.text(layer, 'scalesuiteqc.ca', { size: 42, weight: 680, color: M.ink, tracking: -0.01 });
     SS.place(url.el, 540, G.urlY);
     SS.say(url, S.url, null, { dur: 0.6 });
-    SS.tl.fromTo([logo.el, cta], { scale: 1 }, { scale: 1.012, duration: S.end - 31.9, ease: 'sine.inOut' }, 31.9);
+    SS.tl.fromTo([logo.el, cta], { scale: 1 }, { scale: 1.012, duration: S.end - 37.4, ease: 'sine.inOut' }, 37.4);
 
-    stage.appendChild(SS.CLK.layer); // the clock stays on top of every world
-    R = { layer, logo, P };
+    stage.appendChild(SS.CLK.layer); // the clock stays above every world
+    R = { layer, logo, sp };
   }
   function render() {
-    R.logo.mark(R.P.mark);
-    R.logo.sheen(R.P.sheen);
+    R.logo.mark(P.mark);
+    R.logo.sheen(P.sheen);
+    const k = P.seal;
+    R.sp.forEach((p, i) => p.setAttribute('stroke-dashoffset', (1 - SS.EZ.inOut(SS.clamp01((k - i * 0.22) / 0.56))).toFixed(4)));
   }
   const scene = { name: 'fin', a: -1, b: 99, render, ranges: [] };
   scene.build = (stage) => { build(stage); scene.ranges = [[R.layer, S.proof - 0.1, S.end + 1]]; };

@@ -1,4 +1,4 @@
-# ScaleSuite « Le Système Vendeurs 5 minutes » : film de lancement, plan scène par scène (v2, à valider)
+# ScaleSuite « Le Système Vendeurs 5 minutes » : film de lancement, plan scène par scène (v2, validée)
 
 Film de lancement · 9:16 (1080 × 1920) · **40,0 s** · 60 fps · fonctionne sans le son · français (Québec)
 Fichiers : suffixe `systeme` partout. Aucun fichier existant modifié. Branche `claude/laughing-babbage-qo1pf8`,
@@ -24,12 +24,12 @@ sonore de « Le lead perdu ».
 | Relance après 10 minutes | « Si personne n'a rappelé en 10 minutes, l'équipe est relancée. » | conforme, sans « Filet 10 minutes » |
 | Suivi 90 jours | « Suivi 90 jours. Les vendeurs pas encore prêts sont suivis pendant 90 jours. » | conforme |
 | Groupe Mackay, 124 demandes en moins de 7 mois, avec la campagne seule | « 124 demandes en moins de 7 mois. » « résultats de la campagne seule » « Chiffres tirés de Google Ads » | conforme |
-| Un engagement manqué? Le mois n'est pas facturé. | « Si on manque un engagement, le mois n'est pas facturé. » (titre de section : « Si on ne livre pas, vous ne payez pas. ») | reformulation fidèle (choix 3) |
+| Si on ne livre pas, vous ne payez pas. | « Si on ne livre pas, vous ne payez pas. » (titre de section) | conforme, mot pour mot |
 | Aucun contrat. | « Aucun contrat. L'équipe part quand elle veut, avec son compte et sa page. » | conforme |
 | Vos demandes ne sont jamais partagées ni revendues. | « Vos demandes ne sont jamais partagées ni revendues à un autre courtier. » | conforme (fin coupée) |
 | 3 nouvelles équipes par mois. | « On prend 3 nouvelles équipes par mois. » | conforme |
-| 3 places fondatrices | « Il reste 3 places fondatrices » | **« Il reste » recommandé** (choix 4) |
-| Pour les équipes de 4 à 15 courtiers au Québec. | **absent du site** ; le site dit « Pour les équipes de courtiers du Québec. » | **à trancher** (choix 1) |
+| Il reste 3 places fondatrices. | « Il reste 3 places fondatrices » | conforme |
+| Pour les équipes de courtiers du Québec. | « Pour les équipes de courtiers du Québec. » | conforme |
 
 Absents du film : prix, budget, coût par demande (54 $, 180+), dates de départ (« le 1er du mois », « le 24 »),
 « Filet 10 minutes », exclusivité, IA, agences, démo, pourcentages.
@@ -94,7 +94,7 @@ et un objet en dessous (y 600 à 1500).
 | 3 · Dévoilement (héros) | 6,0 – 10,1 | 4,1 s | La pastille de l'horloge se resserre et devient l'étiquette « **Nouveau** » (pastille douce statique `#E2F6F6` / `#0F7B6F`, 40 px, sans point, y 470), 6,25 s. Logo ScaleSuite (marque balayée, 110 px, y 300, 6,15 s). **Le nom, mot par mot, 150 px, encre** : « Système » (6,6 s), « Vendeurs » (6,9 s), « 5 » puis « **minutes.** » en sarcelle (7,2 et 7,4 s), sur trois lignes (y 640, 800, 960). Dessous : « Pour les équipes de courtiers du Québec. » (48 px, `#596563`, y 1130, 7,7 s ; choix 1). **Tenu 7,9 – 10,1 s (2,2 s).** Cadre conçu pour servir seul d'affiche du lancement (choix 6). | Avancée 1,00 → 1,02, sinus. | **Élément partagé** : le nom rétrécit dans l'en-tête de la carte produit, qui s'ouvre sous lui. |
 | 4 · La pile | 10,1 – 25,0 | **14,9 s** | Carte produit 900 px, en-tête « marque ScaleSuite + **Le Système Vendeurs 5 minutes** » (44 px, 800). Pour chaque composante : **(a)** la ligne s'emboîte dans la carte (nom 40 px + cercle vide) ; **(b)** zoom à travers la ligne : son nom monte en titre (élément partagé), l'étiquette d'étape « Système Vendeurs 5 minutes · n sur 5 » au-dessus, la démonstration avec l'horloge en dessous ; **(c)** retour : la démonstration se compresse dans la ligne, qui se coche (trait dessiné, sarcelle). Détail ci-dessous. | Zooms à travers les lignes, aller et retour (0,4 s, `SS.EZ.cam`) ; fouet avec flou vers le téléphone. | **Retrait** : la carte complète descend sous la preuve. |
 | 5 · Preuve | 25,0 – 27,8 | 2,8 s | « Groupe Mackay » (56 px). « **124** » (270 px, sarcelle, chiffres tabulaires) compte de 0 à 124 en 0,8 s (25,25 s). « demandes en moins de 7 mois. » (60 px). « Avec la campagne seule. » (42 px, `#596563`). Pastille de source « ✓ Chiffres tirés de Google Ads » (32 px), comme sur le site. Tenu 26,2 – 27,8 s. | Fixe. | **Retour de la carte** : la carte produit complète remonte et prend la place du chiffre. |
-| 6 · Le risque renversé | 27,8 – 31,4 | 3,6 s | Titre : « Un engagement manqué? / **Le mois n'est pas facturé.** » (96 px, 27,9 s ; choix 3). La carte produit complète (cinq coches, réduite à 0,8) reçoit un **sceau dessiné** : deux cercles concentriques tracés au trait sarcelle (`stroke-dashoffset`, 0,7 s, 28,3 s), une coche dessinée au centre, sans brillance ni texte (choix 11). Sous la carte : « **Aucun contrat.** » (48 px, 28,8 s) et « Vos demandes ne sont jamais partagées ni revendues. » (40 px, 29,3 s). Tenu 29,7 – 31,4 s. | Fixe, avancée 1 %. | **Titre dans sa bande** ; la carte et le sceau rétrécissent et sortent par le haut. |
+| 6 · Le risque renversé | 27,8 – 31,4 | 3,6 s | Titre (mot pour mot du site) : « Si on ne livre pas, / **vous ne payez pas.** » (100 px, 27,9 s). La carte produit complète (cinq coches, réduite à 0,8) reçoit un **sceau dessiné** : deux cercles concentriques tracés au trait sarcelle (`stroke-dashoffset`, 0,7 s, 28,3 s), une coche dessinée au centre, sans brillance ni texte (choix 11). Sous la carte : « **Aucun contrat.** » (48 px, 28,8 s) et « Vos demandes ne sont jamais partagées ni revendues. » (40 px, 29,3 s). Tenu 29,7 – 31,4 s. | Fixe, avancée 1 %. | **Titre dans sa bande** ; la carte et le sceau rétrécissent et sortent par le haut. |
 | 7 · Rareté réelle | 31,4 – 33,8 | 2,4 s | « **3** nouvelles équipes / par mois. » (104 px, 31,45 s). Dessous, « Il reste 3 places fondatrices. » (48 px, 32,0 s ; choix 4) et **3 places** dessinées : trois cartes vides au contour sarcelle (260 × 200, « Place fondatrice » 32 px) qui s'emboîtent avec 60 ms de décalage. Les nombres viennent de `SS.OFFRE`. Aucune date, aucun compte à rebours. Tenu 32,4 – 33,8 s. | Fixe. | **Ligne** : les trois places se contractent en une ligne (motif V3). |
 | 8 · Fin | 33,8 – 40,0 | 6,2 s | Thèse : « Vos courtiers rencontrent / des vendeurs. » au-dessus de la ligne, « **Nous, on vous / les amène.** » (sarcelle) en dessous, avec la rangée discrète « Courtier 03 · Rencontre · Vendeur · Longueuil » (33,9 – 35,8 ; tenue 34,6 – 35,8). Ensuite, la ligne se contracte en nœud, puis en logo (190 px, y 520). **Le nom du système en grand sous le logo** : « Système Vendeurs / 5 minutes. » (96 px, y 760 – 880, 36,2 s). Le bouton naît d'un nœud : « **Obtenir mon diagnostic gratuit** » (840 × 136, encre, texte blanc 42 px, 10 % de dépassement, 36,5 s), puis « scalesuiteqc.ca » (42 px, 36,8 s). **Tout est posé à 37,3 s et tenu jusqu'à 40,0 s (2,7 s).** | Avancée 1 %. | Fin. |
 
@@ -234,3 +234,38 @@ Voir `brag-output/voiceover-systeme.md` (v2).
   puis le Leader seulement) ; planche `scalesuite-systeme-9x16-keyframes.jpg` (14 images, commit `ec63ce3`).
   Ses composants sont repris dans la v2.
 - **v2** : structure de lancement de produit (ce document).
+
+## Validation du plan v2
+
+Choix retenus : 1 texte du site « Pour les équipes de courtiers du Québec. » · 2 durée 40,0 s · 3 garantie mot
+pour mot du site, « Si on ne livre pas, / vous ne payez pas. », avec « Aucun contrat. » et « Vos demandes ne
+sont jamais partagées ni revendues. » dessous ; réplique 7 « Si on ne livre pas, vous ne payez pas. Aucun
+contrat. » · 4 « Il reste 3 places fondatrices. » · 5 image 0 = état complet à 3,0 s · 6 affiche du lancement
+exportée à part, en 9:16 et en 4:5 (1080 × 1350) · 7 clic feutré sur la pile complète, à au moins 12 dB sous la
+musique · 8 étiquette « Système Vendeurs 5 minutes · n sur 5 » · 9 réplique 1 réordonnée · 10 réplique du texto
+sans « de votre équipe » · 11 sceau sans texte.
+
+## Étape 2 (v2) : images clés
+
+Planche `brag-output/scalesuite-systeme-9x16-keyframes.jpg` (16 images 540 × 960 rendues depuis la timeline ; elle
+remplace la planche v1). Affiches du lancement : `scalesuite-systeme-9x16-affiche-lancement.jpg` (1080 × 1920,
+t = 9,0 s) et `scalesuite-systeme-4x5-affiche-lancement.jpg` (1080 × 1350, même cadre recadré sur le contenu).
+Plus petit texte à l'écran : 30 px (`render/textsize-systeme.mjs`).
+
+Temps de la pile ajustés au rendu (les tenues restent ≥ 1,2 s) :
+
+| Composante | Démo | Tenue lisible | Carte (aller-retour) |
+|---|---|---|---|
+| 1 Campagne Google Vendeurs | 10,8 – 12,8 | 11,2 – 12,8 | 12,8 – 13,3 |
+| 2 Réponse 60 secondes (texto 13,8 s) | 13,3 – 16,0 | 14,4 – 16,0 | 16,0 – 16,5 |
+| 3 Le bon courtier alerté | 16,5 – 18,1 | 16,85 – 18,1 | 18,1 – 18,6 |
+| 4 Relance après 10 minutes (Leader 19,75 s) | 18,6 – 21,1 | 19,9 – 21,1 | 21,1 – 21,6 |
+| 5 Suivi 90 jours | 21,6 – 23,25 | 21,95 – 23,25 | 23,25 – 23,5 |
+| Pile complète (5ᵉ coche 23,5 s) | — | 23,5 – 25,0 | — |
+
+Effets sonores recalés : 5,95 s souffle d'ouverture · 13,8 s texto · 19,75 s Leader · 23,5 s pile complète
+(clic feutré, cible ≥ 12 dB sous la musique) · 36,6 s bouton. Les fenêtres de la voix seront recalées sur ces
+repères à l'étape 3.
+
+Dans la carte produit, les lignes à venir sont des anneaux vides et des lignes grises (la carte « se remplit »).
+La carte de la garantie est une version compacte (noms seuls, échelle 0,76) pour garder le texte à 32 px.

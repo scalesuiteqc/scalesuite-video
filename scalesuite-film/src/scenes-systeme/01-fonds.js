@@ -8,7 +8,7 @@
      to whatever acts at that minute. The clock layer is re-appended on top of the stage in 04-fin. */
 (function () {
   const SS = window.SS, S = SS.ST, P = SS.P, M = SS.M;
-  const CY = 600, PW = 900, PH = 96;
+  const CY = 680, PW = 900, PH = 96; // the clock sits at y 680 in the hook, 640 in the stack
   const PROXY = { r: 0, min: 852, alpha: 0 };
   let R;
 
@@ -17,7 +17,7 @@
     bgA.style.background = P.bg;
     const bgM = SS.el('div', 'layer', stage);
     bgM.style.background = `linear-gradient(180deg, ${M.bg} 0%, ${M.bg} 38%, ${M.bg2} 100%)`;
-    bgM.style.clipPath = 'circle(0px at 540px 600px)';
+    bgM.style.clipPath = 'circle(0px at 540px 680px)';
     SS.BGM = bgM; // the problem world is inserted below it, so the bloom covers it
     SS.tl.fromTo(PROXY, { r: 0 }, { r: 2300, duration: 0.5, ease: 'power2.inOut' }, S.bloom);
 
@@ -70,7 +70,7 @@
     Object.assign(bar.style, { position: 'absolute', left: bx0 + 'px', top: PH / 2 - 5 + 'px', width: bx1 - bx0 + 'px', height: '10px', borderRadius: '5px', background: '#BCC5CE', transformOrigin: '0% 50%' });
     gsap.set(rl, { autoAlpha: 0, x: -16 });
     gsap.set(bar, { scaleX: 0 });
-    SS.place(pill, 540, CY, { clipPath: clipC, autoAlpha: 0 });
+    SS.place(pill, 540, CY, { clipPath: clipC, autoAlpha: 1 });
 
     // ---------------------------------------------------------------- threads from the clock (screen space)
     const fsvg = SS.svg('svg', { width: 1080, height: 1920, style: 'position:absolute;left:0;top:0;overflow:visible' }, layer);
@@ -102,7 +102,7 @@
   }
 
   function render(t) {
-    R.bgM.style.clipPath = PROXY.r > 0.5 ? (PROXY.r > 2290 ? 'none' : `circle(${PROXY.r.toFixed(1)}px at 540px 600px)`) : 'circle(0px at 540px 600px)';
+    R.bgM.style.clipPath = PROXY.r > 0.5 ? (PROXY.r > 2290 ? 'none' : `circle(${PROXY.r.toFixed(1)}px at 540px 680px)`) : 'circle(0px at 540px 680px)';
     const m = PROXY.min;
     R.hH.setAttribute('transform', `rotate(${((m / 60) * 30 % 360).toFixed(2)} 29 29)`);
     R.hM.setAttribute('transform', `rotate(${((m % 60) * 6).toFixed(2)} 29 29)`);
@@ -111,13 +111,13 @@
       if (t < f.at || t > f.off + f.dOff) { f.el.style.display = 'none'; continue; }
       f.el.style.display = '';
       const p = SS.EZ.inOut(SS.clamp01((t - f.at) / f.dDraw)), q = SS.EZ.in(SS.clamp01((t - f.off) / f.dOff));
-      const g = f.target(t), y0 = CY + 48, my = (y0 + g.y) / 2;
+      const g = f.target(t), y0 = gsap.getProperty(SS.CLK.pill, 'y') + 48, my = (y0 + g.y) / 2;
       f.el.setAttribute('d', `M540,${y0} C540,${my.toFixed(1)} ${g.x.toFixed(1)},${my.toFixed(1)} ${g.x.toFixed(1)},${g.y.toFixed(1)}`);
       f.el.setAttribute('stroke-dashoffset', (q > 0 ? -q : 1 - p).toFixed(4));
     }
   }
 
   const scene = { name: 'fonds', a: -1, b: 99, render, ranges: [] };
-  scene.build = (stage) => { build(stage); scene.ranges = [[R.bgA, -1, S.bloom + 0.6], [R.bgM, S.bloom - 0.05, 99], [R.layer, S.born - 0.1, S.proof + 0.3]]; };
+  scene.build = (stage) => { build(stage); scene.ranges = [[R.bgA, -1, S.bloom + 0.6], [R.bgM, S.bloom - 0.05, 99], [R.layer, -1, S.in6 + 0.4]]; };
   SS.scenes.push(scene);
 })();
