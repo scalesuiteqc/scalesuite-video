@@ -2,13 +2,12 @@
 (render/cues-systeme.mjs). Same method, instruments and effect settings as « Le lead perdu »
 (audio/music-lead-perdu.py, copied).
 
-Sound rule (skill scalesuite-video, section 10): 4 to 6 soft effects, no bell or "ding", each at least
-6 dB under the music. This film has 5, on the `sfx-*` cues:
+Sound rule (skill scalesuite-video, section 10): few soft effects, no bell or "ding", each at least
+6 dB under the music. At the user's request (light, airy, professional) this film keeps only 3:
    4.0 s   bloom / reveal            opening breath, rising, low-passed (`breath`, 'rise')
    8.3 s   the seller's text message muffled double vibration (`mutedbuzz`), never a message sound
-  13.4 s   the relance reaches the Leader   one short muffled vibration
-  17.65 s  the last check of the stack felt click, very light (kept only if ≥ 12 dB under the music)
   28.0 s   the button is born        soft breath that opens (`breath`, 'swell')
+The Leader's relance and the checked stack are carried by the music only (no effect).
 Score: grey world sparse in D minor (felt piano, cold pad; one low tock on the clock jump; thins to a
 held note), the held note is breathed in on the rewind, F major opens on the bloom and the 4-note
 signature (C F E A) is played complete, one note per word of the product's name; the neo-soul groove
@@ -271,14 +270,12 @@ music.add(bass(midi(41), 1.2, 0.9), TEXTO, 0.3)
 for k, n in enumerate(SIG):
     music.add(felt(midi(n + 12), 2.0, 0.55), TEXTO + 0.05 + k * 0.17, 0.18, pan=-0.15 + 0.1 * k)
 # SFX 3: the relance reaches the Leader, one short muffled vibration
-fx.add(mutedbuzz(0.16, 1.0), LEADER + 0.05, 0.13)
 music.add(pad([58, 62, 65, 69, 72], 1.6, att=0.1, rel=0.8, bright=1.2), LEADER, 0.34, pan=-0.2)
 music.add(bass(midi(46), 0.9, 0.9), LEADER, 0.3)
 music.add(chord(epiano, CH['Bbmaj9'], 1.4, vel=0.7), LEADER, 0.22)
 # the five checks: five soft felt-piano notes in the music (rising), SFX 4 a very light click on the last
 for i in range(5):
-    music.add(felt(midi([60, 64, 65, 67, 69][i]), 1.6, 0.6), ST['check0'] + i * 0.2, 0.16, pan=-0.2 + 0.1 * i)
-fx.add(feltclick(1.0), FULL, 0.45)
+    music.add(felt(midi([60, 64, 65, 67, 69][i]), 1.6, 0.6), ST['check0'] + i * 0.2, 0.1, pan=-0.2 + 0.1 * i)
 music.add(pad([53, 60, 64, 69, 72], G1 - FULL + 0.4, att=0.15, rel=0.5, bright=1.25), FULL, 0.3, pan=-0.2)
 
 # ================================================================ proof, guarantee, scarcity: no drums, assured
@@ -328,8 +325,7 @@ def rms_db(x, a, b):
 
 print('effects vs music (RMS dB over each effect):')
 ok = True
-for name, a, b, need in [('reveal', BLOOM - 0.45, BLOOM + 0.08, 6), ('texto', TEXTO + 0.08, TEXTO + 0.6, 6), ('leader', LEADER + 0.05, LEADER + 0.21, 6),
-                         ('stack', FULL, FULL + 0.08, 12), ('cta', CTA - 0.1, CTA + 0.6, 6)]:
+for name, a, b, need in [('reveal', BLOOM - 0.45, BLOOM + 0.08, 6), ('texto', TEXTO + 0.08, TEXTO + 0.6, 6), ('cta', CTA - 0.1, CTA + 0.6, 6)]:
     d = rms_db(sfx, a, b) - rms_db(bed, a, b)
     ok = ok and d <= -need
     print(f'  {name:7s} {a:6.2f}–{b:5.2f} s   effect − music = {d:+.1f} dB   (need ≤ −{need})')

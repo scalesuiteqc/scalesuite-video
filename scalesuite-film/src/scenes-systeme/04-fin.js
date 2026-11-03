@@ -28,9 +28,18 @@
     // ================================================================ the card, taken over from the world
     const pc = SS.productCard(layer);
     pc.rows.forEach((r) => { r.k.k = 1; gsap.set(r.sk, { autoAlpha: 0 }); });
+    // the card's white face and shadow live on their own layer: only its opacity and colour are animated
+    // (a box-shadow list is never interpolated, so the picture never depends on the seek history)
+    const shade = SS.el('div', '', pc.el);
+    Object.assign(shade.style, { position: 'absolute', inset: '0px', borderRadius: '36px', boxShadow: SS.SHADOW.mHi });
+    const face = SS.el('div', '', pc.el);
+    Object.assign(face.style, { position: 'absolute', inset: '0px', borderRadius: '36px', background: '#ffffff' });
+    pc.el.insertBefore(face, pc.el.firstChild);
+    pc.el.insertBefore(shade, face);
+    Object.assign(pc.el.style, { background: 'transparent', boxShadow: 'none' });
     gsap.set(pc.el, { x: 90, y: PCTOP, transformOrigin: '0% 0%', autoAlpha: 0 });
     SS.tl.set(pc.el, { autoAlpha: 1 }, S.proof);
-    const frame = [pc.head, pc.el.children[1]]; // header and divider
+    const frame = [pc.head, pc.el.children[3]]; // header and divider
     const rest = pc.rows.slice(1).map((r) => r.el);
     const r1 = pc.rows[0];
     const alt = SS.el('div', '', r1.el);
@@ -42,7 +51,7 @@
     const proofY = 1290 - r1y;
     // 4 · proof: everything but line 1 fades, line 1 drops under the number
     SS.tl.fromTo([...frame, ...rest], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.25, ease: 'power1.in' }, S.proof);
-    SS.tl.fromTo(pc.el, { backgroundColor: 'rgba(255,255,255,1)', boxShadow: SS.SHADOW.mHi }, { backgroundColor: 'rgba(255,255,255,0)', boxShadow: '0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(0,0,0,0)', duration: 0.3, ease: 'power1.in' }, S.proof);
+    SS.tl.fromTo([shade, face], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.3, ease: 'power1.in' }, S.proof);
     SS.tl.fromTo(pc.el, { y: PCTOP }, { y: proofY, duration: 0.4, ease: SS.EZ.inOut }, S.proof + 0.05);
     SS.tl.fromTo(r1.tx, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.2, ease: 'power1.in' }, S.seule);
     SS.tl.fromTo(alt, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: SS.EZ.out }, S.seule + 0.1);
@@ -54,7 +63,13 @@
     num.textContent = '124';
     SS.place(num, 540, 860);
     SS.riseEl(num, S.count - 0.05, S.proofOut, { y: 860 });
-    SS.counter(num, [{ at: S.count, dur: 0.8, from: 0, to: 124, ease: 'power3.out' }]);
+    // counter with a constant width (figure spaces pad it to three digits): no jump when 99 becomes 100
+    const cEase = gsap.parseEase('power3.out');
+    SS.proc((t) => {
+      const v = Math.round(124 * cEase(SS.clamp01((t - S.count) / 0.8)));
+      const txt = String(v).padStart(3, '\u2007');
+      if (num.textContent !== txt) num.textContent = txt;
+    });
     const dm = SS.text(layer, 'demandes en moins de 7 mois.', { size: 72, weight: 760, color: M.ink, tracking: -0.03, maxW: 960 });
     SS.place(dm.el, 540, 1110);
     SS.rise(dm, S.count + 0.25, S.proofOut, { st: 0.04 });
@@ -69,7 +84,7 @@
     SS.tl.fromTo(alt, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, S.proofOut);
     SS.tl.fromTo(r1.tx, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power1.out' }, S.proofOut + 0.1);
     SS.tl.fromTo(pc.el, { x: 90, y: proofY, scale: 1 }, { x: RK.x, y: RK.y, scale: RK.s, duration: 0.4, ease: SS.EZ.inOut }, S.proofOut + 0.05);
-    SS.tl.fromTo(pc.el, { backgroundColor: 'rgba(255,255,255,0)', boxShadow: '0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(0,0,0,0)' }, { backgroundColor: 'rgba(255,255,255,1)', boxShadow: SS.SHADOW.mHi, duration: 0.3, ease: 'power1.out' }, S.proofOut + 0.2);
+    SS.tl.fromTo([shade, face], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: 'power1.out' }, S.proofOut + 0.2);
     SS.tl.fromTo([...frame, ...rest], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: 'power1.out' }, S.proofOut + 0.25);
     const rt = SS.head(layer, 'Si on ne livre pas,\n*vous* *ne* *payez* *pas.*', { size: 104 });
     SS.place(rt.el, 540, 300);
@@ -96,18 +111,22 @@
     SS.tl.fromTo(seal, { autoAlpha: 1, y: 980 }, { autoAlpha: 0, y: 964, duration: 0.25, ease: SS.EZ.in }, S.riskOut);
     SS.cue(S.seal, 'm-seal');
     const nE = O.equipesParMois, nP = O.placesFondatrices;
-    const rare = SS.text(layer, `${nE} nouvelles équipes par mois.\n${nP > 1 ? `Il reste ${nP} places fondatrices.` : 'Il reste 1 place fondatrice.'}`, { size: 46, weight: 740, color: M.teal, tracking: -0.02, lh: 1.2 });
-    SS.place(rare.el, 540, 1400);
-    SS.rise(rare, S.rare, S.riskOut, { st: 0.03 });
+    const rare1 = SS.text(layer, `${nE} nouvelles équipes par mois.`, { size: 56, weight: 780, color: M.ink, tracking: -0.03, maxW: 960 });
+    SS.place(rare1.el, 540, 1378);
+    SS.rise(rare1, S.rare, S.riskOut, { st: 0.03 });
+    const rare2 = SS.text(layer, nP > 1 ? `Il reste ${nP} places fondatrices.` : 'Il reste 1 place fondatrice.', { size: 56, weight: 780, color: M.teal, tracking: -0.03, maxW: 960 });
+    SS.place(rare2.el, 540, 1448);
+    SS.rise(rare2, S.rare + 0.25, S.riskOut, { st: 0.03 });
 
     // ================================================================ 6 · the card contracts into the thesis line
     const line = SS.el('div', 'a3', layer);
     Object.assign(line.style, { width: LINE.w + 'px', height: '6px', borderRadius: '3px', background: M.turq });
     SS.place(line, 540, LINE.y, { autoAlpha: 0 });
     SS.tl.fromTo([...frame, ...pc.rows.map((r) => r.el)], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, S.riskOut);
-    SS.tl.fromTo(pc.el, { x: RK.x, y: RK.y, scaleX: RK.s, scaleY: RK.s, backgroundColor: 'rgba(255,255,255,1)' },
-      { x: 540 - LINE.w / 2, y: LINE.y - 3, scaleX: LINE.w / PC.w, scaleY: 6 / PC.h, backgroundColor: 'rgba(43,191,179,1)', duration: 0.4, ease: SS.EZ.inOut }, S.riskOut);
-    SS.tl.fromTo(pc.el, { boxShadow: SS.SHADOW.mHi }, { boxShadow: '0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(0,0,0,0), 0 0 0 0 rgba(0,0,0,0)', duration: 0.25, ease: 'power1.in' }, S.riskOut);
+    SS.tl.fromTo(pc.el, { x: RK.x, y: RK.y, scaleX: RK.s, scaleY: RK.s },
+      { x: 540 - LINE.w / 2, y: LINE.y - 3, scaleX: LINE.w / PC.w, scaleY: 6 / PC.h, duration: 0.4, ease: SS.EZ.inOut }, S.riskOut);
+    SS.tl.fromTo(face, { backgroundColor: '#ffffff' }, { backgroundColor: '#2bbfb3', duration: 0.4, ease: SS.EZ.inOut }, S.riskOut);
+    SS.tl.fromTo(shade, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.2, ease: 'power1.in' }, S.riskOut);
     SS.tl.set(line, { autoAlpha: 1 }, S.riskOut + 0.4);
     SS.tl.set(pc.el, { autoAlpha: 0 }, S.riskOut + 0.4);
     const t1 = SS.head(layer, 'Vos courtiers rencontrent\ndes vendeurs.', { size: 96 });
@@ -129,7 +148,8 @@
     const logo = SS.logo(layer, G.LH);
     logo.mark(1);
     SS.place(logo.el, 540, G.LY);
-    SS.riseEl(logo.el, S.endLogo, null, { y: G.LY });
+    SS.logoCover(layer, 540, G.LY, LW, G.LH, S.endLogo, null);
+    layer.appendChild(node); // the node stays above the cover
     SS.tl.fromTo(logo.el, { scale: 0.96 }, { scale: 1, duration: 0.4, ease: SS.EZ.out }, S.endLogo);
     SS.tl.fromTo(P, { sheen: 0 }, { sheen: 1, duration: 0.7, ease: 'sine.inOut' }, S.sheen);
     SS.cue(S.endLogo, 'm-endmark');

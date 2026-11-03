@@ -26,7 +26,7 @@
   const snap = (el, from, to, at) => SS.tl.fromTo(el, from, Object.assign({ duration: 0.001, ease: 'none' }, to), at);
   const labSwap = (labels, i, j, at, dur = 0.42) => {
     SS.tl.fromTo(labels[i], { yPercent: 0, autoAlpha: 1 }, { yPercent: -60, autoAlpha: 0, duration: dur * 0.6, ease: SS.EZ.in }, at);
-    SS.tl.fromTo(labels[j], { yPercent: 60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: dur, ease: SS.EZ.out }, at + dur * 0.25);
+    SS.tl.fromTo(labels[j], { yPercent: 60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: dur, ease: SS.EZ.out }, at + dur * 0.6); // one readable label at a time
   };
 
   let R;
@@ -45,8 +45,7 @@
     const logo = SS.logo(rvIn, 130);
     logo.mark(1); logo.sheen(0);
     SS.place(logo.el, 540, 530);
-    SS.riseEl(logo.el, S.logo, S.revealOut, { y: 530 });
-    SS.tl.fromTo(logo.el, { scale: 0.96 }, { scale: 1, duration: 0.4, ease: SS.EZ.out }, S.logo);
+    SS.logoCover(rvIn, 540, 530, (130 * SS.LOGO.w) / SS.LOGO.h, 130, S.logo, S.revealOut);
     const mkNouveau = (parent) => {
       const el = SS.el('div', 'a3', parent);
       Object.assign(el.style, { height: '76px', padding: '0 34px', borderRadius: '38px', background: M.band, color: M.teal, fontSize: '40px', fontWeight: 760, letterSpacing: '-.015em', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' });
@@ -61,11 +60,11 @@
     gsap.set(name.words.map((x) => x.el), { yPercent: 0 });
     gsap.set(name.words.map((x) => x.m), { autoAlpha: 0, y: 30 });
     [S.w1, S.w2, S.w3, S.w4].forEach((t0, i) => { SS.riseOne(name, i, t0); SS.cue(t0, 'm-sig', { i }); });
-    SS.tl.fromTo(name.words.map((x) => x.m), { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -16, duration: 0.25, stagger: 0.015, ease: SS.EZ.in }, S.revealOut);
+    SS.tl.fromTo(name.words.map((x) => x.m), { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -16, duration: 0.24, stagger: 0.012, ease: 'power2.in' }, S.nameOut);
     const pour = SS.text(rvIn, 'Pour les équipes de courtiers du Québec.', { size: 54, weight: 620, color: M.soft, tracking: -0.02, maxW: 960 });
     SS.place(pour.el, 540, 1370);
-    SS.rise(pour, S.pour, S.revealOut, { st: 0.03 });
-    SS.tl.fromTo(P2, { push: 1 }, { push: 1.02, duration: S.revealOut - S.logo, ease: 'sine.inOut' }, S.logo);
+    SS.rise(pour, S.pour, S.nameOut, { st: 0.02 });
+    // no scale animation on this frame: a scaled logo is rasterised differently depending on the frames rendered before it
     // « Nouveau » → the clock (same pill, same place)
     SS.tl.fromTo(nou, { y: 660, scale: 1.1 }, { y: CLOCKY, scale: 1.2, duration: 0.3, ease: SS.EZ.inOut }, S.revealOut - 0.05);
     SS.tl.fromTo(nou, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.15, ease: 'power1.in' }, S.revealOut + 0.15);
@@ -170,7 +169,7 @@
     SS.tl.set(subL.el, { autoAlpha: 1 }, S.leader + 0.05);
     SS.tl.fromTo(subL.el, { y: sL + 24 }, { y: sL, duration: 0.4, ease: SS.EZ.dock }, S.leader + 0.05);
     SS.tl.fromTo(subL.el, { clipPath: subClip }, { clipPath: SS.OPEN, duration: 0.45, ease: SS.EZ.out }, S.leader + 0.05);
-    SS.cue(S.leader, 'sfx-leader');
+    SS.cue(S.leader, 'm-leader');
 
     // ---- c · 90 days: Courtier 03's relance travels down with the camera and becomes the « Suivi » header
     const card = SS.el('div', 'sy-card', w);
@@ -195,8 +194,16 @@
     SS.tl.fromTo(fill, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: SS.EZ.inOut }, S.ribbon);
     SS.tl.fromTo(n1, { scale: 0 }, { scale: 1, duration: 0.35, ease: SS.EZ.pop }, S.ribbon + 0.7);
     SS.tl.fromTo(lab90, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: SS.EZ.out }, S.ribbon + 0.75);
-    SS.tl.fromTo(C.col, { yPercent: 0 }, { yPercent: -50, duration: 0.4, ease: SS.EZ.inOut }, S.dateMode);
-    C.date.to(S.dateRoll, 1, 0.55, SS.EZ.inOut);
+    // time line → date line → later date: a fade swap, never two lines readable at once
+    const [timeRow, dateRow] = [...C.col.children];
+    const [d0, d1] = [...C.date.col.children];
+    gsap.set(d1, { autoAlpha: 0 });
+    SS.tl.fromTo(timeRow, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.14, ease: 'power1.in' }, S.dateMode);
+    snap(C.col, { yPercent: 0 }, { yPercent: -50 }, S.dateMode + 0.15);
+    SS.tl.fromTo(dateRow, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power1.out' }, S.dateMode + 0.16);
+    SS.tl.fromTo(d0, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.14, ease: 'power1.in' }, S.dateRoll + 0.2);
+    snap(C.date.col, { yPercent: 0 }, { yPercent: -50 }, S.dateRoll + 0.35);
+    SS.tl.fromTo(d1, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power1.out' }, S.dateRoll + 0.36);
     SS.tl.fromTo(C.P, { min: 862 }, { min: 862 + 720 * 3, duration: 0.8, ease: SS.EZ.inOut }, S.ribbon);
     SS.cue(S.ribbon, 'm-ribbon');
 
@@ -215,7 +222,7 @@
     SS.tl.set(pc.el, { autoAlpha: 1 }, S.pile + 0.2);
     SS.tl.fromTo(pc.el, { clipPath: pcFrom }, { clipPath: SS.OPEN, duration: 0.4, ease: SS.EZ.out }, S.pile + 0.2);
     pc.rows.forEach((r, i) => SS.tl.fromTo(r.k, { k: 0 }, { k: 1, duration: 0.3, ease: 'none' }, S.check0 + i * 0.2));
-    SS.cue(S.full, 'sfx-stack');
+    SS.cue(S.full, 'm-stack');
 
     // ---- the camera: one push per scene, two travels of 0.4 s (never two moves at once)
     cam.to(S.tick13, S.toTeam - S.tick13 - 0.05, 'sine.inOut', { s: 1.02 });
@@ -237,9 +244,9 @@
     SS.place(label, 540, 175);
     SS.riseEl(label, S.revealOut + 0.1, S.pile, { y: 175 });
     const T = [
-      ['Réponse\n*60_secondes.*', S.revealOut + 0.15, S.toTeam - 0.05],
-      ['Le bon courtier\n*alerté.*', S.h3b, S.h3c - 0.2],
-      ['Relance après\n*10_minutes.*', S.h3c, S.toSuivi - 0.05],
+      ['Réponse\n*60_secondes.*', S.revealOut + 0.15, S.h3b - 0.3],
+      ['Le bon courtier\n*alerté.*', S.h3b, S.h3c - 0.3],
+      ['Relance après\n*10_minutes.*', S.h3c, S.h3d - 0.3],
       ['Pas prêt à vendre?\n*Suivi* *90_jours.*', S.h3d, S.pile],
     ];
     T.forEach(([src, a, b]) => {
@@ -257,7 +264,7 @@
     const plogo = SS.logo(pl, 110);
     plogo.mark(1);
     SS.place(plogo.el, 540, 380);
-    SS.riseEl(plogo.el, S.pile + 0.28, S.proof, { y: 380 });
+    SS.logoCover(pl, 540, 380, (110 * SS.LOGO.w) / SS.LOGO.h, 110, S.pile + 0.28, S.proof);
     const pnou = mkNouveau(pl);
     SS.place(pnou, 540, 500);
     SS.riseEl(pnou, S.pile + 0.33, S.proof, { y: 500 });

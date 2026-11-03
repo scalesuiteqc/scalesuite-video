@@ -13,9 +13,9 @@
     // 1 · hook (0–4.0): one evolving frame; poster (frame 0 of the master) at 3.2
     roll: 1.0, h1b: 1.3, lue: 1.8, cost: 2.4, clockOut: 3.95, bloom: 4.0,
     // 2 · reveal (4.0–7.5)
-    logo: 4.15, nouveau: 4.4, w1: 4.7, w2: 4.95, w3: 5.2, w4: 5.4, pour: 5.7, revealOut: 7.5,
+    logo: 4.15, nouveau: 4.4, w1: 4.7, w2: 4.95, w3: 5.2, w4: 5.4, pour: 5.7, nameOut: 7.2, revealOut: 7.5,
     // 3 · the system at work, one camera (7.5–19.4)
-    phone: 7.45, tick13: 7.9, texto: 8.3,
+    phone: 7.5, tick13: 7.9, texto: 8.3,
     toTeam: 10.5, h3b: 10.65, fil3: 10.8, alert3: 11.0, ticks: 12.5, h3c: 12.5, relance: 13.05, shift: 13.08, route: 13.15, leader: 13.4,
     toSuivi: 14.7, h3d: 14.8, dateMode: 14.8, ribbon: 14.95, dateRoll: 15.1,
     pile: 16.7, check0: 16.85, full: 17.65,
@@ -64,11 +64,22 @@
     const m = T.words[i].m;
     SS.tl.fromTo(m, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: SS.EZ.out }, at);
   };
-  SS.riseEl = (el, at, out, o = {}) => { // any element (gsap-placed): rise + fade in, fade up out
-    const y0 = o.y;
-    gsap.set(el, { autoAlpha: 0, y: y0 + 24 });
-    SS.tl.fromTo(el, { autoAlpha: 0, y: y0 + 24 }, { autoAlpha: 1, y: y0, duration: o.dur || 0.4, ease: SS.EZ.out }, at);
-    if (out != null) SS.tl.fromTo(el, { autoAlpha: 1, y: y0 }, { autoAlpha: 0, y: y0 - 16, duration: 0.25, ease: SS.EZ.in }, out);
+  // Logos stay fully opaque (a logo once rasterised at partial opacity keeps a slightly different
+  // anti-aliasing); a flat cover in the background colour fades away over it instead.
+  SS.logoCover = (parent, x, y, w, h, at, out) => {
+    const c = SS.el('div', 'a3', parent);
+    Object.assign(c.style, { width: w + 40 + 'px', height: h + 40 + 'px', background: SS.M.bg });
+    SS.place(c, x, y);
+    SS.tl.fromTo(c, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.35, ease: 'power1.out' }, at);
+    if (out != null) SS.tl.fromTo(c, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.22, ease: 'power1.in' }, out);
+    return c;
+  };
+  SS.riseEl = (el, at, out, o = {}) => { // any element: rise + fade in, fade up out
+    // The offset is a margin, not a transform: Chrome repaints it at every frame instead of moving a cached
+    // raster, so the settled picture never depends on the frames rendered before it.
+    gsap.set(el, { autoAlpha: 0, marginTop: 24 });
+    SS.tl.fromTo(el, { autoAlpha: 0, marginTop: 24 }, { autoAlpha: 1, marginTop: 0, duration: o.dur || 0.4, ease: SS.EZ.out }, at);
+    if (out != null) SS.tl.fromTo(el, { autoAlpha: 1, marginTop: 0 }, { autoAlpha: 0, marginTop: -16, duration: 0.25, ease: SS.EZ.in }, out);
   };
 
   // Tap ripple
