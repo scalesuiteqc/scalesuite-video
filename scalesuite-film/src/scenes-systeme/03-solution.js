@@ -22,7 +22,8 @@
   NOTE.y = PH.top + 500; // on screen ≈ 1220
   const OX = 1300, OX2 = 2600;
   const SUBX = 560;
-  const SHEET = { logoY: 330, nouveauY: 455, cardTop: 520 };
+  const SHEET = { logoY: 380, nouveauY: 500, cardTop: 580 };
+  const RV = { logoH: 130, logoY: 530, nouY: 660, nouK: 1.13, nameY: 1020, nameSize: 172, pourY: 1380 };
   const P2 = { shake: 0, mark: 0, sheen: 0, push: 1 };
   const snap = (el, from, to, at) => SS.tl.fromTo(el, from, Object.assign({ duration: 0.001, ease: 'none' }, to), at);
 
@@ -178,21 +179,23 @@
     // ---- 5 · 90 days
     const box2 = SS.el('div', 'a3', w);
     gsap.set(box2, { x: OX2, y: 0 });
-    const SV = { top: 740, h: 440 };
+    const SV = { top: 760, h: 600 };
     const card = SS.el('div', 'sy-card', box2);
     Object.assign(card.style, { width: '900px', height: SV.h + 'px', background: '#fff', boxShadow: SS.SHADOW.mHi });
     gsap.set(card, { x: 90, y: SV.top });
     const sv = SS.subCard(box2, 'M', 'Suivi · Vendeur · Longueuil');
     sv.bar.style.background = M.teal;
-    SS.place(sv.el, 540, SV.top + 80);
+    SS.place(sv.el, 540, SV.top + 90);
     const rb = SS.el('div', '', card);
     Object.assign(rb.style, { position: 'absolute', left: '0px', top: '0px', width: '900px', height: SV.h + 'px' });
-    rb.innerHTML = `<div style="position:absolute;left:60px;top:220px;width:780px;height:10px;border-radius:5px;background:#E6EFED"></div>
-      <div class="fill" style="position:absolute;left:60px;top:220px;width:780px;height:10px;border-radius:5px;background:${M.turq};transform-origin:0% 50%"></div>
-      <div style="position:absolute;left:44px;top:206px;width:38px;height:38px;border-radius:50%;background:${M.teal};box-shadow:0 0 0 8px ${M.band}"></div>
-      <div class="n1" style="position:absolute;left:818px;top:206px;width:38px;height:38px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 5px ${M.teal}"></div>
-      <div style="position:absolute;left:44px;top:280px;font-size:34px;font-weight:620;color:${M.soft};white-space:nowrap">Aujourd'hui</div>
-      <div class="lab90" style="position:absolute;right:44px;top:270px;font-size:44px;font-weight:800;letter-spacing:-.02em;color:${M.teal};white-space:nowrap">90 jours</div>`;
+    rb.innerHTML = `<div style="position:absolute;left:66px;top:293px;width:768px;height:14px;border-radius:7px;background:#E6EFED"></div>
+      <div class="fill" style="position:absolute;left:66px;top:293px;width:768px;height:14px;border-radius:7px;background:${M.turq};transform-origin:0% 50%"></div>
+      <div style="position:absolute;left:44px;top:277px;width:46px;height:46px;border-radius:50%;background:${M.teal};box-shadow:0 0 0 10px ${M.band}"></div>
+      <div class="n1" style="position:absolute;left:810px;top:277px;width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 6px ${M.teal}"></div>
+      <div style="position:absolute;left:44px;top:368px;font-size:42px;font-weight:700;letter-spacing:-.02em;color:${M.ink};white-space:nowrap">Aujourd'hui</div>
+      <div style="position:absolute;left:44px;top:426px;font-size:36px;font-weight:580;color:${M.soft};white-space:nowrap">sam. 7 nov.</div>
+      <div class="lab90" style="position:absolute;right:44px;top:358px;text-align:right;white-space:nowrap"><div style="font-size:56px;font-weight:800;letter-spacing:-.03em;color:${M.teal}">90 jours</div>
+        <div style="margin-top:4px;font-size:36px;font-weight:580;color:${M.soft}">ven. 5 févr.</div></div>`;
     const fill = rb.querySelector('.fill'), n1 = rb.querySelector('.n1'), lab90 = rb.querySelector('.lab90');
     gsap.set(fill, { scaleX: 0 }); gsap.set(n1, { scale: 0 }); gsap.set(lab90, { autoAlpha: 0, y: 14 });
     SS.tl.fromTo(fill, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: SS.EZ.inOut }, S.ribbon);
@@ -225,6 +228,9 @@
     };
     const sNou = mkNouveau(sheet);
     SS.place(sNou, 540, SHEET.nouveauY);
+    // the reveal's logo and label land exactly here; the sheet's own copies take over at the hand-over
+    gsap.set([sLogo.el, sNou], { autoAlpha: 0 });
+    SS.tl.fromTo([sLogo.el, sNou], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, ease: 'none' }, S.toCard + 0.36);
     const pc = SS.productCard(sheet);
     gsap.set(pc.el, { x: 90, y: SHEET.cardTop });
     pc.rows.forEach((r) => { gsap.set(r.tx, { autoAlpha: 0, y: 24 }); gsap.set(r.sk, { autoAlpha: 1 }); });
@@ -262,7 +268,7 @@
     SS.tl.set(wrap, { visibility: 'hidden' }, S.toCard + 0.36);
     SS.cue(S.full, 'sfx-stack');
     // exit to the proof: the full card goes down
-    sheetTo(S.proof, 1920, 0.36, SS.EZ.in);
+    sheetTo(S.proof - 0.05, 1920, 0.32, SS.EZ.in);
 
     // ---- the clock in the stack: hidden in card views, back at y 640 for each demo
     const showClock = (at) => SS.tl.fromTo(C.pill, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: SS.EZ.out }, at);
@@ -272,43 +278,45 @@
     // ================================================================ reveal (screen space, above the sheet)
     const rv = SS.el('div', 'layer', stage);
     const rvIn = SS.el('div', 'a3', rv);
-    Object.assign(rvIn.style, { left: '0px', top: '0px', width: '1080px', height: '1920px', transformOrigin: '540px 760px' });
-    const logo = SS.logo(rvIn, 110);
-    SS.place(logo.el, 540, SHEET.logoY);
+    Object.assign(rvIn.style, { left: '0px', top: '0px', width: '1080px', height: '1920px', transformOrigin: '540px 960px' });
+    const logo = SS.logo(rvIn, RV.logoH);
+    SS.place(logo.el, 540, RV.logoY);
     gsap.set(logo.letters, { y: 150 });
-    SS.tl.fromTo(P2, { mark: 0 }, { mark: 1, duration: 0.66, ease: 'none' }, S.logo);
-    SS.tl.fromTo(logo.letters, { y: 150 }, { y: 0, duration: 0.6, stagger: 0.03, ease: SS.EZ.out }, S.logo + 0.2);
+    SS.tl.fromTo(P2, { mark: 0 }, { mark: 1, duration: 0.5, ease: 'none' }, S.logo);
+    SS.tl.fromTo(logo.letters, { y: 150 }, { y: 0, duration: 0.6, stagger: 0.03, ease: SS.EZ.out }, S.logo + 0.12);
     const nou = mkNouveau(rvIn);
-    SS.place(nou, 540, 520, { autoAlpha: 0 });
+    SS.place(nou, 540, RV.nouY, { autoAlpha: 0, scale: RV.nouK });
     // the clock tightens into the « Nouveau » label
     const nw = nou.getBoundingClientRect().width;
-    const k = 76 / C.h, wv = nw / k;
+    const k = (76 * RV.nouK) / C.h, wv = nw / k;
     const clipN = SS.clipR(0, (900 - wv) / 2, 0, (900 - wv) / 2, C.h / 2);
-    SS.tl.fromTo(C.pill, { y: 680, scale: 1, clipPath: C.clipC, backgroundColor: '#ffffff' }, { y: 520, scale: k, clipPath: clipN, backgroundColor: M.band, duration: 0.35, ease: SS.EZ.inOut }, S.nouveau);
+    SS.tl.fromTo(C.pill, { y: 680, scale: 1, clipPath: C.clipC, backgroundColor: '#ffffff' }, { y: RV.nouY, scale: k, clipPath: clipN, backgroundColor: M.band, duration: 0.35, ease: SS.EZ.inOut }, S.nouveau);
     SS.tl.fromTo(C.group, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.15, ease: SS.EZ.in }, S.nouveau);
     SS.tl.fromTo(C.pill, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.001, ease: 'none' }, S.nouveau + 0.36);
     SS.tl.fromTo(nou, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, ease: 'none' }, S.nouveau + 0.36);
     // the clock gets its stack geometry back while hidden
-    snap(C.pill, { y: 520, scale: k, clipPath: clipN, backgroundColor: M.band }, { y: CLOCKY, scale: 1, clipPath: C.clipC, backgroundColor: '#ffffff' }, S.out1 - 0.1);
+    snap(C.pill, { y: RV.nouY, scale: k, clipPath: clipN, backgroundColor: M.band }, { y: CLOCKY, scale: 1, clipPath: C.clipC, backgroundColor: '#ffffff' }, S.out1 - 0.1);
     snap(C.group, { autoAlpha: 0 }, { autoAlpha: 1 }, S.out1 - 0.1);
-    const name = SS.head(rvIn, 'Système\nVendeurs\n5 *minutes.*', { size: 150, lh: 1.02 });
-    SS.place(name.el, 540, 840);
+    const name = SS.head(rvIn, 'Système\nVendeurs\n5 *minutes.*', { size: RV.nameSize, lh: 1.02 });
+    SS.place(name.el, 540, RV.nameY);
     SS.hideWords(name);
     [S.w1, S.w2, S.w3, S.w4].forEach((t0, i) => SS.wordsIn(name, t0, { from: i, to: i + 1, dur: 0.7 }));
     [S.w1, S.w2, S.w3, S.w4].forEach((t0, i) => SS.cue(t0, 'm-sig', { i }));
-    const pour = SS.text(rvIn, 'Pour les équipes de courtiers du Québec.', { size: 48, weight: 620, color: M.soft, tracking: -0.02, maxW: 960 });
-    SS.place(pour.el, 540, 1180);
+    const pour = SS.text(rvIn, 'Pour les équipes de courtiers du Québec.', { size: 54, weight: 620, color: M.soft, tracking: -0.02, maxW: 960 });
+    SS.place(pour.el, 540, RV.pourY);
     SS.say(pour, S.pour, S.toCard, { st: 0.035 });
-    SS.tl.fromTo(P2, { push: 1 }, { push: 1.02, duration: S.toCard - 7.9, ease: 'sine.inOut' }, 7.9);
+    SS.tl.fromTo(P2, { push: 1 }, { push: 1.02, duration: S.toCard - 7.6, ease: 'sine.inOut' }, 7.6);
     // → card view: the name shrinks into the card header; the label moves to its card-view place
-    const ky = SHEET.cardTop + SS.PCARD.headH / 2, kx = 568;
-    SS.tl.fromTo(name.el, { x: 540, y: 840, scale: 1 }, { x: kx, y: ky, scale: 0.3, duration: 0.38, ease: SS.EZ.inOut }, S.toCard);
+    const ky = SHEET.cardTop + SS.PCARD.headH / 2, kx = 582;
+    SS.tl.fromTo(name.el, { x: 540, y: RV.nameY, scale: 1 }, { x: kx, y: ky, scale: 0.27, duration: 0.38, ease: SS.EZ.inOut }, S.toCard);
     SS.tl.fromTo(name.el, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.12, ease: 'power1.in' }, S.toCard + 0.26);
-    SS.tl.fromTo(nou, { y: 520 }, { y: SHEET.nouveauY, duration: 0.35, ease: SS.EZ.inOut }, S.toCard);
+    SS.tl.fromTo(nou, { y: RV.nouY, scale: RV.nouK }, { y: SHEET.nouveauY, scale: 1, duration: 0.35, ease: SS.EZ.inOut }, S.toCard);
+    SS.tl.fromTo(logo.el, { y: RV.logoY, scale: 1 }, { y: SHEET.logoY, scale: 110 / RV.logoH, duration: 0.35, ease: SS.EZ.inOut }, S.toCard);
     SS.tl.fromTo(P2, { push: 1.02 }, { push: 1, duration: 0.35, ease: SS.EZ.inOut }, S.toCard);
 
     // ================================================================ demo headlines (screen space, mint scrim)
     const layer = SS.el('div', 'layer', stage);
+    stage.insertBefore(layer, sheet); // the rising sheet covers the demo headlines (a push, no overlap)
     const scrim = SS.scrimTo(layer, 600, '240,255,252');
     gsap.set(scrim, { x: 0, y: 0 });
     const titles = [
@@ -322,17 +330,17 @@
       const st = SS.stepLabel(layer, i + 1);
       SS.place(st, 540, 172, { autoAlpha: 0, y: 190 });
       SS.tl.fromTo(st, { autoAlpha: 0, y: 190 }, { autoAlpha: 1, y: 172, duration: 0.35, ease: SS.EZ.out }, OUTS[i] + 0.05);
-      SS.tl.fromTo(st, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.15, ease: SS.EZ.in }, INS2[i]);
+      SS.tl.fromTo(st, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.15, ease: SS.EZ.in }, INS2[i] + 0.2);
       const h = SS.head(layer, src, { size });
       SS.place(h.el, 540, i === 0 ? 318 : 345);
-      SS.say(h, OUTS[i] + 0.06, INS2[i] - 0.02);
+      SS.say(h, OUTS[i] + 0.06, INS2[i] + 0.2);
     });
     const sub1 = SS.text(layer, 'Ajustée chaque semaine.\nUne page aux couleurs de votre équipe.', { size: 40, weight: 620, color: M.soft, tracking: -0.015, lh: 1.25, maxW: 960 });
     SS.place(sub1.el, 540, 510);
-    SS.say(sub1, S.out1 + 0.3, S.in2 - 0.02, { st: 0.02 });
+    SS.say(sub1, S.out1 + 0.3, S.in2 + 0.2, { st: 0.02 });
     const mention = SS.text(layer, 'Exemple. Noms et numéros fictifs.', { size: 32, weight: 560, color: M.soft, tracking: -0.01 });
     SS.place(mention.el, 540, 1610);
-    SS.say(mention, S.texto + 0.4, S.in3 - 0.02, { st: 0.02 });
+    SS.say(mention, S.texto + 0.4, S.in3 + 0.2, { st: 0.02 });
 
     stage.appendChild(rv); // the reveal sits above the sheet for the hand-over
     R = { wrap, w, cam, layer, shakeBox, sheet, SB, rv, rvIn, logo };
@@ -352,7 +360,7 @@
   const scene = { name: 'solution', a: -1, b: 99, render, ranges: [] };
   scene.build = (stage) => {
     build(stage);
-    scene.ranges = [[R.wrap, S.out1 - 0.05, S.in6 + 0.4], [R.sheet, S.toCard - 0.02, S.proof + 0.4], [R.rv, S.bloom, S.toCard + 0.37], [R.layer, S.out1, S.in6 + 0.2]];
+    scene.ranges = [[R.wrap, S.out1 - 0.05, S.in6 + 0.4], [R.sheet, S.toCard - 0.02, S.proof + 0.4], [R.rv, S.bloom, S.toCard + 0.37], [R.layer, S.out1, S.in6 + 0.5]];
   };
   SS.scenes.push(scene);
 })();

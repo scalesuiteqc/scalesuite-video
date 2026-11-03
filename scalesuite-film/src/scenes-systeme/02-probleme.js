@@ -78,7 +78,7 @@
     SS.say(h1b, S.h1b, S.hookOut + 0.03);
     const h2 = SS.headP(layer, "Trois heures\npour appeler\n*quelqu'un_d'autre.*", { size: 100 });
     SS.place(h2.el, 540, 410);
-    SS.say(h2, S.cost, S.bloom - 0.05);
+    SS.say(h2, S.cost, S.rewind + 0.28);
 
     R = { wrap, w, cam, layer };
   }

@@ -269,3 +269,20 @@ repères à l'étape 3.
 
 Dans la carte produit, les lignes à venir sont des anneaux vides et des lignes grises (la carte « se remplit »).
 La carte de la garantie est une version compacte (noms seuls, échelle 0,76) pour garder le texte à 32 px.
+
+## Étape 3 : aperçu animé
+
+- Retouches de la planche v2 appliquées : cadres 5, 10, 11, 12, 13, 14 et 16 agrandis d'environ 20 % et centrés
+  entre y 600 et 1500 ; carte de garantie de la même taille que celle de la pile (texte 52 px, sceau hors des
+  lignes) ; affiche 9:16 recentrée (bloc agrandi), affiche 4:5 inchangée ; sous-lignes retirées de la carte
+  produit (les cinq lignes sont traitées pareil, noms en 52 px) ; logo et « Système » pendant l'ouverture du
+  disque (6,05 et 6,15 s).
+- Transitions corrigées après la première planche contact : titres qui se chevauchaient (3,5 s, 31,6 s, 34,0 s),
+  logo en double à 10,3 s, texte de la preuve sur la carte qui sort (25,2 s). Les titres des démonstrations sont
+  sous la feuille de la carte produit, qui les recouvre en montant.
+- Repères finaux : coût 3,68 · dévoilement 6,05 – 7,3 · pile 10,1 – 25,0 · preuve 25,45 · garantie 27,85 ·
+  rareté 31,62 · thèse 34,0 · logo 36,25 · bouton 36,7 · URL 37,0 · tenue jusqu'à 40,0.
+- Son : 5 effets, mesurés à chaque rendu par `audio/music-systeme.py` : ouverture −7,5 dB, texto −9,0 dB, Leader
+  −9,5 dB, pile complète −13,4 dB, bouton −10,4 dB sous la musique. Mix −15,0 LUFS.
+- Déterminisme : 0 différence de DOM ; un écart de pixels sur la pointe de la trotteuse de l'horloge (31 pixels,
+  antialiasing d'une ligne de 2 px) sera traité à l'étape 4.

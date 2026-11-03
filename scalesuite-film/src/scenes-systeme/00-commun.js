@@ -11,11 +11,11 @@
 
   SS.ST = {
     // 1 · hook (0–3.5): readable at t = 0; poster (frame 0 of the master) at 3.0
-    roll: 1.9, h1b: 2.3, lue: 2.6, hookOut: 3.5,
+    roll: 1.9, h1b: 2.3, lue: 2.6, hookOut: 3.35,
     // 2 · cost (3.5–6.0)
-    cost: 3.55, sag: 3.7, rewind: 5.45, bloom: 5.95,
+    cost: 3.68, sag: 3.75, rewind: 5.45, bloom: 5.95,
     // 3 · reveal (6.0–10.1)
-    logo: 6.1, nouveau: 6.25, w1: 6.6, w2: 6.9, w3: 7.2, w4: 7.4, pour: 7.7, toCard: 10.1,
+    logo: 6.05, nouveau: 6.1, w1: 6.15, w2: 6.5, w3: 6.8, w4: 7.0, pour: 7.3, toCard: 10.1,
     // 4 · the stack (10.1–25.0): sheet (card view) in/out, then one demo per component
     dock1: 10.5, out1: 10.8,
     c1: 10.8, tap1: 11.05, page1: 11.12, send1: 12.05, tok1: 12.3,
@@ -25,14 +25,14 @@
     in5: 21.1, out5: 21.6, c5: 21.6, dateMode: 21.7, ribbon: 21.8, dateRoll: 22.1,
     in6: 23.25, full: 23.5,
     // 5 · proof (25.0–27.8)
-    proof: 25.0, count: 25.25, seule: 25.9, proofOut: 27.72,
+    proof: 25.0, count: 25.45, seule: 26.0, proofOut: 27.72,
     // 6 · risk reversed (27.8–31.4)
     risk: 27.85, seal: 28.3, contrat: 28.8, partage: 29.3, riskOut: 31.35,
     // 7 · scarcity (31.4–33.8)
-    rare: 31.45, places: 31.75, reste: 32.0, rareOut: 33.75,
+    rare: 31.62, places: 31.85, reste: 32.1, rareOut: 33.7,
     // 8 · end (33.8–40.0)
-    th1: 33.85, th2: 34.35, meet: 34.55, thOut: 35.8, merge: 35.85, endMark: 36.15, endLetters: 36.3, name: 36.35,
-    cta: 36.6, url: 36.9, sheen: 38.0, end: 40.0,
+    th1: 34.0, th2: 34.45, meet: 34.65, thOut: 35.9, merge: 35.95, endMark: 36.25, endLetters: 36.4, name: 36.45,
+    cta: 36.7, url: 37.0, sheen: 38.1, end: 40.0,
   };
 
   // Problem world (from « Le lead perdu ») and the site identity (design-dna-systeme.json).
@@ -225,43 +225,32 @@
   };
 
   // ---- The product card « Le Système Vendeurs 5 minutes »: header + five named lines, each checked in turn.
-  SS.STACK = [
-    ['Campagne Google Vendeurs', 'et une page aux couleurs de votre équipe'],
-    ['Réponse 60 secondes', 'Un texto au vendeur dans la minute'],
-    ['Le bon courtier alerté', 'La demande va direct au bon courtier'],
-    ['Relance après 10 minutes', "Si personne n'a rappelé, l'équipe est relancée"],
-    ['Suivi 90 jours', 'Les vendeurs pas encore prêts'],
-  ];
-  SS.PCARD = { w: 900, headH: 150, rowH: 136 };
+  SS.STACK = ['Campagne Google Vendeurs', 'Réponse 60 secondes', 'Le bon courtier alerté', 'Relance après 10 minutes', 'Suivi 90 jours'];
+  SS.PCARD = { w: 900, headH: 160, rowH: 130 };
   SS.PCARD.h = SS.PCARD.headH + 5 * SS.PCARD.rowH + 26;
-  SS.productCard = (parent, o = {}) => {
-    const M = SS.M;
-    const rowH = o.compact ? 96 : SS.PCARD.rowH;
-    const PC = { w: SS.PCARD.w, headH: SS.PCARD.headH, h: SS.PCARD.headH + 5 * rowH + 26 };
+  SS.productCard = (parent) => {
+    const M = SS.M, PC = SS.PCARD, rowH = PC.rowH;
     const el = SS.el('div', 'sy-card', parent);
     Object.assign(el.style, { width: PC.w + 'px', height: PC.h + 'px', background: '#fff', boxShadow: SS.SHADOW.mHi });
     const head = SS.el('div', '', el);
     Object.assign(head.style, { position: 'absolute', left: '40px', top: '0px', height: PC.headH + 'px', display: 'flex', alignItems: 'center', gap: '20px', whiteSpace: 'nowrap' });
     const mk = SS.el('span', '', head);
-    Object.assign(mk.style, { position: 'relative', width: '58px', height: '64px', display: 'block', flex: 'none' });
-    const lg = SS.logo(mk, 64, { word: false });
+    Object.assign(mk.style, { position: 'relative', width: '62px', height: '68px', display: 'block', flex: 'none' });
+    const lg = SS.logo(mk, 68, { word: false });
     lg.el.style.left = '0px'; lg.el.style.top = '0px'; lg.mark(1);
     const ht = SS.el('span', '', head);
-    Object.assign(ht.style, { fontSize: '46px', fontWeight: 800, letterSpacing: '-.035em', color: M.ink });
+    Object.assign(ht.style, { fontSize: '47px', fontWeight: 800, letterSpacing: '-.035em', color: M.ink });
     ht.innerHTML = 'Le Système Vendeurs 5&nbsp;minutes';
     const div = SS.el('div', '', el);
     Object.assign(div.style, { position: 'absolute', left: '22px', right: '22px', top: PC.headH + 'px', height: '2px', background: '#E6EFED' });
-    const rows = SS.STACK.map(([n, sub], i) => {
+    const rows = SS.STACK.map((n, i) => {
       const r = SS.el('div', '', el);
       Object.assign(r.style, { position: 'absolute', left: '0px', top: PC.headH + 8 + i * rowH + 'px', width: PC.w + 'px', height: rowH + 'px' });
-      const ny = o.compact ? rowH / 2 - 26 : rowH / 2 - 46;
-      r.innerHTML = `<span class="ring" style="position:absolute;left:40px;top:${(rowH - 60) / 2}px;width:60px;height:60px;border-radius:50%;box-sizing:border-box;border:4px solid #C4D6D3"></span>
-        <span class="ck" style="position:absolute;left:40px;top:${(rowH - 60) / 2}px;width:60px;height:60px"></span>
-        <div class="sk" style="position:absolute;left:128px;top:${rowH / 2 - 22}px"><div style="width:${[380, 330, 350, 400, 260][i]}px;height:18px;border-radius:9px;background:#E6EFED"></div>${o.compact ? '' : `<div style="margin-top:16px;width:${[460, 400, 420, 480, 330][i]}px;height:14px;border-radius:7px;background:#EEF4F3"></div>`}</div>
-        <div class="tx" style="position:absolute;left:128px;top:0;width:740px;height:${rowH}px">
-          <div style="position:absolute;left:0;top:${ny}px;font-size:42px;font-weight:760;letter-spacing:-.025em;color:${M.ink};white-space:nowrap">${n}</div>
-          ${o.compact ? '' : `<div style="position:absolute;left:0;top:${rowH / 2 + 6}px;font-size:32px;font-weight:560;color:${M.soft};white-space:nowrap">${sub}</div>`}</div>`;
-      const chk = SS.check(r.querySelector('.ck'), 60, M.teal);
+      r.innerHTML = `<span class="ring" style="position:absolute;left:40px;top:${(rowH - 68) / 2}px;width:68px;height:68px;border-radius:50%;box-sizing:border-box;border:5px solid #C4D6D3"></span>
+        <span class="ck" style="position:absolute;left:40px;top:${(rowH - 68) / 2}px;width:68px;height:68px"></span>
+        <div class="sk" style="position:absolute;left:136px;top:${rowH / 2 - 11}px;width:${[440, 380, 400, 460, 300][i]}px;height:22px;border-radius:11px;background:#E6EFED"></div>
+        <div class="tx" style="position:absolute;left:136px;top:0;height:${rowH}px;display:flex;align-items:center;font-size:52px;font-weight:780;letter-spacing:-.03em;color:${M.ink};white-space:nowrap">${n}</div>`;
+      const chk = SS.check(r.querySelector('.ck'), 68, M.teal);
       const k = { k: 0 };
       SS.proc(() => chk.set(k.k));
       return { el: r, k, tx: r.querySelector('.tx'), sk: r.querySelector('.sk') };

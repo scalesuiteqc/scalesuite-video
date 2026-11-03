@@ -14,10 +14,10 @@
 (function () {
   const SS = window.SS, S = SS.ST, M = SS.M, O = SS.OFFRE;
   const LINE = { y: 600, w: 780 };
-  const G = { LH: 190, LY: 520, nameY: 800, cta: { y: 1045, w: 840, h: 136, size: 42 }, urlY: 1210 };
+  const G = { LH: 228, LY: 640, nameY: 935, cta: { y: 1190, w: 900, h: 156, size: 48 }, urlY: 1372 };
   const LW = (G.LH * SS.LOGO.w) / SS.LOGO.h;
   const markX = 540 - LW / 2 + 58 * (G.LH / SS.LOGO.h);
-  const RK = { s: 0.76, y: 790 }; // the product card in the risk scene
+  const RK = { top: 520 }; // the product card in the risk scene
   const P = { mark: 0, sheen: 0, seal: 0 };
 
   let R;
@@ -25,86 +25,86 @@
     const layer = SS.el('div', 'layer', stage);
 
     // ================================================================ 5 · proof
-    const gm = SS.text(layer, 'Groupe Mackay', { size: 56, weight: 760, color: M.ink, tracking: -0.025 });
-    SS.place(gm.el, 540, 520);
-    SS.say(gm, S.proof + 0.1, S.proofOut, { st: 0.05 });
+    const gm = SS.text(layer, 'Groupe Mackay', { size: 66, weight: 760, color: M.ink, tracking: -0.025 });
+    SS.place(gm.el, 540, 630);
+    SS.say(gm, S.proof + 0.3, S.proofOut, { st: 0.05 });
     const numM = SS.el('div', 'a3', layer);
-    Object.assign(numM.style, { width: '900px', height: '300px', overflow: 'hidden' });
-    SS.place(numM, 540, 750);
+    Object.assign(numM.style, { width: '1000px', height: '360px', overflow: 'hidden' });
+    SS.place(numM, 540, 900);
     const num = SS.el('div', 'a3 sy-tnum', numM);
-    Object.assign(num.style, { fontSize: '270px', fontWeight: 800, letterSpacing: '-.05em', color: M.teal, lineHeight: 1, whiteSpace: 'nowrap' });
+    Object.assign(num.style, { fontSize: '330px', fontWeight: 800, letterSpacing: '-.05em', color: M.teal, lineHeight: 1, whiteSpace: 'nowrap' });
     num.textContent = '124';
-    SS.place(num, 450, 150);
-    gsap.set(num, { y: 400 });
-    SS.tl.fromTo(num, { y: 400 }, { y: 150, duration: 0.6, ease: SS.EZ.out }, S.count - 0.1);
+    SS.place(num, 500, 180);
+    gsap.set(num, { y: 480 });
+    SS.tl.fromTo(num, { y: 480 }, { y: 180, duration: 0.6, ease: SS.EZ.out }, S.count - 0.1);
     SS.counter(num, [{ at: S.count, dur: 0.8, from: 0, to: 124, ease: 'power3.out' }]);
-    const dm = SS.text(layer, 'demandes en moins de 7 mois.', { size: 60, weight: 760, color: M.ink, tracking: -0.03, maxW: 960 });
-    SS.place(dm.el, 540, 960);
+    const dm = SS.text(layer, 'demandes en moins de 7 mois.', { size: 72, weight: 760, color: M.ink, tracking: -0.03, maxW: 960 });
+    SS.place(dm.el, 540, 1150);
     SS.say(dm, S.count + 0.25, S.proofOut + 0.02, { st: 0.05 });
-    const se = SS.text(layer, 'Avec la campagne seule.', { size: 42, weight: 600, color: M.soft, tracking: -0.015 });
-    SS.place(se.el, 540, 1050);
+    const se = SS.text(layer, 'Avec la campagne seule.', { size: 50, weight: 600, color: M.soft, tracking: -0.015 });
+    SS.place(se.el, 540, 1252);
     SS.say(se, S.seule, S.proofOut + 0.04, { st: 0.04 });
     const src = SS.el('div', 'a3', layer);
-    Object.assign(src.style, { height: '64px', padding: '0 26px', borderRadius: '32px', background: '#fff', boxShadow: `inset 0 0 0 2px ${M.line}`, color: M.teal, fontSize: '32px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap' });
-    src.innerHTML = `<svg viewBox="0 0 24 24" style="width:30px;height:30px" fill="none" stroke="${M.teal}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Chiffres tirés de Google Ads`;
-    SS.place(src, 540, 1160, { autoAlpha: 0, scale: 0.94 });
+    Object.assign(src.style, { height: '76px', padding: '0 32px', borderRadius: '38px', background: '#fff', boxShadow: `inset 0 0 0 2px ${M.line}`, color: M.teal, fontSize: '38px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '14px', whiteSpace: 'nowrap' });
+    src.innerHTML = `<svg viewBox="0 0 24 24" style="width:36px;height:36px" fill="none" stroke="${M.teal}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Chiffres tirés de Google Ads`;
+    SS.place(src, 540, 1372, { autoAlpha: 0, scale: 0.94 });
     SS.tl.fromTo(src, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.4, ease: SS.EZ.out }, S.seule + 0.2);
-    SS.tl.fromTo(src, { autoAlpha: 1, y: 1160 }, { autoAlpha: 0, y: 1190, duration: 0.24, ease: SS.EZ.in }, S.proofOut);
+    SS.tl.fromTo(src, { autoAlpha: 1, y: 1372 }, { autoAlpha: 0, y: 1400, duration: 0.24, ease: SS.EZ.in }, S.proofOut);
     SS.tl.fromTo(num, { yPercent: -50 }, { yPercent: -200, duration: 0.3, ease: SS.EZ.in }, S.proofOut);
     SS.cue(S.count, 'm-count');
 
     // ================================================================ 6 · risk reversed
-    const pc = SS.productCard(layer, { compact: true });
+    const pc = SS.productCard(layer); // same size as the stack's card
     pc.rows.forEach((r) => { r.k.k = 1; gsap.set(r.sk, { autoAlpha: 0 }); });
-    const cx = 540 - SS.PCARD.w / 2, cy = RK.y - pc.h / 2;
-    gsap.set(pc.el, { x: cx, y: cy + 1300, scale: RK.s, transformOrigin: '50% 50%', autoAlpha: 0 });
+    const cx = 90, cy = RK.top;
+    gsap.set(pc.el, { x: cx, y: cy + 1300, autoAlpha: 0 });
     SS.tl.set(pc.el, { autoAlpha: 1 }, S.proofOut + 0.08);
     SS.tl.fromTo(pc.el, { y: cy + 1300 }, { y: cy, duration: 0.55, ease: SS.EZ.out }, S.proofOut + 0.08);
     // the seal: two rings and a check, drawn with a stroke
     const seal = SS.el('div', 'a3', layer);
-    Object.assign(seal.style, { width: '220px', height: '220px' });
-    const ss = SS.svg('svg', { viewBox: '0 0 220 220', width: 220, height: 220 }, seal);
+    Object.assign(seal.style, { width: '190px', height: '190px' });
+    const ss = SS.svg('svg', { viewBox: '0 0 220 220', width: 190, height: 190 }, seal);
     SS.svg('circle', { cx: 110, cy: 110, r: 100, fill: '#ffffff' }, ss);
     const sp = [
       SS.svg('circle', { cx: 110, cy: 110, r: 100, fill: 'none', stroke: M.teal, 'stroke-width': 7, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1, transform: 'rotate(-90 110 110)' }, ss),
       SS.svg('circle', { cx: 110, cy: 110, r: 82, fill: 'none', stroke: M.teal, 'stroke-width': 3, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1, transform: 'rotate(-90 110 110)' }, ss),
       SS.svg('path', { d: 'M70 114l26 26 56-58', fill: 'none', stroke: M.teal, 'stroke-width': 12, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1 }, ss),
     ];
-    SS.place(seal, 840, 1000, { autoAlpha: 0, scale: 0.9, rotation: -8 });
+    SS.place(seal, 880, 1300, { autoAlpha: 0, scale: 0.9, rotation: -8 });
     SS.tl.fromTo(seal, { autoAlpha: 0, scale: 0.9, rotation: -8 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.45, ease: SS.EZ.out }, S.seal);
     SS.tl.fromTo(P, { seal: 0 }, { seal: 1, duration: 0.8, ease: 'none' }, S.seal);
     SS.cue(S.seal, 'm-seal');
     const rt = SS.head(layer, 'Si on ne livre pas,\n*vous* *ne* *payez* *pas.*', { size: 100 });
-    SS.place(rt.el, 540, 330);
+    SS.place(rt.el, 540, 290);
     SS.say(rt, S.risk, S.riskOut);
     const ac = SS.text(layer, 'Aucun contrat.', { size: 56, weight: 780, color: M.ink, tracking: -0.03 });
-    SS.place(ac.el, 540, 1170);
+    SS.place(ac.el, 540, 456);
     SS.say(ac, S.contrat, S.riskOut + 0.02, { st: 0.05 });
     const vd = SS.text(layer, 'Vos demandes ne sont jamais\npartagées ni revendues.', { size: 44, weight: 600, color: M.soft, tracking: -0.02, lh: 1.22 });
-    SS.place(vd.el, 540, 1290);
+    SS.place(vd.el, 540, 1432);
     SS.say(vd, S.partage, S.riskOut + 0.04, { st: 0.025 });
     SS.tl.fromTo([pc.el, seal], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
     SS.tl.fromTo(pc.el, { y: cy }, { y: cy - 160, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
-    SS.tl.fromTo(seal, { y: 1000 }, { y: 840, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
+    SS.tl.fromTo(seal, { y: 1300 }, { y: 1140, duration: 0.3, ease: SS.EZ.in }, S.riskOut);
 
     // ================================================================ 7 · real scarcity (SS.OFFRE)
     const nE = O.equipesParMois, nP = O.placesFondatrices;
     const rr = SS.head(layer, `*${nE}* nouvelles équipes\npar mois.`, { size: 104 });
     SS.place(rr.el, 540, 330);
     SS.say(rr, S.rare, S.rareOut);
-    const reste = SS.text(layer, nP > 1 ? `Il reste ${nP} places fondatrices.` : 'Il reste 1 place fondatrice.', { size: 54, weight: 720, color: M.teal, tracking: -0.025 });
-    SS.place(reste.el, 540, 560);
+    const reste = SS.text(layer, nP > 1 ? `Il reste ${nP} places fondatrices.` : 'Il reste 1 place fondatrice.', { size: 62, weight: 720, color: M.teal, tracking: -0.025 });
+    SS.place(reste.el, 540, 640);
     SS.say(reste, S.reste, S.rareOut + 0.02, { st: 0.04 });
-    const PW = 260, GAP = 30, cnt = Math.max(1, Math.min(5, nP));
+    const PW = 270, GAP = 24, cnt = Math.max(1, Math.min(5, nP));
     const seats = Array.from({ length: cnt }, (_, i) => {
       const el = SS.el('div', 'a3', layer);
-      Object.assign(el.style, { width: PW + 'px', height: '300px', borderRadius: '30px', background: '#fff', boxShadow: `inset 0 0 0 4px ${M.teal}, ${SS.SHADOW.m}` });
-      el.innerHTML = `<div style="position:absolute;left:50%;top:46px;width:76px;height:76px;margin-left:-38px;border-radius:50%;box-sizing:border-box;border:5px solid ${M.teal}"></div>
-        <div style="position:absolute;left:0;right:0;top:150px;text-align:center;font-size:34px;font-weight:760;letter-spacing:-.02em;color:${M.ink};line-height:1.2">Place<br>fondatrice</div>`;
+      Object.assign(el.style, { width: PW + 'px', height: '440px', borderRadius: '32px', background: '#fff', boxShadow: `inset 0 0 0 4px ${M.teal}, ${SS.SHADOW.m}` });
+      el.innerHTML = `<div style="position:absolute;left:50%;top:80px;width:110px;height:110px;margin-left:-55px;border-radius:50%;box-sizing:border-box;border:6px solid ${M.teal}"></div>
+        <div style="position:absolute;left:0;right:0;top:250px;text-align:center;font-size:38px;font-weight:760;letter-spacing:-.02em;color:${M.ink};line-height:1.2">Place<br>fondatrice</div>`;
       const x = 540 + (i - (cnt - 1) / 2) * (PW + GAP);
-      SS.place(el, x, 920, { autoAlpha: 0, y: 960 });
-      SS.tl.fromTo(el, { autoAlpha: 0, y: 960 }, { autoAlpha: 1, y: 920, duration: 0.42, ease: SS.EZ.dock }, S.places + i * 0.06);
-      SS.tl.fromTo(el, { y: 920, scaleY: 1, autoAlpha: 1 }, { y: LINE.y, scaleY: 0.03, autoAlpha: 0, duration: 0.32, ease: SS.EZ.in }, S.rareOut + i * 0.03);
+      SS.place(el, x, 1050, { autoAlpha: 0, y: 1090 });
+      SS.tl.fromTo(el, { autoAlpha: 0, y: 1090 }, { autoAlpha: 1, y: 1050, duration: 0.42, ease: SS.EZ.dock }, S.places + i * 0.06);
+      SS.tl.fromTo(el, { y: 1050, scaleY: 1, autoAlpha: 1 }, { y: LINE.y, scaleY: 0.03, autoAlpha: 0, duration: 0.32, ease: SS.EZ.in }, S.rareOut + i * 0.03);
       return el;
     });
     SS.cue(S.places, 'm-places');
@@ -147,7 +147,7 @@
     SS.tl.fromTo(logo.letters, { y: 150 }, { y: 0, duration: 0.6, stagger: 0.03, ease: SS.EZ.out }, S.endLetters);
     SS.tl.fromTo(P, { sheen: 0 }, { sheen: 1, duration: 0.7, ease: 'sine.inOut' }, S.sheen - 0.3);
     SS.cue(S.endMark, 'm-endmark');
-    const nm = SS.head(layer, 'Système Vendeurs\n5 *minutes.*', { size: 96 });
+    const nm = SS.head(layer, 'Système Vendeurs\n5 *minutes.*', { size: 115 });
     SS.place(nm.el, 540, G.nameY);
     SS.say(nm, S.name, null, { st: 0.06 });
     // call to action: a node that grows into the ink button (site style)
@@ -168,7 +168,7 @@
     SS.tl.fromTo(cw, { yPercent: SS.HIDE }, { yPercent: 0, duration: 0.6, ease: SS.EZ.out }, S.cta + 0.2);
     SS.tl.fromTo(sh, { x: 0 }, { x: G.cta.w + 200, duration: 0.7, ease: 'sine.inOut' }, S.sheen);
     SS.cue(S.cta, 'sfx-cta');
-    const url = SS.text(layer, 'scalesuiteqc.ca', { size: 42, weight: 680, color: M.ink, tracking: -0.01 });
+    const url = SS.text(layer, 'scalesuiteqc.ca', { size: 50, weight: 680, color: M.ink, tracking: -0.01 });
     SS.place(url.el, 540, G.urlY);
     SS.say(url, S.url, null, { dur: 0.6 });
     SS.tl.fromTo([logo.el, cta], { scale: 1 }, { scale: 1.012, duration: S.end - 37.4, ease: 'sine.inOut' }, 37.4);

@@ -1,9 +1,8 @@
 # « Le Système Vendeurs 5 minutes » (film de lancement) : voix hors champ (v2, validée)
 
 Vidéo `scalesuite-systeme-9x16` · 40,0 s · français québécois, vouvoiement, ton posé et assuré.
-Fenêtres calées sur les repères du plan v2 (`storyboard-systeme.md`). Elles seront **recalées sur les
-repères réels de la timeline** (`SS.ST`, exportés par `render/cues-systeme.mjs`) à l'étape 3, sans changer le
-texte. Débit maximal : 2,7 mots par seconde, compté en **mots prononcés** (« 14 h 12 » = quatorze heures douze
+Fenêtres **recalées à l'étape 3 sur les repères réels de la timeline** (`SS.ST`, exportés par
+`render/cues-systeme.mjs`), sans changer le texte. Débit maximal : 2,7 mots par seconde, compté en **mots prononcés** (« 14 h 12 » = quatorze heures douze
 = 3 mots ; « 90 » et « 10 » = 1 mot). Quand une réplique ne tenait pas, j'ai coupé des mots au lieu
 d'accélérer (voir les notes). Aucune phrase ne commence par « Et » ou « Mais ». Aucun trait d'union à l'écran.
 
@@ -12,8 +11,8 @@ d'accélérer (voir les notes). Aucune phrase ne commence par « Et » ou « Mai
 | # | Réplique | Fenêtre (s) | Durée | Mots dits | Mots/s | Ce qu'on voit |
 |---|---|---|---|---|---|---|
 | 1 | 14 h 12 : le vendeur écrit. 17 h : votre courtier le voit. | 0,15 – 4,65 | 4,50 | 12 | 2,67 | accroche ; saut de l'horloge 1,9 s ; « Votre courtier le voit à 17 h 04. » 2,3 s |
-| 2 | Trois heures pour appeler quelqu'un d'autre. | 4,70 – 6,95 | 2,25 | 6 | 2,67 | titre du coût tenu jusqu'à 5,4 ; retour en arrière 5,45 ; éclosion 5,95 |
-| 3 | Voici le Système Vendeurs 5 minutes. | 7,00 – 9,30 | 2,30 | 6 | 2,61 | « Système » 6,6, « Vendeurs » 6,9, « 5 minutes. » 7,2 – 7,4 ; tenu jusqu'à 10,1 |
+| 2 | Trois heures pour appeler quelqu'un d'autre. | 4,65 – 6,90 | 2,25 | 6 | 2,67 | titre du coût 3,68, tenu jusqu'à 5,73 ; retour en arrière 5,45 ; éclosion 5,95 |
+| 3 | Voici le Système Vendeurs 5 minutes. | 6,95 – 9,25 | 2,30 | 6 | 2,61 | « Système » 6,15, « Vendeurs » 6,5, « 5 minutes. » 6,8 – 7,0 ; tenu jusqu'à 10,1 |
 | — | *(musique seule)* | 9,30 – 13,00 | 3,70 | — | — | carte produit, composante 1 (campagne et page) |
 | 4 | En moins d'une minute, le vendeur reçoit un texto. | 13,00 – 16,35 | 3,35 | 9 | 2,69 | ligne « Réponse 60 secondes » 12,9 ; texto 13,9 ; tenu jusqu'à 16,2 |
 | — | *(musique seule)* | 16,35 – 18,30 | 1,95 | — | — | composante 3 (le bon courtier alerté) |
@@ -22,8 +21,8 @@ d'accélérer (voir les notes). Aucune phrase ne commence par « Et » ou « Mai
 | — | *(musique seule)* | 25,10 – 27,85 | 2,75 | — | — | preuve : 124, Groupe Mackay (se lit à l'écran) |
 | 7 | Si on ne livre pas, vous ne payez pas. Aucun contrat. | 27,80 – 31,90 | 4,10 | 11 | 2,68 | titre 27,9 ; sceau 28,3 ; « Aucun contrat. » 28,8 |
 | 8 | Trois nouvelles équipes par mois. | 32,00 – 33,90 | 1,90 | 5 | 2,63 | « 3 nouvelles équipes par mois. » 31,45 ; « Il reste 3 places fondatrices. » 32,0 |
-| — | *(musique seule)* | 33,75 – 36,60 | 2,85 | — | — | thèse et rencontre ; logo 34,7 – 36,0 ; nom du système 36,2 |
-| 9 | Obtenez votre diagnostic gratuit. | 36,60 – 38,40 | 1,80 | 4 | 2,22 | bouton 36,5 ; URL 36,8 ; tenue jusqu'à 40,0 |
+| — | *(musique seule)* | 33,90 – 36,70 | 2,80 | — | — | thèse 34,0 et 34,45, rencontre 34,65 ; logo 36,25 ; nom du système 36,45 |
+| 9 | Obtenez votre diagnostic gratuit. | 36,70 – 38,50 | 1,80 | 4 | 2,22 | bouton 36,7 ; URL 37,0 ; tenue jusqu'à 40,0 |
 
 Total : 71 mots dits.
 
