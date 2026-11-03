@@ -29,16 +29,16 @@ if [ "$MODE" = preview ]; then
   rm -rf "$WORK/frames-preview"
   # timestamped contact sheet: a few frames per scene, one row per scene
   ROWS=(
-    "1 · Accroche (0–3,5 s)|0.00,1.00,2.00,2.60,3.20"
-    "2 · Le coût (3,5–6,0 s)|3.70,4.50,5.50,5.85"
-    "3 · Dévoilement (6,0–10,1 s)|6.05,6.20,6.50,6.90,7.40,9.00"
-    "4a · La pile : campagne, réponse 60 secondes (10,1–16,0 s)|10.30,10.65,11.30,12.20,13.00,13.60,14.20,15.50"
-    "4b · La pile : courtier, relance, suivi, pile complète (16,0–25,0 s)|16.30,17.20,18.30,19.00,19.80,20.80,21.40,22.50,23.40,24.50"
-    "5 · Preuve (25,0–27,8 s)|25.20,25.60,26.50,27.60"
-    "6 · Garantie (27,8–31,4 s)|28.00,28.50,29.20,30.80"
-    "7 · Rareté (31,4–33,8 s)|31.60,32.00,32.50,33.60"
-    "8 · Fin (33,8–40,0 s)|34.00,35.00,36.00,36.40,36.80,37.50,39.90"
+    "1 · Accroche (0–4,0 s)|0.00,1.00,1.60,2.20,3.20,3.95"
+    "2 · Dévoilement (4,0–7,5 s)|4.10,4.30,4.75,5.10,5.50,7.00"
+    "3a · Réponse 60 secondes (7,5–10,5 s)|7.55,7.75,8.10,8.50,9.80"
+    "3b · Le bon courtier, la relance (10,5–14,7 s)|10.55,10.75,11.20,12.20,12.80,13.30,14.20"
+    "3c–d · Suivi 90 jours, la pile (14,7–19,4 s)|14.75,14.95,15.40,16.40,16.80,17.10,17.50,18.60"
+    "4 · Preuve (19,4–21,9 s)|19.45,19.70,20.10,21.40"
+    "5 · Garantie et rareté (21,9–25,4 s)|21.95,22.20,22.70,23.40,25.00"
+    "6 · Fin (25,4–31,0 s)|25.45,25.70,26.50,27.60,27.90,28.30,30.90"
   )
+
 
   ALL="" NAMES="" ARGS=()
   for i in "${!ROWS[@]}"; do
@@ -50,7 +50,7 @@ if [ "$MODE" = preview ]; then
   node render/stills-systeme.mjs --times="${ALL#,}" --names="${NAMES#,}" --out="$WORK/sheet"
   python3 render/sheet-v3.py "$OUT/$NAME-contact-sheet.jpg" 200 "${ARGS[@]}"
 else
-  node render/stills-systeme.mjs --times=3.0 --names=poster --out="$WORK"
+  node render/stills-systeme.mjs --times=3.2 --names=poster --out="$WORK"
   ffmpeg -hide_banner -loglevel error -y -i "$WORK/poster.png" -q:v 2 "$OUT/$NAME-poster.jpg"
   rm -rf "$WORK/frames-final"
   node render/frames-systeme.mjs --fps=60 --workers=4 --poster --out="$WORK/frames-final"

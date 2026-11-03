@@ -10,29 +10,21 @@
   SS.OFFRE = { equipesParMois: 3, placesFondatrices: 3 };
 
   SS.ST = {
-    // 1 · hook (0–3.5): readable at t = 0; poster (frame 0 of the master) at 3.0
-    roll: 1.9, h1b: 2.3, lue: 2.6, hookOut: 3.35,
-    // 2 · cost (3.5–6.0)
-    cost: 3.68, sag: 3.75, rewind: 5.45, bloom: 5.95,
-    // 3 · reveal (6.0–10.1)
-    logo: 6.05, nouveau: 6.1, w1: 6.15, w2: 6.5, w3: 6.8, w4: 7.0, pour: 7.3, toCard: 10.1,
-    // 4 · the stack (10.1–25.0): sheet (card view) in/out, then one demo per component
-    dock1: 10.5, out1: 10.8,
-    c1: 10.8, tap1: 11.05, page1: 11.12, send1: 12.05, tok1: 12.3,
-    in2: 12.8, out2: 13.3, c2: 13.3, tick13: 13.45, texto: 13.8,
-    in3: 16.0, out3: 16.5, c3: 16.5, fil3: 16.6, alert3: 16.95,
-    in4: 18.1, out4: 18.6, c4: 18.6, ticks: 18.7, relance: 19.35, shift: 19.4, route: 19.52, leader: 19.75,
-    in5: 21.1, out5: 21.6, c5: 21.6, dateMode: 21.7, ribbon: 21.8, dateRoll: 22.1,
-    in6: 23.25, full: 23.5,
-    // 5 · proof (25.0–27.8)
-    proof: 25.0, count: 25.45, seule: 26.0, proofOut: 27.72,
-    // 6 · risk reversed (27.8–31.4)
-    risk: 27.85, seal: 28.3, contrat: 28.8, partage: 29.3, riskOut: 31.35,
-    // 7 · scarcity (31.4–33.8)
-    rare: 31.62, places: 31.85, reste: 32.1, rareOut: 33.7,
-    // 8 · end (33.8–40.0)
-    th1: 34.0, th2: 34.45, meet: 34.65, thOut: 35.9, merge: 35.95, endMark: 36.25, endLetters: 36.4, name: 36.45,
-    cta: 36.7, url: 37.0, sheen: 38.1, end: 40.0,
+    // 1 · hook (0–4.0): one evolving frame; poster (frame 0 of the master) at 3.2
+    roll: 1.0, h1b: 1.3, lue: 1.8, cost: 2.4, clockOut: 3.95, bloom: 4.0,
+    // 2 · reveal (4.0–7.5)
+    logo: 4.15, nouveau: 4.4, w1: 4.7, w2: 4.95, w3: 5.2, w4: 5.4, pour: 5.7, revealOut: 7.5,
+    // 3 · the system at work, one camera (7.5–19.4)
+    phone: 7.45, tick13: 7.9, texto: 8.3,
+    toTeam: 10.5, h3b: 10.65, fil3: 10.8, alert3: 11.0, ticks: 12.5, h3c: 12.5, relance: 13.05, shift: 13.08, route: 13.15, leader: 13.4,
+    toSuivi: 14.7, h3d: 14.8, dateMode: 14.8, ribbon: 14.95, dateRoll: 15.1,
+    pile: 16.7, check0: 16.85, full: 17.65,
+    // 4 · proof (19.4–21.9)
+    proof: 19.4, count: 19.75, seule: 20.3, proofOut: 21.85,
+    // 5 · guarantee and scarcity (21.9–25.4)
+    risk: 22.0, contrat: 22.35, partage: 22.55, seal: 22.5, rare: 23.3, riskOut: 25.35,
+    // 6 · end (25.4–31.0)
+    th1: 25.5, th2: 25.8, merge: 27.5, endLogo: 27.7, name: 27.85, cta: 28.0, url: 28.15, sheen: 29.2, end: 31.0,
   };
 
   // Problem world (from « Le lead perdu ») and the site identity (design-dna-systeme.json).
@@ -57,6 +49,26 @@
     SS.hideWords(T);
     SS.wordsIn(T, at, { st: o.st == null ? 0.06 : o.st, dur: o.dur });
     if (out != null) SS.wordsOut(T, out, { st: 0.02 });
+  };
+
+
+  // Headlines enter by a short rise with a fade (no word is ever cut by a visible mask): the mask boxes move.
+  SS.rise = (T, at, out, o = {}) => {
+    const ms = T.words.map((w) => w.m);
+    gsap.set(T.words.map((w) => w.el), { yPercent: 0 });
+    gsap.set(ms, { autoAlpha: 0, y: 24 });
+    SS.tl.fromTo(ms, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: o.dur || 0.4, stagger: o.st == null ? 0.05 : o.st, ease: SS.EZ.out }, at);
+    if (out != null) SS.tl.fromTo(ms, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -16, duration: 0.25, stagger: 0.015, ease: SS.EZ.in }, out);
+  };
+  SS.riseOne = (T, i, at) => { // one word of a headline (the product's name, word by word)
+    const m = T.words[i].m;
+    SS.tl.fromTo(m, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: SS.EZ.out }, at);
+  };
+  SS.riseEl = (el, at, out, o = {}) => { // any element (gsap-placed): rise + fade in, fade up out
+    const y0 = o.y;
+    gsap.set(el, { autoAlpha: 0, y: y0 + 24 });
+    SS.tl.fromTo(el, { autoAlpha: 0, y: y0 + 24 }, { autoAlpha: 1, y: y0, duration: o.dur || 0.4, ease: SS.EZ.out }, at);
+    if (out != null) SS.tl.fromTo(el, { autoAlpha: 1, y: y0 }, { autoAlpha: 0, y: y0 - 16, duration: 0.25, ease: SS.EZ.in }, out);
   };
 
   // Tap ripple
@@ -258,13 +270,13 @@
     return { el, head, rows, h: PC.h };
   };
 
-  // Step label in the site's style (« 1 sur 6 » + segmented bar): « Système Vendeurs 5 minutes · n sur 5 »
-  SS.stepLabel = (parent, n) => {
+  // Product label in the site's style: « Système Vendeurs 5 minutes » (no step number)
+  SS.stepLabel = (parent) => {
     const M = SS.M;
     const el = SS.el('div', 'a3', parent);
-    Object.assign(el.style, { width: '900px', height: '80px' });
-    el.innerHTML = `<div style="display:flex;gap:10px">${[1, 2, 3, 4, 5].map((i) => `<span style="display:block;flex:1;height:8px;border-radius:4px;background:${i <= n ? M.turq : '#DCE8E6'}"></span>`).join('')}</div>
-      <div style="margin-top:20px;text-align:center;font-size:36px;font-weight:760;letter-spacing:-.015em;color:${M.teal};white-space:nowrap">Système Vendeurs 5 minutes · ${n} sur 5</div>`;
+    Object.assign(el.style, { height: '68px', padding: '0 30px', borderRadius: '34px', background: M.band, color: M.teal, fontSize: '36px', fontWeight: 760,
+      letterSpacing: '-.015em', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' });
+    el.textContent = 'Système Vendeurs 5 minutes';
     return el;
   };
 })();

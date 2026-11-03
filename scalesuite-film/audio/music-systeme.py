@@ -4,18 +4,18 @@
 
 Sound rule (skill scalesuite-video, section 10): 4 to 6 soft effects, no bell or "ding", each at least
 6 dB under the music. This film has 5, on the `sfx-*` cues:
-   5.95 s  bloom / reveal            opening breath, rising, low-passed (`breath`, 'rise')
-  13.8 s   the seller's text message muffled double vibration (`mutedbuzz`), never a message sound
-  19.75 s  the relance reaches the Leader   one short muffled vibration
-  23.5 s   the full stack (5th check) felt click, very light (target ≥ 12 dB under the music)
-  36.6 s   the button is born        soft breath that opens (`breath`, 'swell')
+   4.0 s   bloom / reveal            opening breath, rising, low-passed (`breath`, 'rise')
+   8.3 s   the seller's text message muffled double vibration (`mutedbuzz`), never a message sound
+  13.4 s   the relance reaches the Leader   one short muffled vibration
+  17.65 s  the last check of the stack felt click, very light (kept only if ≥ 12 dB under the music)
+  28.0 s   the button is born        soft breath that opens (`breath`, 'swell')
 Score: grey world sparse in D minor (felt piano, cold pad; one low tock on the clock jump; thins to a
 held note), the held note is breathed in on the rewind, F major opens on the bloom and the 4-note
 signature (C F E A) is played complete, one note per word of the product's name; the neo-soul groove
 (+6 %) carries the stack and peaks on the full card; proof / guarantee / scarcity without drums,
 assured; resolution in F major under the logo, the signature recalled once, softer.
 
-    python3 audio/music-systeme.py --cues cues.json [--end 40] out.wav [--stems DIR]
+    python3 audio/music-systeme.py --cues cues.json [--end 31] out.wav [--stems DIR]
 """
 import json
 import os
@@ -176,46 +176,44 @@ def mutedbuzz(dur=0.22, vel=1.0):
 
 # ---------------------------------------------------------------- picture times
 music, drums, fx = Bus(), Bus(), Bus()
-REW, BLOOM = ST['rewind'], at('sfx-reveal', ST['bloom'])
+BLOOM = at('sfx-reveal', ST['bloom'])
 TEXTO, LEADER, FULL, CTA = at('sfx-texto', ST['texto']), at('sfx-leader', ST['leader']), at('sfx-stack', ST['full']), at('sfx-cta', ST['cta'])
 WORDS = [ST['w1'], ST['w2'], ST['w3'], ST['w4']]
 SIG = [60, 65, 64, 69]  # C4 F4 E4 A4: the signature, middle register
 
-# ================================================================ grey world (D minor, cool, sparse)
+# ================================================================ grey world (D minor, cool, sparse): the hook
 PROB = [(0.0, [50, 57, 60, 64], 38), (ST['roll'], [46, 53, 57, 62], 34), (ST['cost'], [43, 50, 53, 58], 31)]
 for k, (t0, notes, root) in enumerate(PROB):
-    t1 = PROB[k + 1][0] if k + 1 < len(PROB) else ST['cost'] + 1.1
-    music.add(pad(notes, t1 - t0 + 1.0, att=0.4 if k else 0.05, rel=0.9, bright=0.8), t0, 0.5, pan=-0.15)
-    music.add(bass(midi(root), min(2.2, t1 - t0 + 0.2), 0.7), t0, 0.32)
-    music.add(chord(felt, notes, 2.4, vel=0.6), t0 + 0.02, 0.22, pan=0.1)
+    t1 = PROB[k + 1][0] if k + 1 < len(PROB) else BLOOM
+    music.add(pad(notes, t1 - t0 + 0.6, att=0.4 if k else 0.05, rel=0.5, bright=0.8), t0, 0.5, pan=-0.15)
+    music.add(bass(midi(root), min(2.0, t1 - t0 + 0.2), 0.7), t0, 0.32)
+    music.add(chord(felt, notes, 2.2, vel=0.6), t0 + 0.02, 0.22, pan=0.1)
 drums.add(softtick(1.0), ST['roll'], 0.2, pan=0.2)  # one low tock on the clock jump (music, not an effect)
-for t0, n in [(0.6, 62), (1.3, 60), (2.4, 58), (3.0, 57), (4.0, 55)]:
+for t0, n in [(0.5, 62), (1.3, 60), (2.0, 58), (2.9, 57)]:
     music.add(felt(midi(n), 2.0, 0.55), t0, 0.16, pan=-0.2)
-# the cost thins to one held low note, breathed in on the rewind
-music.add(pad([38, 45], REW - ST['cost'] - 0.6, att=0.6, rel=0.3, bright=0.6), ST['cost'] + 0.6, 0.5)
-music.add(felt(midi(38), 2.6, 0.8), ST['cost'] + 0.05, 0.25)
+music.add(felt(midi(38), 2.4, 0.8), ST['cost'] + 0.05, 0.25)  # the cost: one held low note, breathed in
 
 # ================================================================ reveal (F major, the signature complete)
-# SFX 1: opening breath, rising from the rewind to the bloom
-fx.add(breath(BLOOM - REW + 0.08, 250, 1800, 'rise', 1.0), REW, 0.34)
-music.add(pad([53, 60, 64, 69], ST['toCard'] - BLOOM + 1.0, att=0.35, rel=1.0, bright=1.1), BLOOM, 0.45, pan=-0.1)
+REW = BLOOM - 0.45
+fx.add(breath(0.53, 250, 1800, 'rise', 1.0), REW, 0.5)  # SFX 1: opening breath, rising into the bloom
+music.add(pad([53, 60, 64, 69], ST['revealOut'] - BLOOM + 0.8, att=0.3, rel=0.8, bright=1.1), BLOOM, 0.45, pan=-0.1)
 music.add(chord(epiano, [53, 57, 60, 64, 67], 3.0, vel=0.6), BLOOM + 0.05, 0.3)
 music.add(bass(midi(41), 3.2, 0.8), BLOOM + 0.05, 0.3)
 for k, (t0, n) in enumerate(zip(WORDS, SIG)):  # one note per word of the name
     music.add(felt(midi(n), 2.8, 0.85), t0, 0.36, pan=-0.15 + 0.1 * k)
     music.add(felt(midi(n - 12), 2.8, 0.5), t0, 0.14, pan=0.1)
-music.add(pad([53, 57, 60, 65, 69], ST['toCard'] - ST['w4'], att=0.8, rel=0.6, bright=1.25), ST['w4'] + 0.1, 0.22, pan=0.2)
-music.add(chord(epiano, [41, 53, 57, 60, 64, 69], 3.0, vel=0.55), ST['pour'], 0.22)
+music.add(pad([53, 57, 60, 65, 69], ST['revealOut'] - ST['w4'], att=0.8, rel=0.5, bright=1.25), ST['w4'] + 0.1, 0.22, pan=0.2)
+music.add(chord(epiano, [41, 53, 57, 60, 64, 69], 2.4, vel=0.55), ST['pour'], 0.22)
 
-# ================================================================ the stack: groove (+6 %)
+# ================================================================ the system at work: groove (+6 %)
 CH = {'Fmaj9': [53, 57, 60, 64, 67], 'Am7': [57, 60, 64, 67], 'Bbmaj9': [58, 62, 65, 69, 72], 'C69': [60, 64, 67, 69, 74],
       'Dm9': [50, 53, 57, 60, 64], 'Gm9': [55, 58, 62, 65, 69], 'C7sus': [48, 55, 58, 60, 65]}
 ROOT = {'Fmaj9': 41, 'Am7': 45, 'Bbmaj9': 46, 'C69': 48, 'Dm9': 38, 'Gm9': 43, 'C7sus': 36}
-G0, G1 = ST['toCard'], ST['proof']
+G0, G1 = ST['revealOut'], ST['proof']
 CYC = ['Fmaj9', 'Am7', 'Bbmaj9', 'C69']
-PROG = [(G0 + 2 * i * BEAT * 2, CYC[i % 4]) for i in range(int((FULL - G0) / (4 * BEAT)) + 1)]
+PROG = [(G0 + i * 4 * BEAT, CYC[i % 4]) for i in range(int((FULL - G0) / (4 * BEAT)) + 1)]
 PROG += [(FULL, 'Fmaj9'), (FULL + 4 * BEAT, 'Bbmaj9'),
-         (G1, 'Dm9'), (ST['risk'], 'Bbmaj9'), (ST['seal'] + 1.0, 'Gm9'), (ST['rare'], 'C7sus'), (ST['th1'], 'Dm9'), (ST['th2'], 'Bbmaj9'), (ST['merge'], 'C69'), (ST['endMark'], 'Fmaj9')]
+         (G1, 'Dm9'), (ST['risk'], 'Bbmaj9'), (ST['rare'], 'Gm9'), (ST['riskOut'], 'C7sus'), (ST['th1'], 'Dm9'), (ST['th2'], 'Bbmaj9'), (ST['merge'], 'C69'), (ST['endLogo'], 'Fmaj9')]
 PROG.sort()
 
 
@@ -259,17 +257,15 @@ def groove(b0, b1, lift=1.0, kit=True):
         music.add(chord(epiano, c[1:], 0.6, vel=0.5), b + 2.5 * BEAT + BEAT / 2 * (SWING - 0.5) * 2, 0.16, pan=0.2)
 
 
-# density rises component by component, peak on the full card
-OUTS = [ST['out1'], ST['out2'], ST['out3'], ST['out4'], ST['out5'], ST['in6']]
-groove(G0, OUTS[0], lift=0.8)
-for i in range(5):
-    groove(OUTS[i], OUTS[i + 1], lift=0.9 + 0.06 * i)
-groove(OUTS[5], G1, lift=1.2)
+# density rises scene by scene, peak on the checked stack
+SEG = [G0, ST['toTeam'], ST['toSuivi'], ST['pile'], G1]
+for i in range(4):
+    groove(SEG[i], SEG[i + 1], lift=0.85 + 0.1 * i)
 music.add(pad([58, 62, 65, 69], G1 - G0 + 0.6, att=1.2, rel=0.8), G0, 0.15, pan=0.2)
-# SFX 2: the text message = a muffled double vibration; the signature answers inside the music
+# SFX 2: the text message = a muffled double vibration; the build and the answer are music
 fx.add(mutedbuzz(0.22, 1.0), TEXTO + 0.08, 0.2)
 fx.add(mutedbuzz(0.22, 1.0), TEXTO + 0.38, 0.16)
-music.add(pad([55, 62, 65, 70], TEXTO - ST['tick13'] + 0.1, att=0.4, rel=0.1, bright=1.2), ST['tick13'], 0.24)  # the build to the phone
+music.add(pad([55, 62, 65, 70], TEXTO - ST['tick13'] + 0.1, att=0.3, rel=0.1, bright=1.2), ST['tick13'], 0.24)
 music.add(pad([60, 64, 69, 72], 2.2, att=0.12, rel=0.8, bright=1.2), TEXTO, 0.34, pan=0.2)
 music.add(bass(midi(41), 1.2, 0.9), TEXTO, 0.3)
 for k, n in enumerate(SIG):
@@ -279,27 +275,28 @@ fx.add(mutedbuzz(0.16, 1.0), LEADER + 0.05, 0.13)
 music.add(pad([58, 62, 65, 69, 72], 1.6, att=0.1, rel=0.8, bright=1.2), LEADER, 0.34, pan=-0.2)
 music.add(bass(midi(46), 0.9, 0.9), LEADER, 0.3)
 music.add(chord(epiano, CH['Bbmaj9'], 1.4, vel=0.7), LEADER, 0.22)
-# SFX 4: the full stack, a very light felt click; the music lifts (pad) under the five checks
-fx.add(feltclick(1.0), FULL, 0.14)
+# the five checks: five soft felt-piano notes in the music (rising), SFX 4 a very light click on the last
+for i in range(5):
+    music.add(felt(midi([60, 64, 65, 67, 69][i]), 1.6, 0.6), ST['check0'] + i * 0.2, 0.16, pan=-0.2 + 0.1 * i)
+fx.add(feltclick(1.0), FULL, 0.45)
 music.add(pad([53, 60, 64, 69, 72], G1 - FULL + 0.4, att=0.15, rel=0.5, bright=1.25), FULL, 0.3, pan=-0.2)
 
 # ================================================================ proof, guarantee, scarcity: no drums, assured
 groove(G1, ST['th1'], lift=0.8, kit=False)
 music.add(pad([50, 57, 60, 65], ST['th1'] - G1 + 0.6, att=0.6, rel=0.8, bright=1.0), G1, 0.28, pan=0.15)
-for b in np.arange(G1, ST['th1'] - 1e-6, 4 * BEAT):  # a slow felt pulse, one per bar
+for b in np.arange(G1, ST['th1'] - 1e-6, 4 * BEAT):
     music.add(felt(midi(ROOT[chord_at(b)] + 24), 1.6, 0.45), b + 0.02, 0.12, pan=-0.25)
 
 # ================================================================ thesis and end (resolution on F major)
-groove(ST['th1'], ST['endMark'], lift=0.7, kit=False)
+groove(ST['th1'], ST['endLogo'], lift=0.7, kit=False)
 music.add(pad([50, 57, 62, 65], ST['merge'] - ST['th1'] + 0.4, att=0.6, rel=0.6), ST['th1'], 0.24)
 music.add(chord(epiano, CH['C69'], 1.6, vel=0.6), ST['merge'], 0.26)
 for k, n in enumerate(SIG):  # the signature recalled, slower and softer
-    music.add(felt(midi(n), 2.6, 0.55), ST['endMark'] + 0.05 + k * 0.22, 0.2, pan=-0.15 + 0.1 * k)
-music.add(chord(epiano, [41, 53, 57, 60, 64, 67], 3.2, vel=0.7), ST['endMark'] + 0.9, 0.3)
-music.add(pad([53, 60, 64, 69, 72], END - ST['endMark'] + 1, att=0.6, rel=1.2, bright=1.2), ST['endMark'] + 0.5, 0.3)
-music.add(bass(midi(41), 3.0, 0.8), ST['endMark'] + 0.9, 0.3)
-# SFX 5: the button is born, a soft breath that opens
-fx.add(breath(0.7, 300, 1500, 'swell', 1.0), CTA - 0.1, 0.36)
+    music.add(felt(midi(n), 2.6, 0.55), ST['endLogo'] + 0.05 + k * 0.22, 0.2, pan=-0.15 + 0.1 * k)
+music.add(chord(epiano, [41, 53, 57, 60, 64, 67], 3.2, vel=0.7), ST['endLogo'] + 0.9, 0.3)
+music.add(pad([53, 60, 64, 69, 72], END - ST['endLogo'] + 1, att=0.6, rel=1.2, bright=1.2), ST['endLogo'] + 0.5, 0.3)
+music.add(bass(midi(41), 3.0, 0.8), ST['endLogo'] + 0.9, 0.3)
+fx.add(breath(0.7, 300, 1500, 'swell', 1.0), CTA - 0.1, 0.36)  # SFX 5: the button is born
 
 # ================================================================ MIX
 mus, dr, fxs = music.x, drums.x, fx.x
@@ -331,7 +328,7 @@ def rms_db(x, a, b):
 
 print('effects vs music (RMS dB over each effect):')
 ok = True
-for name, a, b, need in [('reveal', REW, BLOOM + 0.08, 6), ('texto', TEXTO + 0.08, TEXTO + 0.6, 6), ('leader', LEADER + 0.05, LEADER + 0.21, 6),
+for name, a, b, need in [('reveal', BLOOM - 0.45, BLOOM + 0.08, 6), ('texto', TEXTO + 0.08, TEXTO + 0.6, 6), ('leader', LEADER + 0.05, LEADER + 0.21, 6),
                          ('stack', FULL, FULL + 0.08, 12), ('cta', CTA - 0.1, CTA + 0.6, 6)]:
     d = rms_db(sfx, a, b) - rms_db(bed, a, b)
     ok = ok and d <= -need

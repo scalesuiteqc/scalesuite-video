@@ -1,5 +1,5 @@
 // « Système Vendeurs 5 minutes » frame sequence in parallel pages:
-// node render/frames-systeme.mjs --fps=60 --workers=4 --out=dir [--start=0] [--end=40.0] [--poster]
+// node render/frames-systeme.mjs --fps=60 --workers=4 --out=dir [--start=0] [--end=31.0] [--poster]
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium, serve, args, openFilmSY } from './lib-systeme.mjs';

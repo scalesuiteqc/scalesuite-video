@@ -36,12 +36,12 @@ const dump = (f) => f.page.evaluate(() => {
 
 try {
   if (mode === 'determinism') {
-    const times = (arg || '0.3,0.8,1.5,2.4,3.2,4.6,5.8,7.6,9.7,10.2,11.0,12.7,14.2,14.7,16.0,18.2,20.6,21.3,22.2,23.2,24.5,25.6,28.2,30.6,31.4,33.9').split(',').map(Number);
+    const times = (arg || '0.3,1.2,2.0,3.2,4.1,4.4,5.0,6.5,7.6,8.4,10.6,11.2,12.7,13.3,14.8,15.3,16.9,17.4,19.5,20.3,22.1,22.8,25.5,26.6,27.8,28.3,30.9').split(',').map(Number);
     const a = await openFilmV3(browser, base, 1), b = await openFilmV3(browser, base, 1);
     let worst = 0, domBad = 0;
     for (const t of times) {
       const A = await a.shot(t);                                          // page A: increasing order
-      for (const x of [24.9, 0.1, t + 1.3]) await b.shot(x);              // page B: jumps around first
+      for (const x of [24.9, 0.1, Math.min(t + 1.3, 30.9)]) await b.shot(x);              // page B: jumps around first
       const B = await b.shot(t);
       const [da, db] = [await dump(a), await dump(b)];
       const dd = da.filter((s, i) => s !== db[i]).length;
@@ -51,7 +51,7 @@ try {
     }
     console.log(domBad ? `FAIL: ${domBad} DOM differences` : `OK: 0 DOM differences, worst pixel ${worst}/255`);
   } else {
-    const end = parseFloat(arg) || 40.0;
+    const end = parseFloat(arg) || 31.0;
     const f = await openFilmV3(browser, base, 1, 0.25);
     const rows = []; let prev = null;
     for (let i = 0; i <= Math.round(end * 30); i++) {

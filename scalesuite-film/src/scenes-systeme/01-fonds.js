@@ -8,7 +8,7 @@
      to whatever acts at that minute. The clock layer is re-appended on top of the stage in 04-fin. */
 (function () {
   const SS = window.SS, S = SS.ST, P = SS.P, M = SS.M;
-  const CY = 680, PW = 900, PH = 96; // the clock sits at y 680 in the hook, 640 in the stack
+  const CY = 630, PW = 900, PH = 96; // the clock sits at y 630 in the hook, 640 during the action
   const PROXY = { r: 0, min: 852, alpha: 0 };
   let R;
 
@@ -17,9 +17,9 @@
     bgA.style.background = P.bg;
     const bgM = SS.el('div', 'layer', stage);
     bgM.style.background = `linear-gradient(180deg, ${M.bg} 0%, ${M.bg} 38%, ${M.bg2} 100%)`;
-    bgM.style.clipPath = 'circle(0px at 540px 680px)';
+    bgM.style.clipPath = 'circle(0px at 540px 630px)';
     SS.BGM = bgM; // the problem world is inserted below it, so the bloom covers it
-    SS.tl.fromTo(PROXY, { r: 0 }, { r: 2300, duration: 0.5, ease: 'power2.inOut' }, S.bloom);
+    SS.tl.fromTo(PROXY, { r: 0 }, { r: 2300, duration: 0.42, ease: 'power2.inOut' }, S.bloom);
 
     // ---------------------------------------------------------------- the clock
     const layer = SS.el('div', 'layer', stage);
@@ -102,7 +102,7 @@
   }
 
   function render(t) {
-    R.bgM.style.clipPath = PROXY.r > 0.5 ? (PROXY.r > 2290 ? 'none' : `circle(${PROXY.r.toFixed(1)}px at 540px 680px)`) : 'circle(0px at 540px 680px)';
+    R.bgM.style.clipPath = PROXY.r > 0.5 ? (PROXY.r > 2290 ? 'none' : `circle(${PROXY.r.toFixed(1)}px at 540px 630px)`) : 'circle(0px at 540px 630px)';
     const m = PROXY.min;
     R.hH.setAttribute('transform', `rotate(${((m / 60) * 30 % 360).toFixed(2)} 29 29)`);
     R.hM.setAttribute('transform', `rotate(${((m % 60) * 6).toFixed(2)} 29 29)`);
@@ -118,6 +118,6 @@
   }
 
   const scene = { name: 'fonds', a: -1, b: 99, render, ranges: [] };
-  scene.build = (stage) => { build(stage); scene.ranges = [[R.bgA, -1, S.bloom + 0.6], [R.bgM, S.bloom - 0.05, 99], [R.layer, -1, S.in6 + 0.4]]; };
+  scene.build = (stage) => { build(stage); scene.ranges = [[R.bgA, -1, S.bloom + 0.6], [R.bgM, S.bloom - 0.05, 99], [R.layer, -1, S.pile + 0.4]]; };
   SS.scenes.push(scene);
 })();

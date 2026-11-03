@@ -155,3 +155,17 @@ Voir `voiceover-systeme.md` (v3, 7 répliques).
 - **v1** (validée) : récit en deux mondes autour de l'horloge, 34 s ; relance corrigée vers le Leader seulement.
 - **v2** (validée, aperçu fait, commit `db64142`) : lancement de produit en 40 s, pile en cinq allers-retours.
 - **v3** : même lancement, simplifié à environ 31 s, une seule caméra pour l'action (ce document).
+
+## Validation du plan v3 et aperçu animé
+
+Choix retenus : 31,0 s ; réplique 1 réordonnée ; réplique du texto « dans la minute » ; titres par montée avec
+fondu ; ligne « Avec la campagne seule. » comme objet partagé. Modifications : « Vos demandes ne sont jamais
+partagées ni revendues. » gardée dans la scène 5 (40 px, deux lignes sous « Aucun contrat. », sans
+chevauchement) ; l'étiquette devient « Système Vendeurs 5 minutes » sans numéro ni barre.
+
+Aperçu `previews/scalesuite-systeme-9x16-preview.mp4` (540 × 960, 30 fps, 31,0 s) et planche contact
+`scalesuite-systeme-9x16-contact-sheet.jpg`. Affiche 9:16 réexportée sur le cadre du dévoilement v3 (t = 7,0 s) ;
+affiche 4:5 inchangée. Plus petit texte à l'écran : 30,4 px. Mix −15,0 LUFS. Effets mesurés sous la musique :
+dévoilement −9,1 dB, texto −9,0 dB, Leader −10,9 dB, pile cochée −13,8 dB (≥ 12 dB, gardé), bouton −10,3 dB.
+Repères ajustés au rendu : compteur 19,75 s, « Avec la campagne seule. » 20,3 s ; logo et « Nouveau » de la pile
+à 16,98 et 17,03 s.
