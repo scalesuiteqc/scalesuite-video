@@ -145,10 +145,13 @@
     SS.place(node, markX, G.LY, { scale: 0 });
     SS.tl.fromTo(node, { scale: 0 }, { scale: 2.4, duration: 0.18, ease: SS.EZ.out }, S.merge + 0.24);
     SS.tl.fromTo(node, { scale: 2.4 }, { scale: 0, duration: 0.2, ease: SS.EZ.in }, S.merge + 0.42);
-    const logo = SS.logo(layer, G.LH);
+    // the end logo and its cover live in their own box, shown only from the end logo on (the cover must never
+    // hide the guarantee card or the thesis)
+    const endBox = SS.el('div', 'layer', layer);
+    const logo = SS.logo(endBox, G.LH);
     logo.mark(1);
     SS.place(logo.el, 540, G.LY);
-    SS.logoCover(layer, 540, G.LY, LW, G.LH, S.endLogo, null);
+    SS.logoCover(endBox, 540, G.LY, LW, G.LH, S.endLogo, null);
     layer.appendChild(node); // the node stays above the cover
     SS.tl.fromTo(logo.el, { scale: 0.96 }, { scale: 1, duration: 0.4, ease: SS.EZ.out }, S.endLogo);
     SS.tl.fromTo(P, { sheen: 0 }, { sheen: 1, duration: 0.7, ease: 'sine.inOut' }, S.sheen);
@@ -179,13 +182,13 @@
     SS.tl.fromTo([logo.el, cta], { scale: 1 }, { scale: 1.01, duration: S.end - 28.6, ease: 'sine.inOut' }, 28.6);
 
     stage.appendChild(SS.CLK.layer); // the clock stays above every world
-    R = { layer, logo, sp, end: [logo.el, cta] };
+    R = { layer, logo, sp, endBox };
   }
   function render(t) {
     R.logo.sheen(P.sheen);
     R.sp.forEach((p, i) => p.setAttribute('stroke-dashoffset', (1 - SS.EZ.inOut(SS.clamp01((P.seal - i * 0.22) / 0.56))).toFixed(4)));
   }
   const scene = { name: 'fin', a: -1, b: 99, render, ranges: [] };
-  scene.build = (stage) => { build(stage); scene.ranges = [[R.layer, S.proof - 0.02, S.end + 1]]; };
+  scene.build = (stage) => { build(stage); scene.ranges = [[R.layer, S.proof - 0.02, S.end + 1], [R.endBox, S.endLogo - 0.02, S.end + 1]]; };
   SS.scenes.push(scene);
 })();

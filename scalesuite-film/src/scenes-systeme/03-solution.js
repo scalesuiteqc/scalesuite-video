@@ -242,12 +242,12 @@
     gsap.set(scrim, { x: 0, y: 0 });
     const label = SS.stepLabel(layer);
     SS.place(label, 540, 175);
-    SS.riseEl(label, S.revealOut + 0.1, S.pile, { y: 175 });
+    SS.riseEl(label, S.revealOut + 0.1, S.pile - 0.1, { y: 175 });
     const T = [
       ['Réponse\n*60_secondes.*', S.revealOut + 0.15, S.h3b - 0.3],
       ['Le bon courtier\n*alerté.*', S.h3b, S.h3c - 0.3],
       ['Relance après\n*10_minutes.*', S.h3c, S.h3d - 0.3],
-      ['Pas prêt à vendre?\n*Suivi* *90_jours.*', S.h3d, S.pile],
+      ['Pas prêt à vendre?\n*Suivi* *90_jours.*', S.h3d, S.pile - 0.1],
     ];
     T.forEach(([src, a, b]) => {
       const h = SS.head(layer, src, { size: 104 });
@@ -264,10 +264,10 @@
     const plogo = SS.logo(pl, 110);
     plogo.mark(1);
     SS.place(plogo.el, 540, 380);
-    SS.logoCover(pl, 540, 380, (110 * SS.LOGO.w) / SS.LOGO.h, 110, S.pile + 0.28, S.proof);
+    SS.logoCover(pl, 540, 380, (110 * SS.LOGO.w) / SS.LOGO.h, 110, S.pile + 0.36, S.proof);
     const pnou = mkNouveau(pl);
     SS.place(pnou, 540, 500);
-    SS.riseEl(pnou, S.pile + 0.33, S.proof, { y: 500 });
+    SS.riseEl(pnou, S.pile + 0.4, S.proof, { y: 500 });
 
     R = { wrap, w, cam, layer, shakeBox, rv, rvIn, pl };
   }
@@ -284,7 +284,7 @@
   const scene = { name: 'solution', a: -1, b: 99, render, ranges: [] };
   scene.build = (stage) => {
     build(stage);
-    scene.ranges = [[R.rv, S.logo - 0.05, S.revealOut + 0.4], [R.wrap, S.phone - 0.02, S.proof + 0.01], [R.layer, S.revealOut, S.pile + 0.3], [R.pl, S.pile, S.proof + 0.3]];
+    scene.ranges = [[R.rv, S.logo - 0.01, S.revealOut + 0.4], [R.wrap, S.phone - 0.02, S.proof + 0.01], [R.layer, S.revealOut, S.pile + 0.3], [R.pl, S.pile + 0.35, S.proof + 0.3]];
   };
   SS.PCTOP = PCTOP;
   SS.scenes.push(scene);

@@ -169,3 +169,28 @@ affiche 4:5 inchangée. Plus petit texte à l'écran : 30,4 px. Mix −15,0 LUFS
 dévoilement −9,1 dB, texto −9,0 dB, Leader −10,9 dB, pile cochée −13,8 dB (≥ 12 dB, gardé), bouton −10,3 dB.
 Repères ajustés au rendu : compteur 19,75 s, « Avec la campagne seule. » 20,3 s ; logo et « Nouveau » de la pile
 à 16,98 et 17,03 s.
+
+## Étape 4 : master, contrôle qualité et version avec voix
+
+Retouches avant le master : le nom « Système » sort de 7,2 à 7,45 s, avant l'arrivée du téléphone (7,5 s) ;
+passage de l'horloge en mode date et changements de libellé en fondu, un seul texte lisible à la fois ; titres de
+l'action qui finissent de sortir avant que le suivant n'entre ; rareté en deux lignes de 56 px sous la carte (encre,
+puis sarcelle ; nombres dans `SS.OFFRE`). Son allégé à votre demande : **3 effets** (souffle du dévoilement, vibration
+du texto, souffle du bouton) ; la relance chez le Leader et la pile cochée sont portées par la musique seule.
+
+Corrections de rendu : le compteur garde une largeur fixe (espaces de chiffre), plus de saut à 100 ; la face et
+l'ombre de la carte sont des calques séparés (une liste d'ombres n'est plus interpolée) ; les logos restent
+opaques et sont révélés par un cache de la couleur du fond, sans échelle animée (le rendu ne dépend plus de
+l'historique) ; l'écart de pixels de la trotteuse de la v2 ne se reproduit plus.
+
+| Contrôle | Résultat |
+|---|---|
+| `check-systeme.mjs determinism` | OK : 0 différence de DOM, écart de pixels max 2/255 |
+| `check-systeme.mjs motion 31` | OK : aucun saut isolé (pic 16,1 au glissement de caméra de 10,77 s) |
+| `textsize-systeme.mjs` | OK : plus petit texte à l'écran 30,4 px |
+| `ffprobe` master | 1080 × 1920, 60 fps, yuv420p bt709, 1 860 images, 31,000 s, H.264 + AAC 48 kHz |
+| Sonie master | −15,0 LUFS, LRA 5,7 LU, crête −2,4 dBFS |
+| Effets (3) | dévoilement −9,4 dB, texto −8,8 dB, bouton −10,3 dB sous la musique |
+| Image 0 | état complet de l'accroche à 3,2 s |
+| Texte relu sur 13 images extraites du MP4 | `scalesuite-systeme-9x16-controle.jpg` ; deux défauts trouvés (cache du logo de fin visible sur la carte de garantie et sur la thèse) puis corrigés avant le master final |
+| Version avec voix | vidéo identique au master (copiée), −14,1 LUFS, −2,0 dBTP avant AAC, −1,9 dBTP sur le MP4 |
