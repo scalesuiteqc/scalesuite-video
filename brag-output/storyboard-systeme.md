@@ -194,3 +194,15 @@ l'historique) ; l'écart de pixels de la trotteuse de la v2 ne se reproduit plus
 | Image 0 | état complet de l'accroche à 3,2 s |
 | Texte relu sur 13 images extraites du MP4 | `scalesuite-systeme-9x16-controle.jpg` ; deux défauts trouvés (cache du logo de fin visible sur la carte de garantie et sur la thèse) puis corrigés avant le master final |
 | Version avec voix | vidéo identique au master (copiée), −14,1 LUFS, −2,0 dBTP avant AAC, −1,9 dBTP sur le MP4 |
+
+## Livraison
+
+- Correction vers 17 s : le ruban et les libellés de la carte « Suivi » s'effacent avant que la carte produit se
+  forme (rien ne dépasse dessous). Master et version avec voix refaits ; `determinism` OK (0 différence de DOM,
+  2/255), `motion 31` OK.
+- `scalesuite-systeme-4x5-vo.mp4` (LinkedIn, 1080 × 1350, 60 fps, avec voix) : bande de contenu du film (y 130 à
+  1640) réduite à 1350 px (× 0,894) et centrée ; les marges de 57 px prolongent le fond du film ; textes inchangés
+  (plus petit texte ≈ 27 px à l'écran).
+- `scalesuite-systeme-web-720x1280.mp4` (720 × 1280, 30 fps, H.264, faststart, avec voix) et
+  `scalesuite-systeme-web-affiche-720x1280.jpg`. Script : `scalesuite-film/build-systeme-variants.sh`.
+- Proposition pour la section 9 de la skill : `brag-output/proposition-skill-section9-systeme.md` (skill non modifiée).

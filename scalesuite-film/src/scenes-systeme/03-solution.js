@@ -218,7 +218,9 @@
     const r5y = toW(PCTOP + row5Top + SS.PCARD.rowH / 2);
     SS.tl.fromTo(card, { y: SV.top }, { y: r5y - SV.h / 2, duration: 0.35, ease: SS.EZ.inOut }, S.pile);
     SS.tl.fromTo(sub.el, { y: SV.top + 90 }, { y: r5y, duration: 0.35, ease: SS.EZ.inOut }, S.pile);
-    SS.tl.fromTo([card, sub.el], { autoAlpha: 1, scaleY: 1 }, { autoAlpha: 0, scaleY: 0.25, duration: 0.3, ease: SS.EZ.in }, S.pile + 0.08);
+    // the ribbon and its labels leave first, so nothing of « Suivi » shows under the forming product card
+    SS.tl.fromTo(rb, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.12, ease: 'power1.in' }, S.pile - 0.08);
+    SS.tl.fromTo([card, sub.el], { autoAlpha: 1, scaleY: 1 }, { autoAlpha: 0, scaleY: 0.25, duration: 0.22, ease: 'power2.in' }, S.pile + 0.04);
     SS.tl.set(pc.el, { autoAlpha: 1 }, S.pile + 0.2);
     SS.tl.fromTo(pc.el, { clipPath: pcFrom }, { clipPath: SS.OPEN, duration: 0.4, ease: SS.EZ.out }, S.pile + 0.2);
     pc.rows.forEach((r, i) => SS.tl.fromTo(r.k, { k: 0 }, { k: 1, duration: 0.3, ease: 'none' }, S.check0 + i * 0.2));
