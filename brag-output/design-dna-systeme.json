@@ -1,0 +1,685 @@
+{
+  "meta": {
+    "name": "ScaleSuite · Système Vendeurs 5 minutes (film « systeme »)",
+    "description": "Identité du site scalesuiteqc.ca refait (captures docs/site-reference/), appliquée au film 9:16. Couleurs mesurées avec design-dna/scripts/measure-colors.mjs. Lisibilité mobile et système de mouvement repris de la V3 (design-dna-v3.json).",
+    "source_references": [
+      "docs/site-reference/site-01-hero.png",
+      "docs/site-reference/site-02-parcours.png",
+      "docs/site-reference/site-03-preuve-mackay.png",
+      "docs/site-reference/site-04-tarifs.png",
+      "docs/site-reference/site-05-diagnostic.png",
+      "brag-output/design-dna-v3.json (mouvement, lisibilité)",
+      "brag-output/storyboard-lead-perdu.md (monde gris du problème)"
+    ],
+    "created_at": "2026-11-03"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "Clair, presque monochrome : blanc menthe très pâle, encre quasi noire, un seul accent sarcelle profond. Le turquoise de la V3 ne sert plus qu'aux lignes de routage et au logo.",
+      "primary": {
+        "hex": "#151515",
+        "name": "Encre",
+        "usage": "Titres, bouton d'appel plein (texte blanc), jeton du lead. Mesuré #151515 (accueil) et #171717 (preuve, tarifs, diagnostic)."
+      },
+      "secondary": {
+        "hex": "#0F7B6F",
+        "name": "Sarcelle profond",
+        "usage": "Mot d'accent des titres (« Nous, on vous les amène. »), grands chiffres (124), libellés d'étape (« 1 sur 6 »), coches. Mesuré #0F7B6F / #107B6F."
+      },
+      "accent": {
+        "hex": "#2BBFB3",
+        "name": "Turquoise de routage",
+        "usage": "Lignes de routage tracées, nœuds, halo de l'élément actif, contour de l'annonce « Votre équipe ». Mesuré #3AB9AD / #38A39B sur le site ; on garde la valeur V3 du logo. Barres de progression cyan #27ABBD (diagnostic)."
+      },
+      "neutral": {
+        "scale": [
+          "#FFFFFF",
+          "#F0FFFC",
+          "#E2F6F6",
+          "#D8E3E1",
+          "#C4D6D3",
+          "#94A09E",
+          "#596563",
+          "#151515"
+        ],
+        "usage": "#F0FFFC fond de page (91 % de l'accueil) ; #E2F6F6 bandes menthe et pastilles douces ; #C4D6D3 / #D8E3E1 filets, bordures de champs, squelettes ; #596563 texte secondaire ; #151515 encre."
+      },
+      "semantic": {
+        "success": "#0F7B6F",
+        "warning": "non utilisé",
+        "error": "non utilisé (aucun rouge dans ce film)",
+        "info": "#2BBFB3"
+      },
+      "surface": {
+        "background": "#F0FFFC",
+        "band": "#E2F6F6",
+        "card": "#FFFFFF",
+        "elevated": "#FFFFFF",
+        "problem_world": {
+          "background": "#EEF1F4",
+          "card": "#FAFBFC",
+          "ink": "#2B3138",
+          "soft": "#6B7480",
+          "accent": "#6E8092",
+          "note": "repris de « Le lead perdu »"
+        }
+      },
+      "contrast_strategy": "Encre #151515 sur #F0FFFC (≈ 18:1). Accent #0F7B6F sur #F0FFFC ≈ 5,4:1 (AA même en petit). Bouton plein encre, texte blanc. Plus de dégradé sur le bouton ni sur le texte.",
+      "measurement": {
+        "site-01-hero": {
+          "k": 8,
+          "sampling": {
+            "method": "deterministic_stratified",
+            "max_pixels": 160000,
+            "sampled_pixels": 160000
+          }
+        },
+        "site-02-parcours": {
+          "k": 8,
+          "sampling": {
+            "method": "deterministic_stratified",
+            "max_pixels": 160000,
+            "sampled_pixels": 160000
+          }
+        },
+        "site-03-preuve-mackay": {
+          "k": 8,
+          "sampling": {
+            "method": "deterministic_stratified",
+            "max_pixels": 160000,
+            "sampled_pixels": 160000
+          }
+        },
+        "site-04-tarifs": {
+          "k": 8,
+          "sampling": {
+            "method": "deterministic_stratified",
+            "max_pixels": 160000,
+            "sampled_pixels": 160000
+          }
+        },
+        "site-05-diagnostic": {
+          "k": 8,
+          "sampling": {
+            "method": "deterministic_stratified",
+            "max_pixels": 160000,
+            "sampled_pixels": 160000
+          }
+        }
+      },
+      "measured_palette": {
+        "site-01-hero": [
+          {
+            "hex": "#f0fffc",
+            "coverage": 0.9084,
+            "role": "background"
+          },
+          {
+            "hex": "#151515",
+            "coverage": 0.0482,
+            "role": "text"
+          },
+          {
+            "hex": "#0f7b6f",
+            "coverage": 0.0168,
+            "role": "accent"
+          },
+          {
+            "hex": "#596563",
+            "coverage": 0.0098,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#c4d6d3",
+            "coverage": 0.0076,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#94a09e",
+            "coverage": 0.0061,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#38a39b",
+            "coverage": 0.0015,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#71b7af",
+            "coverage": 0.0015,
+            "role": "unassigned"
+          }
+        ],
+        "site-02-parcours": [
+          {
+            "hex": "#fafdfd",
+            "coverage": 0.7196,
+            "role": "background"
+          },
+          {
+            "hex": "#e5f2f0",
+            "coverage": 0.1955,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#1a1c1d",
+            "coverage": 0.0417,
+            "role": "text"
+          },
+          {
+            "hex": "#bec7cc",
+            "coverage": 0.0157,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#3e4142",
+            "coverage": 0.0144,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#7b7e93",
+            "coverage": 0.0086,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#166e7a",
+            "coverage": 0.0024,
+            "role": "accent"
+          },
+          {
+            "hex": "#3ab9ad",
+            "coverage": 0.0023,
+            "role": "unassigned"
+          }
+        ],
+        "site-03-preuve-mackay": [
+          {
+            "hex": "#feffff",
+            "coverage": 0.4822,
+            "role": "background"
+          },
+          {
+            "hex": "#e2f6f6",
+            "coverage": 0.463,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#171717",
+            "coverage": 0.0207,
+            "role": "text"
+          },
+          {
+            "hex": "#107b6f",
+            "coverage": 0.0104,
+            "role": "accent"
+          },
+          {
+            "hex": "#b3c3c2",
+            "coverage": 0.0097,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#838f8e",
+            "coverage": 0.0065,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#5b6463",
+            "coverage": 0.006,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#57a7a1",
+            "coverage": 0.0016,
+            "role": "unassigned"
+          }
+        ],
+        "site-04-tarifs": [
+          {
+            "hex": "#f9fffe",
+            "coverage": 0.7936,
+            "role": "background"
+          },
+          {
+            "hex": "#e7f8f5",
+            "coverage": 0.1378,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#171717",
+            "coverage": 0.0314,
+            "role": "text"
+          },
+          {
+            "hex": "#bcc2c1",
+            "coverage": 0.0134,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#525453",
+            "coverage": 0.0119,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#888c8b",
+            "coverage": 0.0089,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#288a7f",
+            "coverage": 0.0016,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#68b3ad",
+            "coverage": 0.0013,
+            "role": "unassigned"
+          }
+        ],
+        "site-05-diagnostic": [
+          {
+            "hex": "#f6fefc",
+            "coverage": 0.9138,
+            "role": "background"
+          },
+          {
+            "hex": "#171717",
+            "coverage": 0.0297,
+            "role": "text"
+          },
+          {
+            "hex": "#d8e3e1",
+            "coverage": 0.0168,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#aebab8",
+            "coverage": 0.0133,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#84918f",
+            "coverage": 0.0108,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#5c6362",
+            "coverage": 0.0091,
+            "role": "unassigned"
+          },
+          {
+            "hex": "#27abbd",
+            "coverage": 0.0053,
+            "role": "accent"
+          },
+          {
+            "hex": "#1e8378",
+            "coverage": 0.0011,
+            "role": "unassigned"
+          }
+        ]
+      }
+    },
+    "typography": {
+      "type_scale": {
+        "display": {
+          "size": "150px",
+          "weight": "800",
+          "line_height": "1.0",
+          "tracking": "-0.045em"
+        },
+        "heading_1": {
+          "size": "124px",
+          "weight": "800",
+          "line_height": "1.04",
+          "tracking": "-0.04em"
+        },
+        "heading_2": {
+          "size": "100px",
+          "weight": "800",
+          "line_height": "1.08",
+          "tracking": "-0.04em"
+        },
+        "heading_3": {
+          "size": "64px",
+          "weight": "760",
+          "line_height": "1.1",
+          "tracking": "-0.025em"
+        },
+        "body": {
+          "size": "40px",
+          "weight": "680",
+          "line_height": "1.2",
+          "tracking": "-0.015em"
+        },
+        "body_small": {
+          "size": "32px",
+          "weight": "600",
+          "line_height": "1.25",
+          "tracking": "-0.01em"
+        },
+        "caption": {
+          "size": "30px",
+          "weight": "600",
+          "line_height": "1.25",
+          "tracking": "-0.005em"
+        },
+        "overline": {
+          "size": "28px",
+          "weight": "700",
+          "line_height": "1.2",
+          "tracking": "0.06em"
+        }
+      },
+      "font_families": {
+        "heading": "Inter 800 (auto-hébergée). Le site utilise une grotesque serrée de même famille ; Inter 800 à −0,045 em en est la plus proche disponible hors ligne.",
+        "body": "Inter 500–600",
+        "mono": "aucune ; chiffres tabulaires Inter"
+      },
+      "font_style_notes": "Titres en casse de phrase, très serrés (−0,045 em), 2 lignes au plus, le second segment en sarcelle #0F7B6F (sans dégradé). Sous-titres 48–56 px en #596563, interlignage 1,35. Grands chiffres 200–260 px en sarcelle (comme « 124 » sur le site)."
+    },
+    "spacing": {
+      "base_unit": "8px",
+      "scale": [
+        "8px",
+        "16px",
+        "24px",
+        "32px",
+        "48px",
+        "64px",
+        "96px",
+        "128px"
+      ],
+      "content_density": "comfortable (spacious in calm beats, deliberately crowded in the chaos beat)",
+      "section_rhythm": "Headline block in the top third (y 200–560 on 1920), product block below (y 600–1500); 9:16 safe areas keep critical copy out of y > 1500 and of the right rail x > 940 between y 850–1550."
+    },
+    "layout": {
+      "grid_system": "single centred column on a 1080 × 1920 canvas, 60 px side margins",
+      "max_content_width": "900px (UI blocks 760–900 px wide = 70–83 % of frame)",
+      "columns": "1 (cards), 2 (broker grid), 3 (metric tiles)",
+      "gutter": "24px",
+      "breakpoints": [
+        "1080x1920 (9:16 master)",
+        "1080x1350 (4:5 recomposed)"
+      ],
+      "alignment_tendency": "centered"
+    },
+    "shape": {
+      "border_radius": {
+        "card": "36 px (24 px sur le site à 1200 px, ramené à l'échelle 1080)",
+        "button": "26 px pour 136 px de haut (≈ 19 %, comme le site : 10 px pour 54 px)",
+        "chip": "999 px",
+        "field": "18 px"
+      },
+      "border_usage": "Champs : filet 2 px #C4D6D3. Cartes : anneau d'encre 1 px à 4,5 %. Carte active : contour 3 px #2BBFB3 (comme l'annonce « Votre équipe » du site).",
+      "divider_style": "Filets pleins 2 px #E2EBE9. Jamais de pointillés."
+    },
+    "elevation": {
+      "shadow_style": "soft diffused, mint-tinted",
+      "levels": {
+        "low": "0 1px 2px rgba(18,44,40,.07), 0 8px 18px -10px rgba(18,74,66,.30), 0 0 0 1px rgba(26,26,26,.06)",
+        "medium": "0 1px 2px rgba(18,44,40,.06), 0 14px 34px -14px rgba(18,74,66,.26), 0 0 0 1px rgba(26,26,26,.045)",
+        "high": "0 2px 4px rgba(18,44,40,.08), 0 40px 80px -30px rgba(18,74,66,.40), 0 0 0 1px rgba(26,26,26,.05)"
+      },
+      "depth_cues": "shadows, overlapping layers, camera scale (near objects larger and slightly blurred during fast moves)"
+    },
+    "iconography": {
+      "style": "simple filled/rounded-stroke glyphs drawn inline (person avatar in mint disc, target, search, pin, CRM card, lock, arrow, check circle)",
+      "stroke_weight": "2.1–2.6 on a 24 grid",
+      "size_scale": [
+        "32px",
+        "48px",
+        "64px",
+        "88px"
+      ],
+      "preferred_set": "custom inline SVG (SS.icon in scalesuite-film/src/core.js)"
+    },
+    "motion": {
+      "easing": "signature cubic-bezier(0.16, 1, 0.3, 1) for entrances; cubic-bezier(0.65, 0, 0.35, 1) for camera and on-screen moves; cubic-bezier(0.7, 0, 0.84, 0) for exits; back-out with 6–12 % overshoot reserved for hero elements (V3)",
+      "duration_scale": {
+        "micro": "180ms",
+        "normal": "320ms",
+        "macro": "650ms"
+      },
+      "entrance_pattern": "masked vertical rise for words; scale 0.9→1 + 24 px rise for cards; stroke draw for lines and checks",
+      "exit_pattern": "objects are pulled into the next scene's object (node, header, divider) with ease-in and speed blur; never a scene-level dissolve",
+      "philosophy": "Identique à la V3 (SS.EZ, durées 180/320/650/900 ms, dépassement réservé aux héros), sans flèches qui rebondissent ni halos flottants."
+    },
+    "components": {
+      "button_style": "Plein encre #151515, texte blanc Inter 700, rayon ≈ 19 % de la hauteur, sans flèche ni dégradé : « Obtenir mon diagnostic gratuit ». Lien secondaire : texte encre souligné d'un filet sarcelle (non utilisé dans le film).",
+      "input_style": "white pill search bar with soft shadow, grey search glyph, turquoise caret",
+      "card_style": "Blanc, rayon 36, ombre douce teintée menthe très diffuse, anneau 1 px. Grandes surfaces calmes, beaucoup d'air.",
+      "navigation_pattern": "none (film); dashboard header row with logo + label",
+      "modal_style": "none; the dark ink pill/notification is the only inverted surface",
+      "list_style": "rows with avatar, name, mint type chip, territory, green status dot + 'Active'; alternating #F6FBFA / #FFFFFF",
+      "component_notes": "Pastille douce statique (#E2F6F6, texte #0F7B6F 700) pour « Système Vendeurs 5 minutes » : sans point ni pulsation. Coches sarcelle fines pour les listes. Barre d'étapes (6 segments, le premier en cyan) reprise du site pour le parcours. Annonce Google fictive « Commandité », contour turquoise et étiquette « Votre équipe »."
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": "Calme, précis, concret, rassurant ; parle à un leader d'équipe occupé.",
+      "visual_metaphor": "many tangled routes collapsing into one clean routing line and one node",
+      "era_influence": "2020s product-film editorial (Linear / Stripe launch films) on a pale mint field",
+      "genre": "B2B SaaS social acquisition film",
+      "personality_traits": [
+        "organised",
+        "quietly confident",
+        "helpful",
+        "local (Québec)"
+      ],
+      "adjectives": [
+        "sobre",
+        "net",
+        "concret",
+        "québécois",
+        "confiant",
+        "frais"
+      ]
+    },
+    "visual_language": {
+      "complexity": "moderate",
+      "ornamentation": "Quasi nulle : pas de halo flou, pas de dégradé de texte, pas de pointillés, pas de point qui pulse.",
+      "whitespace_usage": "generous except in the deliberate chaos beat",
+      "visual_weight_distribution": "top-heavy headline, product mass in the centre band",
+      "focal_strategy": "single hero element per beat, others dimmed to 35–40 %",
+      "contrast_level": "high for type, low for surfaces",
+      "texture_usage": "Grain statique très léger seulement."
+    },
+    "composition": {
+      "hierarchy_method": "scale contrast + one accent-coloured word",
+      "balance_type": "symmetric",
+      "flow_direction": "top-down (headline → product → result), routes run vertically on 9:16",
+      "grouping_strategy": "cards and rows on a strict centred grid; connections shown as drawn lines",
+      "negative_space_role": "signals relief and control after the chaos beat"
+    },
+    "imagery": {
+      "photo_treatment": "none (no photos, faces or real names)",
+      "illustration_style": "flat UI recreations, simplified and enlarged",
+      "graphic_elements": [
+        "routing line (3 px turquoise, drawn)",
+        "green node with mint halo",
+        "mint panel bloom",
+        "check circles",
+        "dot grid"
+      ],
+      "pattern_usage": "dot grid of campaign nodes in the thesis beat",
+      "image_shape": "rounded rectangles and circles"
+    },
+    "interaction_feel": {
+      "feedback_style": "check draws, ripple on tap, ring pulse on arrival",
+      "hover_behavior": "n/a (film); taps shown as ripple + 2 % press",
+      "transition_personality": "smooth glide with a decisive settle",
+      "loading_style": "skeleton bars that resolve into real content",
+      "microinteraction_density": "high in product beats, near zero in the relief beat"
+    },
+    "brand_voice_in_ui": {
+      "tone": "direct, plain Québec French, no superlatives",
+      "formality": "vous, professional but warm",
+      "cta_style": "direct imperative ('Demander une démo')",
+      "empty_state_approach": "n/a",
+      "error_tone": "n/a; problems are shown as volume, not as alarms"
+    },
+    "brand_voice": {
+      "tone": "Direct, vouvoiement, français québécois, phrases courtes, détails précis (heures exactes) plutôt qu'adjectifs.",
+      "forbidden": [
+        "« notre IA »",
+        "« Chaque courtier a sa propre campagne »",
+        "« Demander une démo »",
+        "slogan « Google Ads pour les équipes immobilières »",
+        "phrases qui commencent par « Et » ou « Mais »",
+        "traits d'union",
+        "emoji",
+        "prix, pourcentages, promesses de résultats, exclusivité de secteur"
+      ],
+      "cta": "Obtenir mon diagnostic gratuit"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "subtle-accent",
+      "performance_tier": "medium",
+      "fallback_strategy": "static snapshot (poster frame baked in as frame 0)",
+      "primary_technology": "HTML/CSS/SVG rendered frame-by-frame (pure function of time) with Playwright"
+    },
+    "background_effects": {
+      "enabled": true,
+      "type": "static_gradient_grain",
+      "description": "Fond plat #F0FFFC, dégradé vertical fixe vers #E7F8F5 en bas, grain statique. Monde du problème : #EEF1F4 plat. Aucune lumière qui dérive, aucun halo flou.",
+      "implementation": "CSS linear-gradient fixe + SS.grain"
+    },
+    "particle_systems": {
+      "enabled": false,
+      "type": "custom",
+      "description": "not used",
+      "technology": "none",
+      "params": {
+        "count": "0",
+        "shape": "n/a",
+        "size_range": "n/a",
+        "movement_pattern": "n/a",
+        "color_behavior": "n/a",
+        "interaction": "none",
+        "spawn_area": "n/a"
+      }
+    },
+    "3d_elements": {
+      "enabled": false,
+      "type": "abstract-geometry",
+      "description": "only mild CSS perspective tilt on cards; no 3D scene",
+      "technology": "CSS transforms",
+      "params": {
+        "renderer": "n/a",
+        "lighting": "n/a",
+        "camera": "2D camera (translate/scale/rotate of a world layer)",
+        "materials": "n/a",
+        "geometry": "n/a",
+        "post_processing": [
+          "speed blur on fast moves"
+        ],
+        "interaction_model": "none"
+      }
+    },
+    "shader_effects": {
+      "enabled": false,
+      "type": "custom-GLSL",
+      "description": "not used",
+      "technology": "none",
+      "params": {
+        "uniforms": "n/a",
+        "vertex_manipulation": "n/a",
+        "fragment_output": "n/a",
+        "noise_type": "n/a",
+        "distortion": "n/a"
+      }
+    },
+    "scroll_effects": {
+      "parallax": {
+        "enabled": false,
+        "layers": "0",
+        "depth_range": "n/a",
+        "speed_curve": "n/a"
+      },
+      "scroll_triggered_animations": {
+        "enabled": false,
+        "trigger_points": "n/a",
+        "animation_type": "n/a",
+        "scrub_behavior": "n/a"
+      },
+      "scroll_morphing": {
+        "enabled": false,
+        "description": "time-driven film, no scroll"
+      }
+    },
+    "text_effects": {
+      "type": "split-letter-animate",
+      "description": "words rise inside overflow masks; odometer digit roll for counts; per-letter wordmark rise; typing for search queries and form fields",
+      "technology": "DOM spans transformed per frame",
+      "params": {
+        "split_strategy": "by-word (by-char for wordmark and typing)",
+        "animation_per_unit": "translateY 150 % → 0 inside mask",
+        "stagger": "50–70 ms",
+        "effect_style": "masked kinetic type"
+      }
+    },
+    "cursor_effects": {
+      "enabled": false,
+      "type": "none",
+      "description": "taps are shown as ripples, no cursor",
+      "params": {
+        "shape": "n/a",
+        "size": "n/a",
+        "blend_mode": "n/a",
+        "trail": "n/a",
+        "interaction_zone": "n/a"
+      }
+    },
+    "image_effects": {
+      "type": "none",
+      "description": "no imagery",
+      "technology": "none",
+      "params": {
+        "filter_pipeline": "n/a",
+        "hover_transform": "n/a",
+        "reveal_animation": "n/a",
+        "distortion_type": "n/a"
+      }
+    },
+    "glassmorphism_neumorphism": {
+      "enabled": false,
+      "style": "none",
+      "params": {
+        "blur_radius": "n/a",
+        "transparency": "n/a",
+        "border_treatment": "n/a",
+        "shadow_type": "n/a",
+        "light_source_angle": "n/a"
+      }
+    },
+    "canvas_drawings": {
+      "enabled": false,
+      "type": "none",
+      "description": "grain texture only (pre-rendered canvas data URL)",
+      "technology": "Canvas 2D (static)",
+      "params": {
+        "draw_method": "n/a",
+        "animation_loop": "n/a",
+        "color_scheme": "n/a",
+        "responsiveness": "n/a",
+        "interaction": "n/a"
+      }
+    },
+    "svg_animations": {
+      "enabled": true,
+      "type": "path-draw",
+      "description": "routing lines drawn by stroke-dashoffset carrying a light dot; check marks drawn; logo mark revealed by a diagonal wipe with a sheen pass",
+      "params": {
+        "animation_method": "per-frame attribute updates",
+        "path_morphing": "no",
+        "stroke_animation": "dashoffset draw with ease-out",
+        "filter_effects": "none"
+      }
+    },
+    "composite_notes": "Everything is a pure function of time rendered at 60 fps. Motion blur is faked with a speed-scaled CSS blur on fast-moving objects. V3 adds a world camera (one transform on a world layer) so transitions are pushes, pans and zoom-throughs rather than dissolves.",
+    "ambient_replacement": "Les deux lumières floues qui dérivaient (V3) sont retirées. À la place : fond plat #F0FFFC avec un dégradé vertical fixe très doux vers #E7F8F5 en bas (comme les bandes du site) et le grain statique. La vie ambiante vient de l'horloge (trotteuse du petit cadran) et d'une avancée de caméra de 1 à 3 %."
+  }
+}
