@@ -1,314 +1,236 @@
-# ScaleSuite « Le Système Vendeurs 5 minutes » : plan scène par scène (validé, corrigé pour la relance)
+# ScaleSuite « Le Système Vendeurs 5 minutes » : film de lancement, plan scène par scène (v2, à valider)
 
-Film d'acquisition · 9:16 (1080 × 1920) · **34,0 s** · 60 fps · fonctionne sans le son · français (Québec)
-Fichiers : suffixe `systeme` partout (`index-systeme.html`, `src/scenes-systeme/`, `src/styles-systeme.css`,
-`build-systeme.sh`, `audio/music-systeme.py`, `scalesuite-systeme-9x16*.mp4`…). Aucun fichier existant
-modifié. `core.js`, `logo.js`, `styles.css`, `core-v3.js` chargés en lecture seule ; composants de
-« Le lead perdu » copiés.
-Public : leaders d'équipes de 4 à 15 courtiers au Québec.
-Branche : `claude/laughing-babbage-qo1pf8` (nouvelle, partie de `main`). PR vers
-`scalesuiteqc/scalesuite-video`, base `main`.
+Film de lancement · 9:16 (1080 × 1920) · **40,0 s** · 60 fps · fonctionne sans le son · français (Québec)
+Fichiers : suffixe `systeme` partout. Aucun fichier existant modifié. Branche `claude/laughing-babbage-qo1pf8`,
+PR vers `scalesuiteqc/scalesuite-video` (`main`).
+Public : leaders d'équipes de courtiers au Québec.
+
+Cette v2 remplace le plan v1 (validé, images clés faites ; la v1 reste dans l'historique git) par une structure
+de **lancement de produit** à la Hormozi : le nom du produit est le héros. On garde tel quel ce qui est
+réutilisable : l'horloge, la carte « Votre équipe » avec le Leader, le téléphone et le texto, la relance vers le
+Leader seulement, le ruban de 90 jours, le compteur 124, l'identité `design-dna-systeme.json` et le réglage
+sonore de « Le lead perdu ».
+
+---
+
+## Textes vérifiés sur scalesuiteqc.ca/fr (page lue le 3 novembre 2026)
+
+| À l'écran | Texte du site | Statut |
+|---|---|---|
+| Campagne Google Vendeurs, ajustée chaque semaine | « On monte votre campagne Google Vendeurs et on l'ajuste chaque semaine » | conforme (« ajustée », pas « gérée ») |
+| Une page aux couleurs de votre équipe | « Une page aux couleurs de votre équipe, faite pour le cellulaire » | conforme |
+| Réponse 60 secondes | « Réponse 60 secondes. Un texto au vendeur dans la minute, de jour comme de soir. » | conforme |
+| Le bon courtier alerté | « La demande va direct au bon courtier. » | conforme |
+| Relance après 10 minutes | « Si personne n'a rappelé en 10 minutes, l'équipe est relancée. » | conforme, sans « Filet 10 minutes » |
+| Suivi 90 jours | « Suivi 90 jours. Les vendeurs pas encore prêts sont suivis pendant 90 jours. » | conforme |
+| Groupe Mackay, 124 demandes en moins de 7 mois, avec la campagne seule | « 124 demandes en moins de 7 mois. » « résultats de la campagne seule » « Chiffres tirés de Google Ads » | conforme |
+| Un engagement manqué? Le mois n'est pas facturé. | « Si on manque un engagement, le mois n'est pas facturé. » (titre de section : « Si on ne livre pas, vous ne payez pas. ») | reformulation fidèle (choix 3) |
+| Aucun contrat. | « Aucun contrat. L'équipe part quand elle veut, avec son compte et sa page. » | conforme |
+| Vos demandes ne sont jamais partagées ni revendues. | « Vos demandes ne sont jamais partagées ni revendues à un autre courtier. » | conforme (fin coupée) |
+| 3 nouvelles équipes par mois. | « On prend 3 nouvelles équipes par mois. » | conforme |
+| 3 places fondatrices | « Il reste 3 places fondatrices » | **« Il reste » recommandé** (choix 4) |
+| Pour les équipes de 4 à 15 courtiers au Québec. | **absent du site** ; le site dit « Pour les équipes de courtiers du Québec. » | **à trancher** (choix 1) |
+
+Absents du film : prix, budget, coût par demande (54 $, 180+), dates de départ (« le 1er du mois », « le 24 »),
+« Filet 10 minutes », exclusivité, IA, agences, démo, pourcentages.
+
+## Rareté : constante en tête de fichier
+
+En tête de `src/scenes-systeme/00-commun.js` :
+
+```js
+SS.OFFRE = { equipesParMois: 3, placesFondatrices: 3 }; // changez ici, puis ./build-systeme.sh final
+```
+
+Les deux phrases et le nombre de places dessinées en dépendent. Il n'y a ni date ni compte à rebours. La
+réplique de voix « Trois nouvelles équipes par mois. » devra être réenregistrée si ce nombre change.
 
 ---
 
-## L'idée en une phrase
+## Le fil visuel
 
-**Même vendeur, même samedi, même minute.** Sans le système, la demande attend trois heures. Avec le
-système, chaque minute déclenche une action, jusqu'au courtier qui rencontre le vendeur.
-
-## Identité : `brag-output/design-dna-systeme.json`
-
-Couleurs **mesurées** sur les 5 captures du site (copiées dans `docs/site-reference/site-0X-*.png`,
-car le dossier n'existait pas) avec `design-dna/scripts/measure-colors.mjs` :
-
-| Rôle | V3 | Système (site) |
-|---|---|---|
-| Fond | `#F7FBFA` | **`#F0FFFC`** (91 % de l'accueil) ; bandes menthe `#E2F6F6` |
-| Encre | `#1A1A1A` | **`#151515`** |
-| Texte secondaire | `#5E6B69` | **`#596563`** |
-| Accent des titres, grands chiffres | turquoise `#14A89B` | **sarcelle profond `#0F7B6F`** (« Nous, on vous les amène. », « 124 ») |
-| Lignes de routage, nœuds, halo actif | `#2BBFB3` | `#2BBFB3` (gardé ; le site l'emploie pour le contour « Votre équipe ») |
-| Bouton d'appel | dégradé turquoise → vert, flèche | **plein encre `#151515`, texte blanc, sans flèche**, rayon ≈ 19 % de la hauteur |
-| Pastille d'étiquette | — | pastille douce statique `#E2F6F6` / `#0F7B6F`, **sans point** |
-| Fond ambiant | deux lumières floues qui dérivent | **retirées** : fond plat, dégradé vertical fixe très doux vers `#E7F8F5`, grain statique |
-
-Typographie : Inter 800 (auto-hébergée), interlettrage resserré à −0,045 em pour approcher la grotesque
-serrée du site. Le second segment des titres passe en sarcelle, en couleur pleine (jamais en dégradé).
-Monde du problème : palette grise de « Le lead perdu » (`#EEF1F4`, encre `#2B3138`, ardoise `#6E8092`).
-Interdits respectés : pas de point qui pulse, pas de pointillés, pas de texte en dégradé, pas de halo
-flou qui flotte, pas de flèche qui rebondit, fond clair partout, aucun rouge.
-
-La vie ambiante (3ᵉ couche de `motion-design`) vient désormais de **l'horloge** (trotteuse d'un petit
-cadran) et d'une avancée de caméra de 1 à 3 %, plus des lumières.
-
-## Le fil visuel : une seule horloge
-
-```
- ╭──────────────────────────╮
- │  ◷  sam. 14 h 12          │   pastille 420 × 96, chiffres tabulaires 52 px (rouleau par chiffre)
- ╰──────────────────────────╯   cadran 64 px : aiguilles des heures et des minutes, trotteuse
-```
-
-- Elle **naît du titre** de l'accroche (« 14 h 12 » se détache du titre et rétrécit dans la pastille,
-  élément partagé) et reste en haut de la zone produit (y ≈ 640) dans les deux mondes.
-- **Problème** : elle *saute* des heures (rouleau lent, cadran qui tourne d'un bloc) et rien ne
-  change dans l'interface. 14 h 12 → 15 h 30 → 17 h 04.
-- **Bascule** : elle revient en arrière jusqu'à 14 h 12, puis le disque menthe **éclot depuis elle**.
-- **Solution** : elle avance **minute par minute** ; à chaque minute, un fil turquoise court part de
-  la pastille vers l'élément qui agit (formulaire, texto, carte du courtier, équipe).
-- **Suivi** : elle passe en mode date, « sam. 7 nov. » → « ven. 5 févr. » (90 jours plus tard,
-  vérifié : vendredi 5 février 2027).
-
-Dates vérifiées : **samedi 7 novembre 2026** (bien un samedi).
-
-## La carte « Votre équipe » (présente dès la scène 2)
-
-Une liste plutôt qu'une grille, pour garder les alertes en 32 px sur une seule ligne :
-
-```
-◷ sam. 14 h 12                             ← horloge, au-dessus de la carte (y ≈ 600)
-┌───────────────────────────────────────────────┐  900 de large, y 680
-│ Votre équipe · Équipe Gagnon                   │  en-tête 96
-│ ◯  Leader              Responsable de l'équipe │  ← rangée du leader, séparée par un filet
-├───────────────────────────────────────────────┤
-│ ◯  Courtier 01                                 │  rangées de 96, avatar 64 sans visage,
-│ ◯  Courtier 02                                 │  nom 42 px, ligne 2 en 32 px
-│ ◯  Courtier 03         ⌂ En visite libre       │
-│    └ Demande vendeur · Longueuil     [Non lue] │  ← sous-carte d'alerte de 80, emboîtée
-│ ◯  Courtier 04                                 │
-│ ◯  Courtier 05                                 │
-└───────────────────────────────────────────────┘
-```
-
-- **Leader** en première rangée dès la scène 2, avec la ligne 2 « Responsable de l'équipe » : il ne
-  sort pas de nulle part à 14 h 22.
-- Les alertes sont des **sous-cartes** de 80 px qui s'emboîtent sous la rangée concernée (les rangées
-  du dessous glissent de 80 px). Deux sous-cartes au plus à l'écran (Courtier 03 et Leader).
-- La demande n'est **jamais redistribuée** : seuls Courtier 03, puis le Leader, la reçoivent. Les
-  autres rangées restent atténuées à 30 % dans la solution.
-
-## Deux mondes
-
-| | Le problème (0 – 9,4 s) | Avec le Système (9,9 – 34 s) |
-|---|---|---|
-| Fond | `#EEF1F4` plat | `#F0FFFC`, dégradé fixe vers `#E7F8F5` |
-| Cartes | `#FAFBFC`, ombre neutre | `#FFFFFF`, ombre teintée menthe |
-| Accent | ardoise `#6E8092` | sarcelle `#0F7B6F`, routage `#2BBFB3` |
-| Avatars | ardoise sur `#E1E6EB` | sarcelle sur `#E2F6F6` |
-| Mouvement | lent (650 – 900 ms), aucun dépassement | dépassement réservé aux héros (texto 12 %, bouton 10 %, pastilles 4 %) |
-| Horloge | saute des heures | avance minute par minute |
-
----
+- **L'horloge** (pastille, petit cadran, chiffres qui roulent). Dans l'accroche, elle saute de 14 h 12 à
+  17 h 04 et s'élargit en règle grise. Elle revient en arrière, puis le disque menthe éclot depuis elle, et
+  elle devient l'étiquette « Nouveau » du dévoilement (même forme de pastille). Dans la pile, elle revient
+  minute par minute : 14 h 12, 14 h 13, 14 h 22, puis en mode date jusqu'au ven. 5 févr.
+- **La carte produit « Le Système Vendeurs 5 minutes »** : née du nom dévoilé (élément partagé). Elle se
+  remplit d'une ligne cochée par composante, puis reçoit le sceau de garantie. Le nom du produit reste ainsi à
+  l'écran presque tout le temps à partir de 6 s.
+- **L'étiquette d'étape** du site (« 1 sur 6 », barre à segments) devient « Système Vendeurs 5 minutes ·
+  2 sur 5 » au-dessus de chaque titre de la pile, avec une barre de 5 segments.
 
 ## Courbe de rythme
 
 ```
 énergie
-  ▲                                                   ★★ chez le leader (21,1 s, 62 %)
-  │                                    ★ texto          ███            ▲ 124 (25,6 s, 75 %)
-  │                                    ███            █████          ████
-  │ ███                               █████▄▄▄▄▄▄▄▄▄██████▄▄▄▄▄▄▄▄▄██████▄
-  │ ████▄▄▄▄▄                  ▄▄▄▄▄▄█████████████████████████████████████▄▄▄▄▄▄▄▄▄▄
-  │ █████████▄▄▄▄▄▄▄▄  ▁▁  ▄▄▄███████████████████████████████████████████████████████
-  └──────────────────────────────────────────────────────────────────────────────────▶ t
-   0 formulaire  3 en visite  5,6 17 h   9,4 retour  10 Reprenons  12,1 14 h 12  13,8 14 h 13 texto
-   17,6 courtier alerté  20,2 14 h 22 relance → leader  22,8 90 jours  25 preuve  27,8 thèse  30,4 fin  34
+  ▲          ★★★ DÉVOILEMENT (6,6 – 7,5 s)              ★★ pile complète (23,5 s)
+  │          █████                                       ████
+  │ ███      █████▄▄  ▄▄▄  ▄▄▄  ▄▄▄  ▄▄▄  ▄▄▄  ▄▄▄  ▄▄▄  ████
+  │ ████▄▄▄ ▄███████████████████████████████████████████████▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+  │ ████████████████████████████████████████████████████████████████████████▄▄▄▄▄▄▄▄
+  └──────────────────────────────────────────────────────────────────────────────────────▶ t
+   0 accroche  3,5 coût  6 NOM   10,1 pile : campagne · réponse · courtier · relance · suivi   25 preuve  27,8 risque  31,4 rareté  33,8 fin  40
 ```
 
-- **Problème (0 – 9,4 s, 28 %)** : net à l'image 0, puis l'énergie *descend*. Rien ne bouge sauf
-  l'horloge. La musique s'amincit jusqu'à une note tenue sur « Trois heures… ». Respiration 0,5 s.
-- **Bascule (9,4 – 12,1 s)** : retour en arrière rapide (0,5 s), éclosion menthe.
-- **Solution (12,1 – 25,0 s, 38 % du film, la partie la plus longue)** : montée régulière. Le texto
-  (13,8 – 17,6 s) est la scène la plus longue (3,8 s) : c'est la destination. Le pic d'énergie est
-  l'arrivée de la relance chez le leader (21,1 s, 62 %) : neuf tics d'horloge qui accélèrent, une
-  deuxième alerte, une seule ligne qui monte vers le leader. Le compteur 124 (≈ 75 %) porte le
-  dernier sommet, à égalité.
-- **Preuve (25,0 – 27,8 s)** : le compteur est le dernier sommet (≈ 75 %).
-- **Fin (27,8 – 34,0 s)** : thèse, logo, bouton, tenue de 2,2 s.
+- **Gris (0 à 6 s, 15 %)** : dense et immédiat, sans longue respiration.
+- **Dévoilement (6 à 10,1 s)** : le sommet d'énergie. Le nom en 150 px, la signature de quatre notes au complet.
+- **Pile (10,1 à 25,0 s)** : nerveuse, un changement de cadre toutes les 0,5 à 2,8 s, chaque composante tenue
+  juste le temps de la lire (au moins 1,2 s). Second sommet : la carte complète, cinq coches, tenue 1,5 s.
+- **Preuve et garantie (25 à 31,4 s)** : un cran plus bas, assurées, sans dépassement.
+- **Rareté (31,4 à 33,8 s)** : sèche, factuelle.
+- **Fin (33,8 à 40 s)** : posée, tenue 2,7 s.
+
+**Densité** : aucune moitié de cadre vide pendant plus de 0,5 s. Chaque cadre a un titre en haut (y 170 à 600)
+et un objet en dessous (y 600 à 1500).
 
 ---
 
 ## Scènes
 
-| # | Temps | Durée | Ce qu'on voit | Caméra | Transition vers la suivante |
+| # | Temps | Durée | Ce qu'on voit | Caméra | Transition |
 |---|---|---|---|---|---|
-| 1 · Accroche (gris) | 0,0 – 3,0 | 3,0 s | **Image 0, tout est lisible** : titre « Samedi, **14 h 12.** » (124 px, ardoise sur « 14 h 12 », y 230 – 370) et sous-titre « Un vendeur remplit votre formulaire. » (52 px, y 430). Dessous (y 640 – 960), un résultat Google de 900 px : « **Commandité** · exemple.ca », « Vendre votre maison à Longueuil » (42 px), deux liens annexes squelettes. À 0,55 s, appui (onde) ; **zoom à travers** : l'annonce s'ouvre en page de l'équipe 900 × 900 (barre « Équipe Gagnon » couleur fictive `#2F5D8C`, titre partagé avec l'annonce, champs « Votre propriété · Maison, Longueuil », « Votre cellulaire » tapé « 514 555 0187 », bouton « **Envoyer** »). À 2,0 s, appui sur « Envoyer » ; à 2,15 – 2,55 s la page **se compresse en jeton** d'encre « ● DEMANDE VENDEUR · Longueuil » (460 × 100, 34 px). | Avancée lente 1,00 → 1,03 (sinus). | **Élément partagé** : « 14 h 12 » quitte le titre et rétrécit dans la pastille de l'horloge ; le jeton tombe (arc, ease-in) vers la carte de l'équipe qui monte du bas. |
-| 2 · Votre courtier est en visite | 3,0 – 5,6 | 2,6 s | Horloge « ◷ sam. 14 h 12 » au-dessus de la carte « **Votre équipe** · Équipe Gagnon » (900 px) : rangée **Leader** (« Responsable de l'équipe »), puis Courtier 01 à 05 (avatars ronds neutres, aucun visage). Courtier 03 : « ⌂ **En visite libre** ». Le jeton s'emboîte sous Courtier 03 en sous-carte « Demande vendeur · Longueuil » avec la pastille « **Non lue** » (ardoise). Les autres rangées ont des lignes 2 en squelette. Titre : « Votre courtier / est **en visite.** » (3,1 s ; tenu 3,6 – 5,6). L'horloge **saute** : 15 h 30 (4,4 s), puis 17 h 04 (5,1 s), rouleau lent 0,4 s, cadran qui tourne d'un bloc ; rien d'autre ne bouge, la pastille reste « Non lue ». | Fixe à 1,08 sur Courtier 03 et l'horloge. | **Continu** : même carte. |
-| 3 · Il voit l'alerte à 17 h | 5,6 – 9,4 | 3,8 s | À 5,6 s, « En visite libre » devient « Disponible » et « Non lue » devient « **Lue à 17 h 04** » (bascule dans le masque, sans rebond). La pastille de l'horloge s'élargit en règle : « 14 h 12 ━━━━━━ 17 h 04 », segment gris tracé entre les deux heures : le temps perdu, rendu visible sans chiffre de durée. Titre (via `SS.band`) : « Il voit l'alerte / à **17 h.** » (5,7 s ; tenu 6,1 – 7,4). Puis « Trois heures / pour appeler / **quelqu'un d'autre.** » (7,45 s ; tenu 7,9 – 9,4) ; la rangée de Courtier 03 s'affaisse de 10 px, les autres s'atténuent à 30 %. Respiration musicale 8,9 – 9,4 s. | Avancée 1,08 → 1,14 sur la barre de temps, puis fixe. | **Retour en arrière** : l'horloge redescend jusqu'à 14 h 12 (rouleau inverse, 0,5 s), la règle se rembobine, « Lue » redevient « Non lue », puis tout se vide. |
-| 4 · Reprenons (bascule) | 9,4 – 12,1 | 2,7 s | 9,5 – 10,0 s : retour en arrière. 10,05 s : un **disque menthe éclot depuis l'horloge** (0,5 s) et recouvre le cadre. L'horloge reste seule, en couleurs ScaleSuite : « ◷ sam. 14 h 12 ». Titre « **Reprenons.** » (124 px, 10,4 s) et dessous « Avec le Système Vendeurs 5 minutes. » (52 px, 10,6 s). Tenu 10,9 – 12,1 s. | Fixe, avancée 1 %. | **Continu** : l'horloge reste ; la page de l'équipe remonte du bas sous elle. |
-| 5 · 14 h 12, le formulaire part | 12,1 – 13,8 | 1,7 s | Même page de l'équipe (monde menthe), formulaire déjà rempli. Appui sur « Envoyer » à 12,3 s, compression en jeton à 12,45 – 12,8 s (écho exact de l'accroche, plus rapide). Titre : « **14 h 12.** / Le formulaire part. » (12,2 s ; tenu 12,5 – 13,8). | Fixe à 1,05. | **Tic de l'horloge** à 13,85 s (14 h 12 → 14 h 13, un seul chiffre roule) ; un fil turquoise part de la pastille et le jeton le suit vers le bas, coup de fouet avec flou de vitesse jusqu'au téléphone. |
-| 6 · 14 h 13, le vendeur a sa réponse (héros) | 13,8 – 17,6 | **3,8 s** | **Téléphone du vendeur**, objet héros, cadré serré et coupé par le bas (820 × 1700, écran verrouillé clair) : « samedi 7 novembre », « **14:13** ». À 14,55 s le jeton se déplie en **texto** (12 % de dépassement, vibration amortie 3 oscillations) : expéditeur « **514 555 0142** » · « maintenant », message « Bonjour, ici Julie de l'Équipe Gagnon. J'ai bien reçu votre demande. Je vous appelle dans quelques minutes. » (36 px, 3 lignes, carte 800 de large, y 960 – 1330). Titre : « **14 h 13.** / Le vendeur a **sa réponse.** » (14,3 s ; tenu 15,0 – 17,6, 2,6 s : le temps de lire le texto). Mention discrète « Exemple. Noms et numéros fictifs. » (30 px, `#596563`, y 1560), comme sur le site. | Coup de fouet vers le bas en arc, puis légère poussée 1,00 → 1,04 pendant la lecture. | **Même minute** : la caméra remonte (fouet en arc) ; le fil turquoise repart de l'horloge vers la carte de l'équipe. |
-| 7 · 14 h 13, le bon courtier est alerté | 17,6 – 20,2 | 2,6 s | Horloge toujours « sam. 14 h 13 ». La carte de l'équipe en couleurs ScaleSuite (Leader, Courtier 01 à 05, avatars sarcelle). La **ligne de routage** se trace de l'horloge (17,8 – 18,4 s) jusqu'à la rangée de **Courtier 03**, qui prend le halo turquoise ; une sous-carte s'y emboîte (4 %) : « **Nouvelle demande · Vendeur · Longueuil** ». Les autres rangées, Leader compris, s'atténuent à 30 %. Courtier 03 est encore « ⌂ En visite libre » (même situation que dans le problème). Titre : « Le bon courtier / est **alerté.** » (17,9 s ; tenu 18,6 – 20,2). | Panoramique court de l'horloge vers la carte, puis fixe à 1,08. | **Continu** : l'horloge avance. |
-| 8 · 14 h 22, l'équipe est relancée | 20,2 – 22,8 | 2,6 s | L'horloge **avance minute par minute** de 14 h 13 à 14 h 22 (20,3 – 21,0 s, neuf tics qui accélèrent, loi de puissance). Courtier 03 n'a pas rappelé : à 14 h 22, la sous-carte de Courtier 03 bascule dans son masque en **deuxième alerte « Relance · Vendeur · Longueuil »** (21,0 s). Puis **une seule ligne de routage** monte de cette sous-carte vers la rangée **Leader** (21,05 – 21,35 s, arc court dans la marge gauche), qui prend le halo et reçoit la même sous-carte « **Relance · Vendeur · Longueuil** » (4 %, 21,4 s). Courtier 01, 02, 04 et 05 restent atténués : rien ne s'allume chez eux, la demande n'est pas redistribuée. Aucun classement, aucun délai par courtier. Titre (texte du site) : « Pas de rappel? / L'équipe est **relancée.** » (20,35 s ; tenu 21,6 – 22,8). | Légère remontée pour cadrer Courtier 03 et le Leader ensemble (1,08 → 1,04). | **Élément partagé** : la sous-carte de Courtier 03 quitte la liste et devient la première pastille d'un ruban de suivi. |
-| 9 · Pas prêt à vendre? 90 jours | 22,8 – 25,0 | 2,2 s | Carte « **Suivi · Vendeur · Longueuil** » 900 px : un ruban horizontal se trace de « Aujourd'hui » à « **90 jours** » (`stroke-dashoffset`, 0,9 s). L'horloge passe en mode date et roule « sam. 7 nov. » → « **ven. 5 févr.** ». Aucune fréquence de relance inventée, aucun point de contact chiffré. Titre : « Pas prêt à vendre? / **Suivi pendant 90 jours.** » (22,9 s ; tenu 23,4 – 25,0). | Fixe à 1,05, avancée 1 %. | **Morphose** : le ruban se contracte en un trait qui devient l'axe du compteur. |
-| 10 · Preuve | 25,0 – 27,8 | 2,8 s | « **124** » (240 px, sarcelle, chiffres tabulaires) compte de 0 à 124 en 0,8 s (25,25 – 26,05, ease-out). Dessus : « Groupe Mackay » (48 px) ; dessous : « demandes en moins de 7 mois. » (52 px) puis « Avec la campagne seule. » (40 px, `#596563`, 26,1 s). Tenu 26,2 – 27,8 s. | Fixe. | **Morphose** : le chiffre s'aplatit en ligne (motif V3). |
-| 11 · Thèse | 27,8 – 30,4 | 2,6 s | Sur la menthe : « Vos courtiers rencontrent / des vendeurs. » (110 px, encre, 27,9 s) puis « **Nous, on vous les amène.** » (110 px, sarcelle, 28,4 s). Sous la thèse, discrète, la rangée de Courtier 03 avec la sous-carte « **Rencontre · Vendeur · Longueuil** » (la destination, voir choix 6). Tenu 28,8 – 30,4. | Avancée 1 %. | **Ligne contractée en nœud, puis en logo** (motif V3). |
-| 12 · Fin | 30,4 – 34,0 | 3,6 s | Logo complet (balayage de la marque, lettres qui montent), « **Le Système Vendeurs 5 minutes** » (44 px, pastille douce statique). Le **bouton naît d'un nœud** et s'étire en « **Obtenir mon diagnostic gratuit** » (700 × 136, plein encre, texte blanc 40 px, 10 % de dépassement, 31,25 s), puis « scalesuiteqc.ca » (40 px, 31,6 s). Tout est posé à 31,8 s et tenu jusqu'à 34,0 s (2,2 s ; un seul reflet lent sur le bouton à 32,6 s). | Avancée de 1 %. | Fin. |
+| 1 · Accroche (gris) | 0,0 – 3,5 | 3,5 s | Ligne d'étiquette « **Leaders d'équipe de courtiers** » (40 px, ardoise, y 175). Titre en deux temps (88 px, y 240 – 600) : « Le vendeur écrit / à **14 h 12.** » visible dès t = 0, puis « Votre courtier / le voit à **17 h 04.** » (2,3 s). Entre les deux phrases, l'horloge (y 680) roule d'un bloc de 14 h 12 à 17 h 04 (1,9 – 2,6 s) et s'élargit en **règle grise 14 h 12 ━━ 17 h 04**. Dessous, la carte « Votre équipe » (Leader, Courtier 01 à 05, rangées de 80, y 760 – 1480). Dès t = 0, Courtier 03 est « En visite libre » et a la sous-carte « Demande vendeur · Longueuil » avec « **Non lue** ». À 2,6 s, elle passe à « Lue à 17 h 04 ». **Image 0 du master = affiche à t = 3,0 s** (état complet : les deux phrases, la règle, « Lue à 17 h 04 » ; choix 5). | Fixe, poussée 1,00 → 1,02. | **Titre dans sa bande** : le titre change, la carte reste. |
+| 2 · Le coût | 3,5 – 6,0 | 2,5 s | « Trois heures / pour appeler / **quelqu'un d'autre.** » (100 px, 3,55 s ; tenu 3,95 – 5,4). La rangée de Courtier 03 s'affaisse de 10 px, les autres s'atténuent à 30 %. À 5,45 s, l'horloge revient en arrière jusqu'à 14 h 12 (0,45 s), la règle se replie et les pastilles reprennent leur état. | Fixe. | **Éclosion** : à 5,95 s, le disque menthe éclot depuis l'horloge (0,5 s). |
+| 3 · Dévoilement (héros) | 6,0 – 10,1 | 4,1 s | La pastille de l'horloge se resserre et devient l'étiquette « **Nouveau** » (pastille douce statique `#E2F6F6` / `#0F7B6F`, 40 px, sans point, y 470), 6,25 s. Logo ScaleSuite (marque balayée, 110 px, y 300, 6,15 s). **Le nom, mot par mot, 150 px, encre** : « Système » (6,6 s), « Vendeurs » (6,9 s), « 5 » puis « **minutes.** » en sarcelle (7,2 et 7,4 s), sur trois lignes (y 640, 800, 960). Dessous : « Pour les équipes de courtiers du Québec. » (48 px, `#596563`, y 1130, 7,7 s ; choix 1). **Tenu 7,9 – 10,1 s (2,2 s).** Cadre conçu pour servir seul d'affiche du lancement (choix 6). | Avancée 1,00 → 1,02, sinus. | **Élément partagé** : le nom rétrécit dans l'en-tête de la carte produit, qui s'ouvre sous lui. |
+| 4 · La pile | 10,1 – 25,0 | **14,9 s** | Carte produit 900 px, en-tête « marque ScaleSuite + **Le Système Vendeurs 5 minutes** » (44 px, 800). Pour chaque composante : **(a)** la ligne s'emboîte dans la carte (nom 40 px + cercle vide) ; **(b)** zoom à travers la ligne : son nom monte en titre (élément partagé), l'étiquette d'étape « Système Vendeurs 5 minutes · n sur 5 » au-dessus, la démonstration avec l'horloge en dessous ; **(c)** retour : la démonstration se compresse dans la ligne, qui se coche (trait dessiné, sarcelle). Détail ci-dessous. | Zooms à travers les lignes, aller et retour (0,4 s, `SS.EZ.cam`) ; fouet avec flou vers le téléphone. | **Retrait** : la carte complète descend sous la preuve. |
+| 5 · Preuve | 25,0 – 27,8 | 2,8 s | « Groupe Mackay » (56 px). « **124** » (270 px, sarcelle, chiffres tabulaires) compte de 0 à 124 en 0,8 s (25,25 s). « demandes en moins de 7 mois. » (60 px). « Avec la campagne seule. » (42 px, `#596563`). Pastille de source « ✓ Chiffres tirés de Google Ads » (32 px), comme sur le site. Tenu 26,2 – 27,8 s. | Fixe. | **Retour de la carte** : la carte produit complète remonte et prend la place du chiffre. |
+| 6 · Le risque renversé | 27,8 – 31,4 | 3,6 s | Titre : « Un engagement manqué? / **Le mois n'est pas facturé.** » (96 px, 27,9 s ; choix 3). La carte produit complète (cinq coches, réduite à 0,8) reçoit un **sceau dessiné** : deux cercles concentriques tracés au trait sarcelle (`stroke-dashoffset`, 0,7 s, 28,3 s), une coche dessinée au centre, sans brillance ni texte (choix 11). Sous la carte : « **Aucun contrat.** » (48 px, 28,8 s) et « Vos demandes ne sont jamais partagées ni revendues. » (40 px, 29,3 s). Tenu 29,7 – 31,4 s. | Fixe, avancée 1 %. | **Titre dans sa bande** ; la carte et le sceau rétrécissent et sortent par le haut. |
+| 7 · Rareté réelle | 31,4 – 33,8 | 2,4 s | « **3** nouvelles équipes / par mois. » (104 px, 31,45 s). Dessous, « Il reste 3 places fondatrices. » (48 px, 32,0 s ; choix 4) et **3 places** dessinées : trois cartes vides au contour sarcelle (260 × 200, « Place fondatrice » 32 px) qui s'emboîtent avec 60 ms de décalage. Les nombres viennent de `SS.OFFRE`. Aucune date, aucun compte à rebours. Tenu 32,4 – 33,8 s. | Fixe. | **Ligne** : les trois places se contractent en une ligne (motif V3). |
+| 8 · Fin | 33,8 – 40,0 | 6,2 s | Thèse : « Vos courtiers rencontrent / des vendeurs. » au-dessus de la ligne, « **Nous, on vous / les amène.** » (sarcelle) en dessous, avec la rangée discrète « Courtier 03 · Rencontre · Vendeur · Longueuil » (33,9 – 35,8 ; tenue 34,6 – 35,8). Ensuite, la ligne se contracte en nœud, puis en logo (190 px, y 520). **Le nom du système en grand sous le logo** : « Système Vendeurs / 5 minutes. » (96 px, y 760 – 880, 36,2 s). Le bouton naît d'un nœud : « **Obtenir mon diagnostic gratuit** » (840 × 136, encre, texte blanc 42 px, 10 % de dépassement, 36,5 s), puis « scalesuiteqc.ca » (42 px, 36,8 s). **Tout est posé à 37,3 s et tenu jusqu'à 40,0 s (2,7 s).** | Avancée 1 %. | Fin. |
 
-Durées : 3,0 · 2,6 · 3,8 · 2,7 · 1,7 · **3,8** · 2,6 · 2,6 · 2,2 · 2,8 · 2,6 · 3,6 s = 34,0 s.
+### Détail de la pile (10,1 – 25,0 s)
 
-### États tenus (≥ 1,2 s, immobiles et lisibles)
+| Composante (ligne de la carte) | Temps | Titre pendant la démo | Démonstration (horloge en haut, y 600) | Tenu lisible |
+|---|---|---|---|---|
+| carte : en-tête + ligne 1 | 10,1 – 10,8 | — | le nom devient l'en-tête, la ligne 1 s'emboîte | — |
+| **1 · Campagne Google Vendeurs** (sous-ligne « et une page aux couleurs de votre équipe ») | 10,8 – 12,9 | « Campagne / Google Vendeurs. » + « Ajustée chaque semaine. Une page aux couleurs de votre équipe. » (44 px) | 14 h 12 : annonce « Commandité · exemple.ca » avec l'étiquette « Votre équipe » (comme sur le site), appui, la page de l'Équipe Gagnon s'ouvre, « Envoyer », la page devient le jeton | 11,3 – 12,9 (1,6 s) |
+| carte : coche 1, ligne 2 | 12,9 – 13,4 | — | — | — |
+| **2 · Réponse 60 secondes** | 13,4 – 16,2 | « Réponse / 60 secondes. » | tic 14 h 13 ; fil vers le téléphone du vendeur ; le texto de 514 555 0142, signé Julie (scène actuelle, inchangée) ; mention « Exemple. Noms et numéros fictifs. » | 14,5 – 16,2 (1,7 s) |
+| carte : coche 2, ligne 3 | 16,2 – 16,7 | — | — | — |
+| **3 · Le bon courtier alerté** | 16,7 – 18,3 | « Le bon courtier / **alerté.** » | 14 h 13 : fil de l'horloge vers Courtier 03 (« En visite libre »), halo, « Nouvelle demande · Vendeur · Longueuil » ; les autres rangées, Leader compris, s'atténuent | 17,0 – 18,3 (1,3 s) |
+| carte : coche 3, ligne 4 | 18,3 – 18,8 | — | — | — |
+| **4 · Relance après 10 minutes** | 18,8 – 21,3 | « Relance après / **10 minutes.** » | neuf tics jusqu'à 14 h 22 ; deuxième alerte « Relance · Vendeur · Longueuil » chez Courtier 03 ; **une seule** ligne vers le Leader, qui prend le halo et la même alerte ; les autres restent atténués | 20,1 – 21,3 (1,2 s) |
+| carte : coche 4, ligne 5 | 21,3 – 21,8 | — | — | — |
+| **5 · Suivi 90 jours** | 21,8 – 23,4 | « Pas prêt à vendre? / **Suivi 90 jours.** » | ruban « Aujourd'hui → 90 jours » ; l'horloge en mode date : sam. 7 nov. → ven. 5 févr. | 22,2 – 23,4 (1,2 s) |
+| **la pile complète** | 23,4 – 25,0 | — | retour à la carte : coche 5 (23,45 s), la carte « Le Système Vendeurs 5 minutes » avec ses **cinq lignes cochées** | 23,5 – 25,0 (**1,5 s**) |
+
+Les allers-retours entre la carte et les démonstrations (0,5 s) sont des transitions, pas des états à lire.
+Toutes les lignes de la carte se lisent pendant la tenue finale de 1,5 s. Le jeton n'est pas repris entre la
+composante 1 et la composante 2 : le texto se déplie depuis le fil de l'horloge.
+
+### États tenus (≥ 1,2 s)
 
 | État | Tenu |
 |---|---|
-| Titre de l'accroche « Samedi, 14 h 12. Un vendeur remplit votre formulaire. » (l'interface dessous agit) | 0,0 – 2,9 s |
-| « Votre courtier est en visite. », Courtier 03 « En visite libre », « Non lue » (seule l'horloge saute) | 3,6 – 5,6 s (2,0 s) |
-| « Il voit l'alerte à 17 h. », « Lue à 17 h 04 » | 6,1 – 7,4 s (1,3 s) |
-| « Trois heures pour appeler quelqu'un d'autre. » | 7,9 – 9,4 s (1,5 s) |
-| « Reprenons. Avec le Système Vendeurs 5 minutes. » | 10,9 – 12,1 s (1,2 s) |
-| « 14 h 12. Le formulaire part. » | 12,5 – 13,8 s (1,3 s) |
-| Texto sur l'écran verrouillé + « 14 h 13. Le vendeur a sa réponse. » | 15,0 – 17,6 s (2,6 s) |
-| « Le bon courtier est alerté. », ligne sur Courtier 03 | 18,6 – 20,2 s (1,6 s) |
-| « Pas de rappel? L'équipe est relancée. », relance chez Courtier 03 et chez le Leader | 21,6 – 22,8 s (1,2 s) |
-| « Pas prêt à vendre? Suivi pendant 90 jours. » | 23,4 – 25,0 s (1,6 s) |
-| « Groupe Mackay · 124 demandes en moins de 7 mois. Avec la campagne seule. » | 26,2 – 27,8 s (1,6 s) |
-| Thèse complète | 28,8 – 30,4 s (1,6 s) |
-| Fin (logo, nom du système, bouton, URL) | 31,8 – 34,0 s (2,2 s) |
-
-Aucun cadre vide plus de 0,3 s : chaque transition passe par un objet (titre → horloge, jeton,
-disque, fil de l'horloge, ruban, chiffre, nœud).
+| Accroche complète (affiche, image 0 du master) | 2,6 – 3,5 s |
+| « Trois heures pour appeler quelqu'un d'autre. » | 3,95 – 5,4 s (1,45 s) |
+| **Dévoilement** « Nouveau · Système Vendeurs 5 minutes. · Pour les équipes… » | 7,9 – 10,1 s (2,2 s) |
+| Composantes 1 à 5 | voir le tableau (1,2 à 1,7 s chacune) |
+| **Pile complète, cinq coches** | 23,5 – 25,0 s (1,5 s) |
+| Preuve | 26,2 – 27,8 s (1,6 s) |
+| Risque renversé (titre, sceau, deux lignes) | 29,7 – 31,4 s (1,7 s) |
+| Rareté | 32,4 – 33,8 s (1,4 s) |
+| Thèse et rencontre | 34,6 – 35,8 s (1,2 s) |
+| Fin | 37,3 – 40,0 s (2,7 s) |
 
 ---
 
-## Texte à l'écran (relu contre les règles)
+## Règles appliquées (inchangées)
 
-- Seulement des affirmations du site : parcours en 6 étapes, texto dans la minute, de jour comme de
-  soir (montré un samedi après-midi), bon courtier alerté, équipe relancée si personne n'a rappelé en
-  10 minutes (montré par l'horloge 14 h 12 → 14 h 22, sans le nom « Filet 10 minutes »), suivi 90
-  jours, preuve Groupe Mackay (124 demandes en moins de 7 mois, campagne seule), bouton « Obtenir mon
-  diagnostic gratuit ».
-- Absent : campagne par courtier, agences, IA, « Google Ads pour les équipes immobilières », démo,
-  prix, pourcentage, promesse de nombre, exclusivité, script d'appel, classement, délai par courtier.
-- Noms fictifs : Équipe Gagnon, Julie, numéros en 555 (514 555 0142 pour l'équipe, 514 555 0187 pour
-  le vendeur), « exemple.ca ». Leader, Courtier 01 à 05. Seul nom réel : Groupe Mackay, dans la preuve.
-- **Aucun trait d'union** : pas de noms de lieux composés (Longueuil seulement), « exemple.ca » au lieu
-  de « exemple.ca › equipe-gagnon » du site. Aucune phrase en « Et » ou « Mais ». Aucun emoji.
-  Vouvoiement.
-- Le texto vient d'un numéro local (aucun nom d'expéditeur, comme au Canada) et il est signé du prénom.
-- Ponctuation québécoise : pas d'espace avant « ? » (comme « Le lead perdu ») ; « 14 h 12 », « 17 h ».
-
-## Règles appliquées
-
-- **Lisibilité** : interface 900 px (83 %) ; texte d'interface ≥ 30 px à l'écran, libellés principaux
-  40 px, message du texto 36 px ; titres 104 à 124 px entre y 200 et 560 ; produit entre y 600 et
-  1500 ; rien de critique sous y 1500 ni à x > 930 ; `SS.scrim` sous les titres posés sur une
-  interface qui bouge, `SS.band` pour les titres qui changent dans la même case. Contrôle automatique
-  de la taille du texte (`render/textsize-systeme.mjs`, copié de `textsize-equipe.mjs`).
-- **Mouvement** : courbes `SS.EZ` de la V3, durées 180 / 320 / 650 / 900 ms ; aucune interpolation
-  linéaire dans l'espace (l'horloge roule avec easing, seule la frappe est caractère par caractère) ;
-  décalages de 35 à 80 ms (< 500 ms par groupe) ; dépassement **jamais dans le monde du problème** ;
-  règle du tiers (fouets en arc avec clé intermédiaire) ; un héros par temps ; trois couches
-  (primaire : l'action ; secondaire : ombres, halos, fil de l'horloge ; ambiante : trotteuse, avancée
-  de caméra, grain) ; aucun fondu de scène.
-- **Déterminisme** : `fromTo()` uniquement, états initiaux explicites, flou procédural, horloge
-  procédurale sur un proxy ; contrôles `determinism` et `motion 34` à OK.
-- **Raccords** à vérifier au pixel : 3,0 s (titre → horloge), 10,05 s (horloge → disque),
-  13,85 s (jeton → fil), 14,55 s (jeton → texto), 22,8 s (carte → ruban), 25,0 s (ruban → axe du
-  compteur), 30,4 s (ligne → nœud → logo).
-
----
+- **Lisibilité** : interface de 900 px ; texte ≥ 30 px à l'écran (contrôle `render/textsize-systeme.mjs`),
+  libellés principaux 40 px ; titres 88 à 150 px entre y 170 et 600 ; produit entre y 600 et 1500 ; rien de
+  critique sous y 1500 ni à x > 930.
+- **Mouvement** : courbes `SS.EZ` de la V3 ; aucun dépassement dans le monde gris ; dépassement réservé aux
+  héros (texto 12 %, bouton 10 %, lignes de la carte 4 %) ; décalages < 500 ms par groupe ; règle du tiers ;
+  trois couches (l'ambiante vient de la trotteuse et des avancées de caméra) ; aucun fondu de scène.
+- **Identité** : `design-dna-systeme.json` (fond `#F0FFFC`, encre `#151515`, sarcelle `#0F7B6F`, bouton encre).
+  Étiquettes douces statiques, sceau au trait, sans brillance. Pas de point qui pulse, pas de pointillés, pas de
+  texte en dégradé, pas de halo flou, pas de flèche qui rebondit, aucun rouge. Rien qui fasse penser à une image
+  générée par IA : interfaces vectorielles nettes, pas de photo, pas de visage.
+- **Texte** : aucun trait d'union, aucun emoji, aucune phrase qui commence par « Et » ou « Mais », vouvoiement,
+  noms fictifs (Équipe Gagnon, Julie, numéros en 555, exemple.ca), Leader et Courtier 01 à 05 ; seul nom réel :
+  Groupe Mackay.
+- **Déterminisme** : `fromTo()` uniquement, flou procédural ; contrôles `determinism` et `motion 40` à OK.
 
 ## Son
 
-### Effets sonores : 5 au total (règle de la skill, réglage de « Le lead perdu » repris tel quel)
+### Effets sonores : 5 (réglage de « Le lead perdu » repris tel quel)
 
-| # | Temps | Moment | Son (fonction de `music-lead-perdu.py`) | Gain | Cible sous la musique |
+| # | Temps | Moment | Son | Gain | Cible sous la musique |
 |---|---|---|---|---|---|
-| 1 | 9,5 s | Retour en arrière, puis éclosion à 10,05 s | souffle montant 250 → 1 800 Hz, passe-bas 2,5 kHz (`breath`, `'rise'`) | 0,34 | ≈ −10 dB |
-| 2 | 12,3 s | Appui sur « Envoyer » (monde menthe) | clic feutré (`feltclick`) | 0,22 | ≈ −12 dB |
-| 3 | 14,55 s | **Texto du vendeur** (héros) | double vibration sourde 150 Hz (`mutedbuzz`), jamais un son de message | 0,30 / 0,24 | ≈ −8 dB |
-| 4 | 21,4 s | La relance arrive chez le leader | une seule vibration sourde, plus courte et plus basse (`mutedbuzz`, 0,16 s) | 0,20 | ≈ −11 dB |
-| 5 | 31,25 s | Le bouton naît | souffle doux 300 → 1 500 Hz en cloche (`breath`, `'swell'`) | 0,36 | ≈ −10 dB |
+| 1 | 5,95 s | Éclosion, puis dévoilement du nom | souffle d'ouverture montant 250 → 1 800 Hz (`breath`, `'rise'`) | 0,34 | ≈ −10 dB |
+| 2 | 13,9 s | Texto du vendeur | double vibration sourde (`mutedbuzz`) | 0,30 / 0,24 | ≈ −8 dB |
+| 3 | 19,95 s | La relance arrive chez le Leader | une vibration sourde courte (`mutedbuzz`, 0,16 s) | 0,20 | ≈ −11 dB |
+| 4 | 23,45 s | Pile complète (cinquième coche) | clic feutré très léger (`feltclick`) | 0,16 | ≈ −13 dB (choix 7) |
+| 5 | 36,5 s | Le bouton naît | souffle doux en cloche (`breath`, `'swell'`) | 0,36 | ≈ −10 dB |
 
-Rien d'autre : ni l'appui sur l'annonce de l'accroche, ni « Envoyer » dans le problème, ni les sauts
-d'horloge, ni les tics minute, ni le compteur 124 n'ont d'effet. Aucune cloche, aucun « ding ». Le
-script imprime le contrôle RMS de chaque effet contre la musique à chaque rendu (jamais moins de 6 dB).
+Rien d'autre : ni les coches 1 à 4, ni les tics, ni le compteur, ni le sceau. Aucune cloche, aucun « ding ».
 
-### Musique (`audio/music-systeme.py`, même méthode et même signature do, fa, mi, la)
+### Musique (`audio/music-systeme.py`)
 
-- **Problème** : nappe froide clairsemée en ré mineur, piano feutré grave. Le tic-tac est *dans* la
-  musique (`softtick`), mais il ne bat pas : un seul tock grave à chaque saut d'horloge (4,4 et
-  5,1 s), puis plus rien. S'amincit jusqu'à une note tenue sur « Trois heures… ».
-- **Bascule** : la note tenue est aspirée pendant le retour en arrière ; la musique s'ouvre en fa
-  majeur sur l'éclosion.
-- **Solution** : groove néo-soul doux de « Le lead perdu » (sans pings). Les tics minute de l'horloge
-  tombent sur des temps forts (repères exportés). La **signature de quatre notes** est jouée une fois
-  au piano feutré médium sur le texto (14,55 s), dans la musique. Pic de densité sur l'arrivée chez le leader.
-- **Preuve** : la basse monte avec le compteur, sans effet.
-- **Fin** : résolution en fa majeur sous le logo.
+- **Gris (0 à 6 s)** : piano feutré grave en ré mineur, nappe froide ; un seul tock grave sur le saut
+  d'horloge ; la note tenue est aspirée pendant le retour en arrière.
+- **Dévoilement** : ouverture en fa majeur sur l'éclosion. **La signature de quatre notes au complet** (do, fa,
+  mi, la), au piano feutré médium, une note par mot : « Système » 6,6 s, « Vendeurs » 6,9 s, « 5 » 7,2 s,
+  « minutes. » 7,4 s. La nappe s'élargit sous la tenue.
+- **Pile** : le groove néo-soul de « Le lead perdu », un peu plus vif (tempo +6 %). Chaque zoom vers une
+  composante tombe sur un temps fort ; la densité monte jusqu'à la pile complète.
+- **Preuve, garantie, rareté** : sans batterie, basse et piano posés : de l'assurance, un cran plus bas.
+- **Fin** : résolution en fa majeur sous le logo, la signature rappelée une fois, plus doucement.
 - Mix à −15 LUFS / −1,5 dBTP ; pistes `bed` et `sfx` pour la voix.
 
 ## Voix hors champ
 
-Voir `brag-output/voiceover-systeme.md` (écrit à l'étape 1 sur ce plan ; fenêtres recalées sur les
-repères réels à l'étape 3).
+Voir `brag-output/voiceover-systeme.md` (v2).
 
 ---
 
 ## Choix à trancher (avec ma recommandation)
 
-1. **Garder la preuve Mackay** (25,0 – 27,8 s, compteur 0 → 124). *Recommandé : oui.* C'est la seule
-   preuve publiée et elle répond à « est-ce que ça marche? » juste avant l'appel. « Avec la campagne
-   seule. » reste en dessous, comme sur le site.
-2. **Durée : 34,0 s.** *Recommandé.* Le haut de la fourchette, parce que le texto (22 mots) demande
-   2,6 s de lecture et que chaque état est tenu ≥ 1,2 s. Variante à 32 s : retirer la scène 5
-   (« 14 h 12. Le formulaire part. ») et faire partir le jeton directement de la bascule ; on perd
-   l'écho exact de l'accroche.
-3. **Style de l'horloge** : pastille numérique « ◷ sam. 14 h 12 » avec rouleau par chiffre, plus un
-   petit cadran à aiguilles (64 px) qui donne la vie ambiante. *Recommandé.* Variantes : grand cadran
-   analogique seul (plus graphique, mais l'heure exacte se lit moins vite) ; numérique seule.
-4. **L'horloge naît du titre** (« 14 h 12 » se détache de « Samedi, 14 h 12. »). *Recommandé* : un
-   seul objet du début à la fin, et l'image 0 reste une phrase lisible.
-5. **Pic d'énergie** : le texto est la scène la plus longue (la destination, 3,8 s, à ≈ 43 %), mais le
-   pic d'énergie est l'arrivée de la relance chez le leader (≈ 62 %), puis le compteur (≈ 75 %). *Recommandé* :
-   la chronologie des minutes impose cet ordre, et la courbe monte jusqu'à la preuve.
-6. **Montrer la rencontre** (6ᵉ étape du parcours) sous la thèse : la carte de Courtier 03 avec
-   « Rencontre · Vendeur · Longueuil », discrète, sans date ni promesse. *Recommandé : oui*, c'est la
-   destination (Hormozi). Variante : thèse seule sur la menthe.
-7. **Mention « Exemple. Noms et numéros fictifs. »** sous le téléphone (30 px, hors zone critique),
-   comme sur le site. *Recommandé : oui*, puisque le texto montre un prénom et un numéro.
-8. **Mot « demande » plutôt que « lead »** partout à l'écran (jeton « DEMANDE VENDEUR »), comme le
-   site. *Recommandé.*
-9. **Vendeur au masculin** (« le vendeur », « Pas prêt à vendre? »), comme dans votre texte et sur le
-   site. *Recommandé.*
-10. **Voix sur la preuve** : pas de réplique « Groupe Mackay… ». Elle se dit en 10 mots (3,7 s) et il
-    ne reste que 1,65 s libre avant la thèse. *Recommandé : la preuve se lit à l'écran, sous une montée
-    de la musique.* Variante : prolonger la preuve de 1,4 s (35,4 s, hors cible).
-11. **Problème : « Lue à 17 h 04 »** plutôt qu'un appel manqué ou un autre courtier qui signe : on
-   reste sur un fait (l'heure), sans dramatiser. *Recommandé.*
+1. **Ligne du public au dévoilement** : « Pour les équipes de 4 à 15 courtiers au Québec. » **n'est pas sur le
+   site**, qui dit « Pour les équipes de courtiers du Québec. » *Recommandé : le texte du site*, pour respecter
+   la règle « seulement des affirmations du site ». Si vous ajoutez « 4 à 15 » au site, je le reprends tel quel.
+2. **Durée : 40,0 s.** *Recommandé.* La pile (5 composantes lisibles, plus la tenue finale de 1,5 s) prend
+   14,9 s ; c'est le haut de votre fourchette.
+3. **Garantie** : « Un engagement manqué? Le mois n'est pas facturé. » (votre texte, reformulation fidèle de
+   « Si on manque un engagement, le mois n'est pas facturé. »). *Recommandé : le garder.* Variante plus
+   frappante, mot pour mot du site : « Si on ne livre pas, / vous ne payez pas. »
+4. **Rareté** : « Il reste 3 places fondatrices. » (mot pour mot du site) plutôt que « 3 places fondatrices. ».
+   *Recommandé* : « Il reste » porte la rareté, sans compte à rebours.
+5. **Image 0 du master = affiche de l'accroche** (t = 3,0 s : les deux phrases, la règle 14 h 12 ━━ 17 h 04,
+   « Lue à 17 h 04 »). *Recommandé* : la douleur complète se lit dès l'image 0, et le titre garde ses deux temps
+   à la lecture.
+6. **Affiche du lancement** : exporter aussi le cadre du dévoilement (t = 9,0 s) en JPEG à part,
+   `scalesuite-systeme-9x16-affiche-lancement.jpg`. *Recommandé.*
+7. **Cinquième effet sur la pile complète** (clic feutré, ≈ −13 dB). *Recommandé : oui*, très discret.
+   Variante : 4 effets seulement.
+8. **Étiquette d'étape « Système Vendeurs 5 minutes · n sur 5 »** avec une barre à 5 segments, reprise du
+   « 1 sur 6 » du site. *Recommandé* : le nom reste à l'écran pendant toute la pile.
+9. **Réplique 1 de la voix réordonnée** : « 14 h 12 : le vendeur écrit. 17 h : votre courtier le voit. »
+   (12 mots dits au lieu de 14). *Recommandé* : votre version demande 5,2 s et déborderait sur le coût et le
+   dévoilement. Le texte à l'écran garde votre formulation. Variante : votre texte exact, avec un monde gris
+   allongé de 0,8 s (film de 40,8 s).
+10. **Réplique sur le texto coupée** : « En moins d'une minute, le vendeur reçoit un texto. » (sans « de votre
+    équipe »), pour tenir dans la composante 2 sans parler par-dessus la composante 1. *Recommandé.*
+11. **Sceau sans texte** (deux cercles et une coche, au trait). *Recommandé* : aucun mot de plus à vérifier, et le
+    titre dit déjà la garantie.
 
 ## Étapes
 
-1. **Ce plan** + `design-dna-systeme.json` + `voiceover-systeme.md`. ← *arrêt*
-2. Images clés 540 × 960 sur une planche (une par état tenu, 13 images). Arrêt.
+1. **Ce plan v2** + `voiceover-systeme.md` v2. ← *arrêt*
+2. Images clés 540 × 960 sur la nouvelle structure (une par état tenu, environ 16 images). Arrêt.
 3. Aperçu animé 540 × 960 avec la musique, et la planche contact. Arrêt.
-4. Master 1080 × 1920, 60 fps, contrôle qualité complet (section 11), texte relu sur des images
-   extraites du MP4.
-5. Version avec voix (prise `voiceover-systeme.mp3` fournie par vous).
+4. Master 1080 × 1920, 60 fps, contrôle qualité complet ; texte relu sur des images extraites du MP4.
+5. Version avec voix (prise `voiceover-systeme.mp3`).
 6. Version 4:5 (1080 × 1350), après validation du 9:16.
 7. `git add -f`, commit, push, PR vers `scalesuiteqc/scalesuite-video` (`main`).
 8. Proposition de mise à jour de la section 9 de la skill (sans la modifier avant votre accord).
 
 ---
 
-## Validation du plan (étape 1)
+## Historique
 
-Les 11 recommandations et les deux écarts sont acceptés. **Correction obligatoire, scène 8** : la
-relance ne va pas aux autres courtiers. Après 10 minutes sans rappel, elle va au courtier assigné,
-puis au leader de l'équipe. Appliqué ci-dessus :
-- rangée **Leader** dans la carte « Votre équipe », visible dès la scène 2 (problème) ;
-- à 14 h 22 : deuxième alerte « Relance · Vendeur · Longueuil » chez Courtier 03, puis **une seule**
-  ligne de routage vers le Leader, qui prend le halo et la même sous-carte ; les autres rangées
-  restent atténuées ;
-- titre inchangé « Pas de rappel? L'équipe est relancée. » (texte du site) ;
-- effet sonore 4 (une vibration sourde) sur l'arrivée chez le leader, 21,4 s ;
-- le pic d'énergie devient l'arrivée chez le leader (62 %) ; le compteur 124 porte le dernier sommet.
-- La grille 2 × 3 devient une liste (Leader + Courtier 01 à 05), pour que les alertes tiennent sur une
-  ligne en 32 px.
-
-## Étape 2 : images clés
-
-Planche `brag-output/scalesuite-systeme-9x16-keyframes.jpg` : 14 images 540 × 960 rendues depuis la
-timeline (une par état tenu). Contrôle des tailles (`render/textsize-systeme.mjs`) : plus petit texte
-à l'écran 30 px. Sources : `index-systeme.html`, `src/scenes-systeme/`, `src/styles-systeme.css`,
-`src/film-systeme.js`, `render/*-systeme.*`.
+- **v1** (validée le 3 novembre) : récit en deux mondes autour de l'horloge, 34 s ; relance corrigée (Courtier 03,
+  puis le Leader seulement) ; planche `scalesuite-systeme-9x16-keyframes.jpg` (14 images, commit `ec63ce3`).
+  Ses composants sont repris dans la v2.
+- **v2** : structure de lancement de produit (ce document).
