@@ -1,0 +1,15 @@
+/* « Système Vendeurs 5 minutes » : additions on top of styles.css (V2) and styles-v3.css, both loaded
+   read-only. Two worlds: the problem (cool grey-blue, from « Le lead perdu ») and the new site identity
+   (design-dna-systeme.json: #F0FFFC, ink #151515, deep teal #0F7B6F). No will-change. */
+:root {
+  --p-bg: #EEF1F4; --p-card: #FAFBFC; --p-ink: #2B3138; --p-soft: #6B7480; --p-slate: #6E8092; --p-line: #E3E8ED;
+  --m-bg: #F0FFFC; --m-ink: #151515; --m-soft: #596563; --m-teal: #0F7B6F; --m-line: #D8E3E1; --m-band: #E2F6F6;
+}
+.sy-card { position: absolute; left: 0; top: 0; box-sizing: border-box; border-radius: 36px; }
+.sy-row { position: absolute; left: 0; top: 0; box-sizing: border-box; display: flex; align-items: center; gap: 22px; white-space: nowrap; }
+.sy-chip { display: inline-flex; align-items: center; gap: 10px; height: 54px; padding: 0 20px; border-radius: 27px; box-sizing: border-box;
+  font-size: 32px; font-weight: 680; letter-spacing: -.01em; white-space: nowrap; flex: none; }
+.sy-token { display: flex; align-items: center; gap: 16px; padding: 0 34px; border-radius: 50px; box-sizing: border-box;
+  background: #151515; color: #fff; font-size: 34px; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
+.sy-token .dt { width: 18px; height: 18px; border-radius: 50%; background: #2BBFB3; flex: none; }
+.sy-tnum { font-feature-settings: 'tnum' 1; }
