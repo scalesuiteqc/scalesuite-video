@@ -1,0 +1,6 @@
+« Dimanche, 21 h 14 » : bloc ElevenLabs (Multilingual v2), une seule prise
+Réglages suggérés : stabilité 50 à 60 %, similarité 75 %, style 0 à 10 %. Voix québécoise posée.
+Coller tout le texte entre les deux lignes de tirets. Déposer la prise à la racine : voiceover-dimanche.mp3
+----------------------------------------------------------------
+Jeudi, trois rencontres avec des vendeurs. <break time="1.0s" /> Tout a commencé dimanche, à vingt et une heures quatorze. <break time="1.0s" /> Sophie cherche à vendre son condo. Elle tombe sur votre équipe. <break time="1.0s" /> Moins d'une minute plus tard, elle a sa réponse. <break time="1.5s" /> Vous, vous étiez au souper. <break time="1.0s" /> Lundi matin, Julie l'appelle. <break time="1.0s" /> Marc n'était pas prêt. On est restés en contact. <break time="1.0s" /> Jeudi, ils sont tous à l'agenda. <break time="1.0s" /> Vous savez d'où viennent vos prochains mandats. <break time="1.0s" /> On livre, ou le mois est gratuit. Pas de contrat. <break time="1.0s" /> Votre diagnostic gratuit, sur Scale Suite Q C point C A.
+----------------------------------------------------------------
