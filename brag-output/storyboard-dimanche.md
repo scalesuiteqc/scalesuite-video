@@ -101,13 +101,13 @@ disparaître). Aucun objet, aucune couleur ni aucune marque de la référence.
 | 2 · Le retour en arrière | 2,8 – 5,6 | 2,8 s | L'agenda recule (échelle 0,92, monte de 80 px) ; la barre de lecture monte du bas (y 1440), curseur à droite, bulle « **jeu. 18 h 30** / 12 novembre ». Le point de contact se pose sur le curseur (appui, 0,95), puis glisse vers la gauche (2,95 → 4,30 s, `inOut`) : la bulle déroule les heures à reculons (mer., mar., lun.) et se pose sur « **dim. 21 h 14** / 8 novembre » ; elle s'incline dans le sens du geste et se redresse avec un ressort. Les cartes rentrent dans la pochette **à l'envers** (devant d'abord), comme l'accroche jouée à rebours. Titre : « Tout a commencé / **dimanche** soir. » (104 px). Tenu 4,35 – 5,6 s. | Recul 1,03 → 0,92, puis fixe. | **Élément partagé** : la piste s'épaissit et devient la barre de recherche ; la bulle monte et devient l'étiquette d'heure « dim. 21 h 14 » au-dessus d'elle ; l'agenda tombe hors du cadre (accélération). |
 | 3 · Dimanche, 21 h 14 | 5,6 – 9,4 | 3,8 s | Titre « Sophie veut vendre / son **condo.** » (100 px). Barre de recherche 900 × 112 (y 700), frappe « **vendre mon condo rosemont** » (6,05 – 6,85 s). Le résultat **« Commandité »** tombe dessous (6,95 s, 900 × 270) : « Équipe Exemple », « equipeexemple.ca », « **Vendre votre condo à Rosemont** » (44 px), « Une équipe de courtiers de votre quartier. » ; résultats ordinaires en squelette. **Appui** sur l'annonce (7,6 s, onde, compression 2,5 %). **Le titre de l'annonce devient le titre de la page** (7,7 – 8,15 s) pendant que la carte s'ouvre en page de l'équipe (900 × 960 : bandeau `#2F5D8C` avec monogramme « EE » et « Équipe Exemple », titre 54 px). Le formulaire se remplit : Prénom « Sophie », Cellulaire « 514 555 0198 », Propriété « Condo » (8,2 – 8,95 s). **Appui** sur « Me faire rappeler » (9,05 s). « Exemple. Noms et numéros fictifs. » | Poussée 1,00 → 1,06 sur le formulaire pendant qu'il se remplit. | **Page compressée en jeton** : la page se resserre (anticipation 3 %), puis se compresse en un jeton d'encre « Demande de Sophie ». |
 | 4 · Dans la minute | 9,4 – 13,2 | 3,8 s | Le jeton file en arc vers le bas ; le **cell de Sophie** monte (haut du téléphone à y 640). Fil de textos, expéditeur « **514 555 0142** » (numéro de l'équipe), ligne « dim. 8 nov., 21 h 14 ». Le jeton se pose dans le fil et **se déplie en texto** (10,25 s, 12 % de dépassement, vibration de 3 oscillations amorties) : « Bonjour Sophie! Ici Julie, de l'Équipe Exemple. Merci pour votre demande. Je vous appelle demain dès 9 h. » (38 px). Sous la bulle (10,7 s) : coche verte et « **Envoyé en moins d'une minute** » (34 px). Titre : « Elle a sa réponse / avant de déposer / son **cell.** » Tenu 11,0 – 13,2 s (2,2 s, texte long). | Suit le jeton (coup de fouet vers le bas, flou de vitesse), puis fixe. | **Panoramique** vers la droite (coup de fouet, flou) jusqu'au cell du leader. |
-| 5 · Votre dimanche, puis lundi | 13,2 – 17,0 | 3,8 s | **a)** Le cell du leader, entier (échelle 0,62), posé debout sur le sol clair avec son reflet : écran verrouillé « **dimanche 8 novembre** », « **21:15** », aucune notification. Titre « Vous, vous étiez / au **souper.** » Tenu 13,7 – 14,8 s. **b)** La barre remonte (« dim. 21 h 15 »), le doigt la glisse vers la droite jusqu'à « **lun. 9 h 00** / 9 novembre » (14,85 – 15,4 s) pendant que la caméra passe au **cell de Julie** (étiquette « Julie » au-dessus) : « lundi 9 novembre », « 9:00 ». L'avis tombe du haut (15,5 s, 12 % de dépassement, vibration) : « ScaleSuite, maintenant », « **Nouveau vendeur pour vous.** » (40 px), « Sophie, condo, Rosemont » (34 px), bouton « **Appeler Sophie** ». Titre « Lundi matin, / Julie l'**appelle.** » Tenu 15,8 – 17,0 s. | Fixe sur le leader (respiration), puis panoramique vers la droite pendant le glissement (0,55 s, `inOut`). | **La barre reste** (fil conducteur) : le cell de Julie descend hors du cadre pendant que la carte de Marc monte. |
+| 5 · Votre dimanche, puis lundi | 13,2 – 17,8 | 4,6 s | **a)** Le cell du leader, entier (échelle 0,62), posé debout sur le sol clair avec son reflet : écran verrouillé « **dimanche 8 novembre** », « **21:15** », aucune notification. Titre « Vous, vous étiez / au **souper.** » Tenu 13,7 – 14,8 s. **b)** La barre remonte (« dim. 21 h 15 »), le doigt la glisse vers la droite jusqu'à « **lun. 9 h 00** / 9 novembre » (14,85 – 15,4 s) pendant que la caméra passe au **cell de Julie** (étiquette « Julie ») : écran verrouillé « lundi 9 novembre », « 9:00 », où l'avis Messages est **déjà là**, reçu la veille sans bruit : « **Équipe Exemple** », « hier, 21 h 14 », « Nouveau vendeur : Sophie, condo, Rosemont. 514 555 0198 ». Aucune vibration. Titre « Lundi matin, / Julie l'**appelle.** » Le point de contact touche l'avis (16,0 s) : l'avis s'ouvre en fil Messages (élément partagé), le numéro se souligne ; le doigt touche le numéro (16,75 s) : l'écran d'appel « **Appel à Sophie** » monte (16,85 s). Tenu 17,1 – 17,8 s. « Exemple. Noms et numéros fictifs. » | Fixe sur le leader (respiration), panoramique vers la droite pendant le glissement (0,55 s, `inOut`), légère poussée sur l'avis. | **La barre reste** (fil conducteur) : le cell de Julie descend hors du cadre pendant que la carte de Marc monte. |
 | 6 · Ceux qui ne sont pas prêts | 17,0 – 21,2 | 4,2 s | Le doigt ramène la barre loin à gauche : « **jeu. 19 h 02** / 24 septembre » (17,0 – 17,6 s). **Carte de Marc** (860 × 330) : « Marc, duplex, Villeray » (44 px), « Demande du 24 septembre » (32 px), pastille grise « **Pas avant le printemps** » qui se pose (17,6 s), piste « Suivi pendant 90 jours » vide. Titre « Marc n'était / pas **prêt.** » Puis la barre glisse à droite : bulle « **6 semaines plus tard** / jeu. 5 novembre » (18,4 – 19,0 s) ; la piste de suivi se remplit en même temps jusqu'à 42 jours sur 90. Titre « On est restés / en **contact.** » Texto de suivi (19,05 s) : « Bonjour Marc, ici Julie. Toujours dans vos plans de vendre au printemps? » Réponse de Marc (19,6 s, bulle turquoise à droite) : « **Oui! On pourrait se voir la semaine prochaine?** » | Fixe, poussée 1 %. | **Morphose** : la réponse de Marc se resserre en sa carte de rencontre « **19 h 45** Marc, duplex, Villeray » (20,6 – 21,1 s, ressort). |
-| 7 · Jeudi (point culminant) | 21,2 – 26,2 | **5,0 s** | La barre glisse jusqu'à « **jeu. 18 h 30** / 12 novembre » (21,2 – 21,7 s), là où le rembobinage avait commencé ; elle sort par le bas. L'agenda de Julie remonte. Les cartes **volent et entrent dans la pochette** en couches (Sophie depuis la gauche, Annie depuis la droite, Marc depuis le haut ; arcs, 21,65 → 22,6 s, ressorts) : on retrouve l'image de l'accroche (22,6 – 22,9 s). Titre « Jeudi, ils sont / tous à l'**agenda.** » Les cartes s'enfoncent, la **couverture se rabat** depuis la reliure et l'agenda se ferme **avec un appui** (23,45 s : écrasement de 3 %, ombre de contact qui se resserre, retour sur ressort). **Recul de caméra** (23,6 – 24,4 s, 1,00 → 0,56) : la semaine de l'équipe, « Équipe Exemple, semaine du 9 novembre » ; l'agenda de Julie (3 onglets de rencontre qui dépassent) et celui de Kevin (2 onglets), légendés « **Julie** / 3 rencontres » et « **Kevin, nouveau** / 2 rencontres » (44 et 36 px à l'écran). Titre « Vous savez d'où / viennent vos prochains / **mandats.** » Tenu 24,5 – 26,2 s. | Cadre serré sur l'agenda pendant le vol des cartes, poussée de 2 % à la fermeture, puis recul. | **Coup de fouet** vers le bas (flou de vitesse) jusqu'à la carte « Ce qu'on livre ». |
-| 8 · Le risque | 26,2 – 29,0 | 2,8 s | Titre « Ce qu'on / **livre.** » Carte 900 × 720, cinq lignes (gras 40 px, précision 32 px) : « **Campagne Google** ajustée chaque semaine », « **Page** à l'image de votre équipe », « **Texto au vendeur** en moins d'une minute », « **Relance de l'équipe** si personne n'a rappelé en 10 minutes », « **Suivi des vendeurs** pendant 90 jours ». Les cinq crochets se cochent vite (26,6 → 27,25 s, 0,16 s d'écart, tracé du crochet). **Le sceau s'imprime** (27,4 s) dans le coin bas droit de la carte, sans couvrir de texte : tampon rond bleu profond, double anneau, « ON LIVRE, OU LE MOIS EST GRATUIT » en anneau, marque ScaleSuite au centre ; impact avec écrasement et encre légèrement irrégulière, rotation de −8°. Le titre devient « On livre, ou le mois / est **gratuit.** », puis « **Pas de contrat.** » (56 px, 27,7 s). Tenu 27,8 – 29,0 s. | Fixe, poussée 1 % ; micro secousse de 2 px à l'impact du sceau. | **Élément partagé** : le sceau se décolle et s'étire en bouton pilule. |
-| 9 · Appel à l'action | 29,0 – 33,4 | 4,4 s | La carte tombe hors du cadre ; le sceau monte au centre et s'étire en **bouton pilule lustré** (700 × 150, voir le choix 6) ; « **Mon diagnostic gratuit** » (52 px, blanc) monte dans le bouton (29,55 s). Deux ancrages apparaissent (x 300 et 780, y 790) et **deux câbles élastiques** les relient aux extrémités du bouton (tracés en 0,25 s). Logo complet au-dessus (balayage de la marque, montée des lettres, 29,35 s). Le point de contact saisit le bouton (29,8 s), le **tire** vers le bas et la droite (29,85 – 30,35 s : les câbles s'étirent et s'amincissent, le bouton s'incline), puis le **relâche** (30,35 s) : balancement amorti (2 oscillations et demie), posé à 31,35 s. « scalesuiteqc.ca » (44 px, y 1250) et « Demander une démo » (40 px, souligné turquoise, y 1335). **Tout est posé à 31,4 s et tenu jusqu'à 33,4 s (2,0 s)**, reflet qui passe une fois sur le bouton. | Fixe, poussée de 1 %. | Fin. |
+| 7 · Jeudi (point culminant) | 21,2 – 26,2 | **5,0 s** | La barre glisse jusqu'à « **jeu. 18 h 30** / 12 novembre » (21,2 – 21,7 s), là où le rembobinage avait commencé ; elle sort par le bas. L'agenda de Julie remonte. Les cartes **volent et entrent dans la pochette** en couches (Sophie depuis la gauche, Annie depuis la droite, Marc depuis le haut ; arcs, 21,65 → 22,6 s, ressorts) : on retrouve l'image de l'accroche (22,6 – 22,9 s). Titre « Jeudi, ils sont / tous à l'**agenda.** » Les cartes s'enfoncent, la **couverture se rabat** depuis la reliure et l'agenda se ferme **avec un appui** (23,45 s : écrasement de 3 %, ombre de contact qui se resserre, retour sur ressort). **Recul de caméra** (23,6 – 24,4 s, 1,00 → 0,56) : la semaine de l'équipe, « Équipe Exemple, semaine du 9 novembre » ; l'agenda de Julie (3 onglets de rencontre qui dépassent) et celui de Kevin (2 onglets), légendés « **Julie** / 3 rencontres » et « **Kevin, nouveau** / 2 rencontres » (44 et 36 px à l'écran). Titre « Vous savez d'où / viennent vos prochains / **mandats.** » Tenu 24,5 – 26,2 s. | Cadre serré sur l'agenda pendant le vol des cartes, poussée de 2 % à la fermeture, puis recul. | **Coup de fouet** vers le bas (flou de vitesse) jusqu'à la carte « Nos engagements. ». |
+| 8 · Le risque | 27,0 – 29,8 | 2,8 s | Carte 900 × 780 titrée « **Nos engagements.** » (56 px), les **cinq engagements de la garantie** (40 px, deux lignes au besoin) : « Campagne en ligne en 5 jours ouvrables », « Chaque demande au bon courtier en moins de 60 secondes », « Un résumé écrit chaque semaine », « Une réponse en 1 jour ouvrable », « Un bilan chaque mois ». Les cinq crochets se cochent vite (0,16 s d'écart, tracé du crochet). **Le sceau s'imprime** dans le coin bas droit de la carte, sans couvrir de texte : tampon rond bleu profond, double anneau, « ON LIVRE, OU LE MOIS EST GRATUIT » en anneau, marque ScaleSuite au centre ; impact avec écrasement et encre légèrement irrégulière, rotation de −8°. Titre au-dessus : « On livre, ou le mois / est **gratuit.** », puis « **Pas de contrat.** » (56 px). Tenu 1,2 s. La relance de 10 minutes et le suivi de 90 jours restent dans la scène 6, pas dans la garantie. | Fixe, poussée 1 % ; micro secousse de 2 px à l'impact du sceau. | **Élément partagé** : le sceau se décolle et s'étire en bouton pilule. |
+| 9 · Appel à l'action | 29,8 – 33,9 | 4,1 s | La carte tombe hors du cadre ; le sceau monte au centre et s'étire en **bouton pilule lustré encre `#151515`** (700 × 150, comme les boutons du site : reflet spéculaire en haut, liseré clair, ombre portée qui suit le balancement) ; « **Mon diagnostic gratuit** » (52 px, blanc) monte dans le bouton. Deux ancrages apparaissent et **deux câbles élastiques** les relient aux extrémités du bouton. Logo complet au-dessus (balayage de la marque, montée des lettres). Le point de contact saisit le bouton, le **tire** vers le bas et la droite (les câbles s'étirent et s'amincissent, le bouton s'incline), puis le **relâche** : balancement amorti (2 oscillations et demie). « **scalesuiteqc.ca** » (44 px) dessous. **Seul appel à l'action : le bouton et l'adresse.** Tout est posé et tenu au moins 2,0 s, reflet qui passe une fois sur le bouton. | Fixe, poussée de 1 %. | Fin. |
 
-Durées : 2,8 · 2,8 · 3,8 · 3,8 · 3,8 · 4,2 · **5,0** · 2,8 · 4,4 s.
+Durées : 2,8 · 2,8 · 3,8 · 3,8 · 4,6 · 4,2 · **5,0** · 2,8 · 4,1 s (total 33,9 s ; les scènes 6 à 9 sont décalées de 0,8 s par rapport au tableau initial, voir « Validation du plan »).
 
 ### États tenus (lisibles et immobiles)
 
@@ -118,11 +118,11 @@ Durées : 2,8 · 2,8 · 3,8 · 3,8 · 3,8 · 4,2 · **5,0** · 2,8 · 4,4 s.
 | Page de l'équipe, formulaire rempli | 8,95 – 9,4 s (titre de l'annonce lisible depuis 7,0 s) |
 | Texto de Julie, « Envoyé en moins d'une minute », titre | 11,0 – 13,2 s (2,2 s) |
 | Cell du leader, « Vous, vous étiez au souper. » | 13,7 – 14,8 s (1,1 s, plan immobile) |
-| Avis du lundi sur le cell de Julie | 15,8 – 17,0 s (1,2 s) |
+| Fil Messages de Julie, puis « Appel à Sophie » | 16,5 – 17,8 s (avis lisible dès 15,4 s) |
 | Texto de suivi et réponse de Marc | 19,6 – 20,6 s (lecture depuis 19,05 s) |
 | Semaine de l'équipe, « Vous savez d'où viennent vos prochains mandats. » | 24,5 – 26,2 s (1,7 s) |
 | « On livre, ou le mois est gratuit. » « Pas de contrat. », sceau | 27,8 – 29,0 s (1,2 s) |
-| Fin (logo, bouton, scalesuiteqc.ca, Demander une démo) | 31,4 – 33,4 s (2,0 s) |
+| Fin (logo, bouton, scalesuiteqc.ca) | ≥ 2,0 s jusqu'à la fin |
 
 Aucun cadre vide ou à moitié coupé plus de 0,3 s : chaque transition passe par un objet (agenda, piste,
 bulle, jeton, barre, réponse, sceau).
@@ -178,8 +178,7 @@ bulle, jeton, barre, réponse, sceau).
 Titres : « Jeudi, trois rencontres avec des vendeurs. » · « Tout a commencé dimanche soir. » · « Sophie
 veut vendre son condo. » · « Elle a sa réponse avant de déposer son cell. » · « Vous, vous étiez au
 souper. » · « Lundi matin, Julie l'appelle. » · « Marc n'était pas prêt. » · « On est restés en contact. »
-· « Jeudi, ils sont tous à l'agenda. » · « Vous savez d'où viennent vos prochains mandats. » · « Ce qu'on
-livre. » · « On livre, ou le mois est gratuit. » · « Pas de contrat. »
+· « Jeudi, ils sont tous à l'agenda. » · « Vous savez d'où viennent vos prochains mandats. » · « On livre, ou le mois est gratuit. » · « Pas de contrat. »
 
 Interface : cartes « 17 h 15 Annie, maison, Ahuntsic », « 18 h 30 Sophie, condo, Rosemont », « 19 h 45
 Marc, duplex, Villeray » ; agenda « Julie », « Jeudi 12 novembre » ; bulle « jeu. 18 h 30 », « dim. 21 h 14 »,
@@ -188,11 +187,11 @@ Marc, duplex, Villeray » ; agenda « Julie », « Jeudi 12 novembre » ; bulle 
 votre condo à Rosemont », « Une équipe de courtiers de votre quartier. » ; page « Équipe Exemple », champs
 « Prénom », « Cellulaire », « Propriété », bouton « Me faire rappeler » ; jeton « Demande de Sophie » ;
 textos et lignes citées dans le tableau ; écrans verrouillés « dimanche 8 novembre » 21:15, « lundi 9
-novembre » 9:00 ; avis « Nouveau vendeur pour vous. », « Sophie, condo, Rosemont », « Appeler Sophie » ;
+novembre » 9:00 ; avis Messages « Équipe Exemple », « hier, 21 h 14 », « Nouveau vendeur : Sophie, condo, Rosemont. 514 555 0198 », écran d'appel « Appel à Sophie » ;
 carte de Marc « Demande du 24 septembre », « Pas avant le printemps », « Suivi pendant 90 jours » ; semaine
 « Équipe Exemple, semaine du 9 novembre », « Julie », « 3 rencontres », « Kevin, nouveau », « 2 rencontres » ;
-les cinq lignes de la scène 8 ; sceau « ON LIVRE, OU LE MOIS EST GRATUIT » ; fin « Mon diagnostic gratuit »,
-« scalesuiteqc.ca », « Demander une démo » ; mentions « Exemple. Noms fictifs. » ou « Exemple. Noms et
+carte « Nos engagements. » et ses cinq lignes ; sceau « ON LIVRE, OU LE MOIS EST GRATUIT » ; fin « Mon diagnostic gratuit »,
+« scalesuiteqc.ca » ; mentions « Exemple. Noms fictifs. » ou « Exemple. Noms et
 numéros fictifs. » dans les scènes 1, 3, 4, 5, 6 et 7.
 
 Vérifié : aucun trait d'union ni tiret, aucune phrase qui commence par « Et » ou « Mais », aucun nombre de
@@ -213,7 +212,7 @@ jeudi 12.
 | # | Temps | Moment | Son (synthèse) | Gain de départ | Cible |
 |---|---|---|---|---|---|
 | 1 | 7,6 s | Appui sur l'annonce | clic feutré, bruit passe-bas 1,5 kHz + 180 Hz (`feltclick`) | 0,22 | ≈ −11,8 dB |
-| 2 | 15,5 s | Vibration du lundi (cell de Julie) | double vibration sourde 150 Hz, passe-bas 380 Hz (`mutedbuzz`) | 0,30 / 0,24 | ≈ −8 dB |
+| 2 | 16,75 s | Le doigt touche le numéro de Sophie (lance l'appel) | clic feutré, plus doux que le premier (`feltclick`) | 0,18 | −11 à −13 dB |
 | 3 | 23,45 s | Fermeture de l'agenda | « toc » feutré grave : bruit passe-bas 900 Hz + 110 Hz amorti, sans résonance (`feltthud`, nouveau) | 0,30 | −9 à −11 dB |
 | 4 | 27,4 s | Le sceau s'imprime | appui de tampon : bruit passe-bas 1,2 kHz + 140 Hz, attaque douce (`feltthud`, plus court) | 0,26 | −10 à −12 dB |
 | 5 | 30,35 s | Relâchement du bouton | souffle doux 300 → 1 500 Hz en cloche (`breath`, `'swell'`) | 0,36 | ≈ −10 dB |
@@ -248,7 +247,7 @@ la mesure RMS de chaque effet contre la musique au même moment, comme pour « L
 | 3 | Sophie cherche à vendre son condo. Elle tombe sur votre équipe. | 5,85 – 9,30 | frappe 6,05, annonce 6,95, page 7,7 |
 | 4 | Moins d'une minute plus tard, elle a sa réponse. | 9,55 – 13,10 | texto 10,25, « Envoyé en moins d'une minute » 10,7 |
 | 5 | Vous, vous étiez au souper. | 13,35 – 14,85 | cell du leader, 21:15 |
-| 6 | Lundi matin, Julie l'appelle. | 15,20 – 16,90 | avis 15,5, « Appeler Sophie » |
+| 6 | Lundi matin, Julie l'appelle. | 15,20 – 17,10 | avis Messages lisible 15,4, appui sur le numéro 16,75, « Appel à Sophie » 16,85 |
 | 7 | Marc n'était pas prêt. On est restés en contact. | 17,20 – 20,90 | « Pas avant le printemps » 17,6, « 6 semaines plus tard » 18,4 |
 | 8 | Jeudi, ils sont tous à l'agenda. | 21,30 – 23,30 | cartes dans la pochette 22,6 ; respiration sur la fermeture 23,45 |
 | 9 | Vous savez d'où viennent vos prochains mandats. | 23,70 – 26,10 | recul, semaine de l'équipe |
@@ -330,3 +329,37 @@ fichier à la racine sous le nom `voiceover-dimanche.mp3`.
 3. Scènes 4 à 9, aperçu complet, master 1080 × 1920 60 fps, version avec voix, feuille de timing.
 4. Contrôle qualité (section 11 du skill), commit, push, pull request vers `scalesuiteqc/scalesuite-video`
    (`main`).
+
+---
+
+## Validation du plan (étape 1)
+
+Validés tels quels : choix 1 (Instrument Sans pour les titres, Inter pour l'interface), 2 (Annie jeudi
+17 h 15), 3 (Marc : recul au 24 septembre, puis 6 semaines plus tard, puis jeudi 12), 4 (agenda de Julie),
+5 (bulle sur deux lignes), 7 (mentions fictives), 8 (pas d'espace avant « ! » et « ? »), 10 (titres
+ajoutés). Changements demandés, intégrés aux lignes du tableau ci-dessus :
+
+1. **Fin** : « Demander une démo » est retiré (« plus » voulait dire « on ne l'utilise plus »). Seul appel à
+   l'action : le bouton « Mon diagnostic gratuit » et « scalesuiteqc.ca » dessous. La voix ne parle
+   d'aucune démo (vérifié : réplique 11 « Votre diagnostic gratuit, sur scalesuiteqc.ca. », inchangée).
+2. **Bouton** (choix 6) : encre `#151515`, lustré, comme les boutons du site.
+3. **Scène 8** (choix 11) : les cinq crochets sont les **cinq engagements de la garantie**, rien d'autre :
+   « Campagne en ligne en 5 jours ouvrables », « Chaque demande au bon courtier en moins de 60 secondes »,
+   « Un résumé écrit chaque semaine », « Une réponse en 1 jour ouvrable », « Un bilan chaque mois ». Titre
+   de la carte : « Nos engagements. » (le titre « Ce qu'on livre. » est retiré). La relance de 10 minutes et
+   le suivi de 90 jours restent montrés à la scène 6.
+4. **Scène 5b** (choix 9) : l'alerte à Julie est un **texto du numéro de l'équipe**, déjà reçu la veille
+   sans bruit (« Équipe Exemple », « hier, 21 h 14 », « Nouveau vendeur : Sophie, condo, Rosemont.
+   514 555 0198 »). Le doigt touche l'avis, le fil s'ouvre, le numéro est souligné, le doigt le touche :
+   « Appel à Sophie ». Pas de bouton « Appeler Sophie », pas de vibration au lundi. L'effet sonore 2 passe
+   sur l'appui qui lance l'appel (clic feutré) : **5 effets** au total.
+
+**Timing** : la scène 5 passe de 3,8 à 4,6 s pour le geste du lundi. Scènes 1 à 4 inchangées (0 – 13,2 s) ;
+scène 5 13,2 – 17,8 ; scène 6 17,8 – 22,0 ; scène 7 22,0 – 27,0 (l'agenda se ferme vers 24,25 s, 72 %) ;
+scène 8 27,0 – 29,8 ; scène 9 29,8 – 33,9. **Durée : 33,9 s** (sous la limite de 34 s). Les fenêtres de
+la voix des répliques 6 à 11 seront recalées sur les repères réels à l'étape 3.
+
+**Référence 4** : toujours absente de la session (ni à la racine du clone, ni sur `main` ou une autre
+branche de `scalesuiteqc/scalesuite-video` sur GitHub au moment de l'étape 2). Les références 1 à 3 sont
+d'autres films (CraftedStays, NeuraFlow, LangEase). Le niveau de finition des cartes, de la bulle et du
+bouton suit donc la description de la section 3 du brief.
