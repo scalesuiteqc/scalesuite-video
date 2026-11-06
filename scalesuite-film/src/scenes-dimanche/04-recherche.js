@@ -24,7 +24,7 @@
   function build(stage) {
     const wrap = SS.el('div', 'world-wrap', stage);
     const w = SS.el('div', 'world', wrap);
-    const cam = SS.camera({ x: 540, y: 960, s: 1, r: 0 });
+    const cam = SS.camera({ x: 540, y: 960, s: 1, r: 0, blur: 0 });
     cam.set({ x: 540, y: 960, s: 1, r: 0 });
 
     // ---- search bar (identical to the morphed track at 6.05)
@@ -139,11 +139,13 @@
     cam.to(T.form, T.tapCta - T.form + 0.25, 'sine.inOut', { y: 1000, s: 1.05 });
 
     R = { wrap, w, cam, fields };
+    SS.WB = { wrap, w, cam, page, title, PG, TITLE_PG }; // world B continues in 05-cells.js (scenes 4 and 5)
   }
   function render() {
     R.w.style.transform = SS.camMatrix(R.cam.p);
+    SS.blur(R.wrap, R.cam.p.blur || 0);
   }
   const scene = { name: 'recherche', a: -1, b: 99, render, ranges: [] };
-  scene.build = (stage) => { build(stage); scene.ranges = [[R.wrap, T.morph, T.squeeze + 0.6]]; };
+  scene.build = (stage) => { build(stage); scene.ranges = [[R.wrap, T.morph, T.s5Out + 0.5]]; };
   SS.scenes.push(scene);
 })();

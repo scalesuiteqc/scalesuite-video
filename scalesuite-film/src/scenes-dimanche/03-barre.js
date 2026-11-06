@@ -76,6 +76,17 @@
     SS.tl.fromTo(B, { mblur: 0 }, { mblur: 4, duration: 0.14, ease: 'power2.in' }, T.morph + 0.08);
     SS.tl.fromTo(B, { mblur: 4 }, { mblur: 0, duration: 0.2, ease: 'power2.out' }, T.morph + 0.22);
     SS.tl.fromTo(B, { out: 0 }, { out: 1, duration: 0.26, ease: SS.EZ.in }, T.open);
+    // ---- reset while hidden (10 s), then scenes 5 to 7: Monday, 24 September, 6 weeks later, Thursday
+    SS.tl.fromTo(B, { y: BARY, fly: 1, out: 1 }, { y: 2060, fly: 0, out: 0, duration: 0.01, ease: 'none' }, 10.0);
+    SS.tl.fromTo(B, { y: 2060 }, { y: BARY, duration: 0.45, ease: SS.EZ.out }, T.bar2In);
+    [[T.mon, T.monDur], [T.sept, T.septDur], [T.six, T.sixDur], [T.thu, T.thuDur]].forEach(([at, dur]) => {
+      SS.tl.fromTo(B, { fing: 0 }, { fing: 1, duration: 0.16, ease: SS.EZ.out }, at - 0.12);
+      SS.tl.fromTo(B, { press: 0 }, { press: 1, duration: 0.07, ease: 'power2.out' }, at - 0.06);
+      SS.tl.fromTo(B, { press: 1 }, { press: 0, duration: 0.1, ease: 'power2.out' }, at + dur + 0.04);
+      SS.tl.fromTo(B, { fing: 1 }, { fing: 0, duration: 0.24, ease: 'power1.out' }, at + dur + 0.06);
+      SS.cue(at, 'm-scrub', { dur });
+    });
+    SS.tl.fromTo(B, { y: BARY }, { y: 2060, duration: 0.4, ease: SS.EZ.in }, T.thu + T.thuDur + 0.12);
 
     precompute();
     R = { L, track, fill, thumb, bw, body, tail, l1, l2, fing };
@@ -120,6 +131,6 @@
     R.tail.style.opacity = (1 - fly).toFixed(3);
   }
   const scene = { name: 'barre', a: -1, b: 99, render, ranges: [] };
-  scene.build = (stage) => { build(stage); scene.ranges = [[R.L, T.barIn - 0.02, T.open + 0.3]]; };
+  scene.build = (stage) => { build(stage); scene.ranges = [[R.L, T.barIn - 0.02, T.open + 0.3], [R.L, T.bar2In - 0.02, T.thu + T.thuDur + 0.55]]; };
   SS.scenes.push(scene);
 })();

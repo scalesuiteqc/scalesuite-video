@@ -4,7 +4,7 @@
 import { chromium, serve, args, openFilmDM } from './lib-dimanche.mjs';
 
 const o = args({ min: '30' });
-const times = (process.argv.slice(2).find((a) => !a.startsWith('--')) || '0,2.0,4.8,7.3,9.0').split(',').map(Number);
+const times = (process.argv.slice(2).find((a) => !a.startsWith('--')) || '0,2.0,2.7,4.8,6.4,7.3,9.0,11.5,14.3,15.8,16.6,17.5,18.9,20.8,23.2,25.6,28.9,31.6,33.5').split(',').map(Number);
 const { srv, base } = await serve();
 const browser = await chromium.launch();
 try {

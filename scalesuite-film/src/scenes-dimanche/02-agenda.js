@@ -19,6 +19,10 @@
     { tm: '19 h 45', nm: 'Marc, duplex, Villeray', r: -0.2, edge: '#16708F' },
   ];
   SS.AGENDA = { AG, POCKET, CARD, CARDS };
+  const KEV = { x: 1500 };                       // Kevin's agenda, beside Julie's (world)
+  const REVEAL = { x: 1020, y: 1170, s: 0.5 };   // the team's week: Julie at x 300, Kevin at x 780 on screen
+  SS.AGENDA.REVEAL = REVEAL;
+  const SWING = [SS.springEase(0.16, 13), SS.springEase(0.17, 14.5), SS.springEase(0.15, 12)]; // ribbons (light damping)
 
   // a meeting card (also used by the scenes that make or fly cards)
   SS.D.card = (parent, d) => {
@@ -67,6 +71,7 @@
       <div style="position:absolute;right:46px;top:66px;font-size:36px;font-weight:650;letter-spacing:-.015em;color:${C.ink2};white-space:nowrap">Julie</div>
       <div style="position:absolute;left:30px;right:30px;top:148px;height:2px;background:${C.line}"></div>${HOURS}`;
     // ring binding across the top edge: punched holes in the page, metal rings over the cover edge
+    const rings = [];
     for (let i = 0; i < 13; i++) {
       const x = 96 + i * 59;
       const hole = SS.el('div', 'dm', root);
@@ -76,6 +81,7 @@
       Object.assign(ring.style, { left: x - 6 + 'px', top: '-16px', width: '12px', height: '62px', borderRadius: '6px',
         background: 'linear-gradient(90deg, #6F8488 0%, #C9D6D8 30%, #FFFFFF 46%, #AFC0C3 66%, #5F7478 100%)',
         boxShadow: '0 3px 4px -1px rgba(8,30,40,.35)' });
+      rings.push(ring);
     }
     // the meeting cards (between the page and the pocket)
     const cards = CARDS.map((d) => {
@@ -112,13 +118,108 @@
     SS.tl.fromTo(wrap, { y: 0 }, { y: -1650, duration: 0.45, ease: 'power2.in' }, T.morph - 0.08);
     SS.tl.fromTo(P, { blur: 0 }, { blur: 7, duration: 0.3, ease: 'power2.in' }, T.morph - 0.02);
 
+    // ================================================================ 7 · Thursday: the cards fly back in, the agenda closes
+    // reset while the agenda is away (6–22 s): camera back to 1:1, no blur
+    cam.to(12, 0.01, 'none', { y: 1000, s: 1 });
+    SS.tl.fromTo(P, { blur: 7 }, { blur: 0, duration: 0.01, ease: 'none' }, 12);
+    // it rises from below while the bar reaches Thursday 18 h 30 (Marc's card floats in front, 06-marc.js)
+    SS.tl.fromTo(wrap, { y: 1750 }, { y: 0, duration: 0.55, ease: SS.EZ.out }, T.rise);
+    SS.tl.fromTo(P, { blur: 5 }, { blur: 0, duration: 0.36, ease: 'power2.out' }, T.rise);
+    // Marc's floating card is handed over (identical place, local top 315), then drops into its slot
+    SS.tl.fromTo(cards[2], { y: CARD.rest }, { y: 315, duration: 0.001, ease: 'none' }, T.hand);
+    SS.tl.fromTo(cards[2], { y: 315 }, { y: CARD.fan[2], duration: SS.SPR.card.dur, ease: SS.SPR.card.ease }, T.fly + 0.3);
+    // Annie (from the right) and Sophie (from the left) fly in on arcs and drop into the pocket in layers
+    [{ i: 0, x0: 1060, y0: -90, r0: 9, at: T.fly }, { i: 1, x0: -1020, y0: 20, r0: -10, at: T.fly + 0.1 }].forEach((f) => {
+      const el = cards[f.i];
+      SS.tl.fromTo(el, { x: f.x0 }, { x: CARD.x, duration: 0.6, ease: SS.EZ.out }, f.at);
+      SS.tl.fromTo(el, { y: f.y0 }, { y: CARD.fan[f.i], duration: SS.SPR.card.dur * 1.3, ease: SS.SPR.card.ease }, f.at);
+      SS.tl.fromTo(el, { rotation: f.r0 }, { rotation: CARDS[f.i].r, duration: 0.7, ease: SS.EZ.out }, f.at);
+    });
+    SS.cue(T.fly, 'm-fly');
+    // the front cover swings down from the ring binding and closes over the page (accelerating)
+    const fc = SS.el('div', 'dm', root);
+    Object.assign(fc.style, SS.D.linen(C.linen), { width: AG.w + 'px', height: AG.h + 'px', borderRadius: '30px', transformOrigin: '50% 0%',
+      boxShadow: 'inset 0 2px 0 rgba(255,255,255,.18), inset 0 -5px 0 rgba(0,0,0,.24), inset 3px 0 0 rgba(255,255,255,.06), 0 3px 6px rgba(8,30,40,.25)' });
+    fc.innerHTML = coverFace('Julie') + '<div class="sh" style="position:absolute;inset:0;border-radius:30px;background:#06222C"></div>';
+    const shade = fc.querySelector('.sh');
+    gsap.set(fc, { autoAlpha: 0, scaleY: 0.02 });
+    gsap.set(shade, { opacity: 0.6 });
+    rings.forEach((r) => root.appendChild(r)); // the rings stay over the closed cover
+    SS.tl.fromTo(fc, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, ease: 'none' }, T.close);
+    SS.tl.fromTo(fc, { scaleY: 0.02 }, { scaleY: 1, duration: T.press7 - T.close, ease: 'power2.in' }, T.close);
+    SS.tl.fromTo(shade, { opacity: 0.6 }, { opacity: 0, duration: T.press7 - T.close, ease: 'power1.in' }, T.close);
+    // the press: squash on the floor, contact shadow tightens, back on a soft spring
+    gsap.set(root, { transformOrigin: '50% 100%' });
+    SS.tl.fromTo(root, { scaleY: 1, scaleX: 1 }, { scaleY: 0.97, scaleX: 1.008, duration: 0.07, ease: 'power2.out' }, T.press7);
+    SS.tl.fromTo(root, { scaleY: 0.97, scaleX: 1.008 }, { scaleY: 1, scaleX: 1, duration: SS.SPR.soft.dur, ease: SS.SPR.soft.ease }, T.press7 + 0.07);
+    SS.tl.fromTo(contact, { scaleX: 1, scaleY: 1 }, { scaleX: 0.95, scaleY: 0.75, duration: 0.07, ease: 'power2.out' }, T.press7);
+    SS.tl.fromTo(contact, { scaleX: 0.95, scaleY: 0.75 }, { scaleX: 1, scaleY: 1, duration: 0.4, ease: SS.EZ.out }, T.press7 + 0.07);
+    cam.to(T.close, T.press7 - T.close + 0.1, 'sine.inOut', { s: 1.02 });
+    // once closed, what lies under the cover is switched off (nothing reads through, nothing is drawn)
+    SS.tl.fromTo([page, ...cards, lip, pocket], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.001, ease: 'none' }, T.press7 + 0.01);
+    SS.cue(T.press7, 'sfx-close');
+    // one ribbon per meeting drops out of the closed agenda and swings (precomputed light spring)
+    ribbons(root, CARDS.map((d) => d.edge), [600, 640, 680]).forEach((rb, i) => {
+      gsap.set(rb, { autoAlpha: 0, scaleY: 0, rotation: 0 });
+      SS.tl.fromTo(rb, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, ease: 'none' }, T.press7 + 0.02 + i * 0.05);
+      SS.tl.fromTo(rb, { scaleY: 0 }, { scaleY: 1, duration: 0.22, ease: SS.EZ.out }, T.press7 + 0.02 + i * 0.05);
+      const sw = SWING[i];
+      SS.tl.fromTo(rb, { rotation: 12 - 3 * i }, { rotation: 0, duration: sw.dur, ease: sw.ease }, T.press7 + 0.02 + i * 0.05);
+    });
+    // Kevin's agenda (closed, two ribbons), hidden until the camera pulls back
+    const kev = closedPlanner(w, 'Kevin', [CARDS[1].edge, CARDS[0].edge]);
+    SS.place(kev.root, KEV.x, AG.cy, { autoAlpha: 0 });
+    SS.place(kev.contact, KEV.x, AG.top + AG.h + 4, { autoAlpha: 0 });
+    SS.tl.fromTo([kev.root, kev.contact], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, ease: 'none' }, T.back);
+    // the camera pulls back: the team's week (Julie, Kevin)
+    cam.to(T.back, 0.85, SS.EZ.inOut, { x: REVEAL.x, y: REVEAL.y, s: REVEAL.s });
+    // exit into scene 8: whip down (the agenda leaves through the top)
+    SS.tl.fromTo(wrap, { y: 0 }, { y: -1750, duration: 0.42, ease: 'power2.in' }, T.whip8);
+    SS.tl.fromTo(P, { blur: 0 }, { blur: 7, duration: 0.3, ease: 'power2.in' }, T.whip8 + 0.06);
+
     R = { wrap, w, cam };
+  }
+  // ---- the outer face of a cover (debossed name and team), a closed planner, its ribbons
+  function coverFace(name) {
+    return `<div style="position:absolute;left:0;right:0;top:300px;text-align:center" class="dm-ttl"><span style="font-size:130px;font-weight:700;letter-spacing:-.035em;color:rgba(3,28,38,.40);text-shadow:0 2px 0 rgba(255,255,255,.12)">${name}</span></div>
+      <div style="position:absolute;left:0;right:0;top:0;bottom:0;border-radius:30px;background:linear-gradient(115deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,.12) 100%)"></div>`;
+  }
+  function ribbons(parent, colors, xs) {
+    return colors.map((c, i) => {
+      const rb = SS.el('div', 'dm', parent);
+      Object.assign(rb.style, { left: xs[i] - 13 + 'px', top: '812px', width: '26px', height: '150px', transformOrigin: '50% 0%',
+        background: `linear-gradient(90deg, rgba(0,0,0,.14), rgba(255,255,255,.18) 45%, rgba(0,0,0,.08)), ${c}`,
+        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%)', boxShadow: '0 2px 3px rgba(0,0,0,.2)' });
+      return rb;
+    });
+  }
+  function closedPlanner(parent, name, colors) {
+    const contact = SS.el('div', 'a3', parent);
+    Object.assign(contact.style, { width: '860px', height: '64px', borderRadius: '50%',
+      background: 'radial-gradient(closest-side, rgba(8,40,52,.30), rgba(8,40,52,.12) 55%, rgba(8,40,52,0))' });
+    const root = SS.el('div', 'dm', parent);
+    Object.assign(root.style, { width: AG.w + 'px', height: AG.h + 'px',
+      WebkitBoxReflect: 'below 6px linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 76%, rgba(0,0,0,.16) 100%)' });
+    const back = SS.el('div', 'dm', root);
+    Object.assign(back.style, SS.D.linen(C.linen), { width: AG.w + 'px', height: AG.h + 'px', borderRadius: '30px',
+      boxShadow: '0 2px 3px rgba(8,30,40,.20), 0 40px 70px -34px rgba(8,40,52,.60)' });
+    const fc = SS.el('div', 'dm', root);
+    Object.assign(fc.style, SS.D.linen(C.linen), { width: AG.w + 'px', height: AG.h + 'px', borderRadius: '30px',
+      boxShadow: 'inset 0 2px 0 rgba(255,255,255,.18), inset 0 -5px 0 rgba(0,0,0,.24), inset 3px 0 0 rgba(255,255,255,.06)' });
+    fc.innerHTML = coverFace(name);
+    ribbons(root, colors, [620, 660]).forEach((rb, i) => gsap.set(rb, { rotation: i ? -2 : 1.5 }));
+    for (let i = 0; i < 13; i++) {
+      const ring = SS.el('div', 'dm', root);
+      Object.assign(ring.style, { left: 96 + i * 59 - 6 + 'px', top: '-16px', width: '12px', height: '62px', borderRadius: '6px',
+        background: 'linear-gradient(90deg, #6F8488 0%, #C9D6D8 30%, #FFFFFF 46%, #AFC0C3 66%, #5F7478 100%)', boxShadow: '0 3px 4px -1px rgba(8,30,40,.35)' });
+    }
+    return { root, contact };
   }
   function render() {
     R.w.style.transform = SS.camMatrix(R.cam.p);
     SS.blur(R.wrap, P.blur);
   }
   const scene = { name: 'agenda', a: -1, b: 99, render, ranges: [] };
-  scene.build = (stage) => { build(stage); scene.ranges = [[R.wrap, -1, T.morph + 0.4]]; };
+  scene.build = (stage) => { build(stage); scene.ranges = [[R.wrap, -1, T.morph + 0.4], [R.wrap, T.rise - 0.02, T.whip8 + 0.45]]; };
   SS.scenes.push(scene);
 })();

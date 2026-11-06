@@ -363,3 +363,68 @@ la voix des répliques 6 à 11 seront recalées sur les repères réels à l'ét
 branche de `scalesuiteqc/scalesuite-video` sur GitHub au moment de l'étape 2). Les références 1 à 3 sont
 d'autres films (CraftedStays, NeuraFlow, LangEase). Le niveau de finition des cartes, de la bulle et du
 bouton suit donc la description de la section 3 du brief.
+
+---
+
+## Réalisation (étapes 2 et 3)
+
+### Timing réel (table `SS.DT`, `src/scenes-dimanche/00-commun.js`)
+
+| # | Scène | Temps | Durée | Moments clés (s) |
+|---|---|---|---|---|
+| 1 | Accroche, le résultat | 0,0 – 2,8 | 2,8 | cartes 0,35 → 1,3 ; affiche (image 0 du master) = état à 2,0 |
+| 2 | Le retour en arrière | 2,8 – 5,6 | 2,8 | barre 2,84 ; glissement 3,02 → 4,32 ; « dim. 21 h 14 » tenu 4,35 – 5,6 |
+| 3 | Dimanche, 21 h 14 | 5,6 – 9,4 | 3,8 | piste → recherche 5,6 – 6,05 ; frappe 6,12 ; annonce 6,95 ; appui 7,6 ; page 7,72 ; formulaire 8,25 – 8,98 ; « Me faire rappeler » 9,05 |
+| 4 | Dans la minute | 9,4 – 13,2 | 3,8 | jeton 9,62 ; texto 10,25 ; « Envoyé en moins d'une minute » 10,7 ; tenu 11,0 – 13,2 |
+| 5 | Votre dimanche, puis lundi | 13,2 – 17,8 | 4,6 | cell du leader 13,6 – 14,85 ; « lun. 9 h 00 » 15,4 ; appui sur l'avis 16,1 ; fil 16,15 ; numéro souligné 16,5 ; appui 16,8 ; « Appel à Sophie » 16,9 |
+| 6 | Ceux qui ne sont pas prêts | 17,8 – 22,0 | 4,2 | « jeu. 19 h 02 / 24 septembre » 18,4 ; « Pas avant le printemps » 18,4 ; « 6 semaines plus tard » 19,2 – 19,8 ; suivi 19,85 ; réponse 20,4 ; carte 21,4 |
+| 7 | Jeudi (point culminant) | 22,0 – 26,8 | **4,8** | « jeu. 18 h 30 » 22,5 ; cartes 22,6 – 23,3 ; couverture 23,9 ; **appui 24,25 (71,5 %)** ; recul 24,45 – 25,3 ; tenu 25,3 – 26,8 |
+| 8 | Le risque | 26,8 – 29,8 | 3,0 | « Nos engagements. » 26,9 ; crochets 27,25 – 27,9 ; sceau 28,25 ; « Pas de contrat. » 28,5 ; tenu 28,6 – 29,8 |
+| 9 | Appel à l'action | 29,8 – 33,9 | 4,1 | sceau → bouton 29,85 – 30,35 ; câbles 30,1 ; tiré 30,66 – 31,02 ; relâché 31,02 ; posé ≈ 31,9 ; tenu jusqu'à 33,9 |
+
+**Durée : 33,9 s.** La scène 7 passe de 5,0 à 4,8 s pour laisser 1,2 s de lecture à la garantie : elle reste
+la plus longue après la scène 5, dont le geste du lundi demande 4,6 s.
+
+### Choix de réalisation
+
+- **Agenda** : reliure à anneaux métalliques, couverture et pochette en toile (bruit de fibres et tissage
+  en CSS), épaisseur des pages, lignes d'heures 17 h à 20 h (le jeudi apparaît vide quand on rembobine),
+  ombre de contact, reflet au sol (`-webkit-box-reflect`). Liserés des cartes aux couleurs du logo (bleu,
+  turquoise, bleu profond). À la fermeture, un signet par rencontre tombe et se balance (3 pour Julie, 2
+  pour Kevin) : c'est ce qui rend « 3 rencontres » visible au recul.
+- **Barre de lecture** : position du curseur fonction monotone et lisse du temps raconté (interpolation
+  cubique monotone), bulle sur deux lignes recalculée à chaque image ; inclinaison de la bulle =
+  pendule de torsion amorti piloté par l'accélération du curseur, précalculé sur tout le film.
+- **Raccords** : la piste devient la barre de recherche (même géométrie au moment du passage) ; le titre de
+  l'annonce devient le titre de la page ; la page se compresse en jeton d'encre qui se déplie en texto ;
+  l'avis s'ouvre en fil Messages ; la réponse de Marc se resserre en sa carte, reprise par l'agenda au
+  pixel près ; le sceau devient le bouton. Les changements de lieu passent par un mouvement de caméra
+  vers le bas (tout sort par le haut) ou un panoramique, avec flou de vitesse.
+- **Bouton** : pilule encre lustrée, deux câbles élastiques (ressorts à sens unique), corps rigide 2D
+  (gravité, amortissement, ressort du doigt pendant qu'il tire), simulé une seule fois à la construction
+  (pas de 0,25 ms, table par milliseconde) ; câbles dessinés en Bézier, plus fins quand ils s'étirent, qui
+  pendent quand ils se détendent.
+- **Interdits respectés** : aucune lumière floue qui dérive (fond studio statique), aucune pastille avec
+  point, aucun « · » dans le texte à l'écran, aucun dégradé dans le texte.
+
+### Contrôle qualité (section 11 du skill)
+
+- `node render/check-dimanche.mjs determinism` : **OK, 0 différence de DOM** sur 44 instants. Un
+  `mix-blend-mode` sur le grain d'encre du sceau faisait varier la rastérisation selon l'historique : retiré.
+  Reste un écart ponctuel de pixels (au plus 12/255 sur 4 pixels, au bord de la marque du logo, anticrénelage
+  de son masque), invisible.
+- `node render/check-dimanche.mjs motion 33.9` : **OK** après correction d'un seul saut (21,4 s : la
+  réponse bleue remplacée en une image par la carte blanche ; maintenant un fondu de 0,2 s pendant la
+  morphose). Pic le plus fort au lever de l'agenda (22,1 s), non isolé.
+- `node render/textsize-dimanche.mjs` : **OK, plus petit texte 30 px à l'écran** (zoom de caméra compris),
+  après agrandissement du monogramme, des heures de l'agenda, de la date de la bulle et du fil de Julie.
+  Ce qui est sous la couverture fermée est masqué (rien ne se lit au travers).
+- Son : 5 effets, chacun mesuré contre la musique au même instant : appui sur l'annonce −9,2 dB, appui sur
+  le numéro −9,6 dB, fermeture de l'agenda −11,4 dB, sceau −10,2 dB, relâchement du bouton −11,5 dB. Mix
+  −14,9 LUFS intégrés, crête vraie −1,6 dB. Sonie à court terme par scène : rembobinage −18,0, dimanche
+  −16,9, la minute −15,5, **souper −17,8 (creux)**, lundi −16,0, Marc −15,0, **jeudi −12,6 (le plus fort)**,
+  risque −15,1, fin −13,8.
+- Master `scalesuite-dimanche-9x16.mp4` : 1080 × 1920, 60 fps, H.264 High yuv420p bt709, 2 034 images,
+  33,9 s, AAC 48 kHz ; image 0 = affiche (t = 2,0 s) ; images relues dans le MP4 lui-même.
+- Dates relues à l'écran : jeu. 12 novembre, dim. 8 novembre (21 h 14, 21:15), lun. 9 novembre (9:00),
+  jeu. 24 septembre, jeu. 5 novembre, semaine du 9 novembre : tous les jours de semaine sont justes en 2026.

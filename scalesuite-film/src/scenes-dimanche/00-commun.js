@@ -14,20 +14,22 @@
     // 3 · Sunday 21 h 14 (5.6–9.4): track → search bar, typed query, sponsored ad, ad → page, form
     morph: 5.6, morphDur: 0.45, s3Head: 5.8, typeAt: 6.12, typeDur: 0.8, ad: 6.95, tapAd: 7.6, open: 7.72,
     form: 8.02, f1: 8.25, f2: 8.5, f3: 8.83, tapCta: 9.05, s3Out: 9.35,
-    // 4 · within the minute (9.4–13.2)
+    // 4 · within the minute (9.4–13.2): page → token → Sophie's phone, the text unfolds
     squeeze: 9.4, token: 9.62, land: 10.25, sent: 10.7, s4Head: 10.6, s4Out: 13.15,
-    // 5 · your Sunday, then Monday (13.2–17.8)
-    pan1: 13.2, s5Head: 13.4, bar2In: 14.7, mon: 14.85, monDur: 0.55, s5bHead: 15.3, tapNote: 16.0, thread: 16.05,
-    tapNum: 16.75, call: 16.85, s5Out: 17.75,
-    // 6 · not ready yet (17.8–22.0)
-    sept: 17.8, septDur: 0.6, marc: 17.95, spring: 18.4, s6Head: 18.1, six: 19.2, sixDur: 0.6, s6bHead: 19.5,
-    follow: 19.85, reply: 20.4, born: 21.4, s6Out: 21.95,
-    // 7 · Thursday, climax (22.0–27.0)
-    thu: 22.0, thuDur: 0.5, fly: 22.45, nest: 23.7, close: 23.9, press7: 24.25, back: 24.4, s7Head: 22.2, s7bHead: 24.5, s7Out: 26.95,
-    // 8 · the risk (27.0–29.8)
-    whip8: 27.0, checks: 27.4, seal: 28.2, s8Head: 28.2, nocontract: 28.5, s8Out: 29.75,
-    // 9 · call to action (29.8–33.9)
-    pill: 29.8, cables: 30.2, logo: 30.15, url: 30.7, grab: 30.6, pull9: 30.65, release: 31.15, end: 33.9,
+    // 5 · your Sunday (leader's phone, still), then Monday on Julie's phone (13.2–17.8)
+    pan1: 13.2, s5Head: 13.4, s5Out1: 14.8, bar2In: 14.7, mon: 14.85, monDur: 0.55, s5bHead: 15.3,
+    tapNote: 16.1, thread: 16.15, under: 16.5, tapNum: 16.8, call: 16.9, s5Out: 17.75,
+    // 6 · not ready yet: Marc (17.8–22.0)
+    sept: 17.8, septDur: 0.6, marc: 17.95, spring: 18.4, s6Head: 18.1, s6Out1: 19.35, six: 19.2, sixDur: 0.6,
+    s6bHead: 19.62, follow: 19.85, reply: 20.4, born: 21.4, dExit: 21.6, s6Out: 21.95,
+    // 7 · Thursday, the climax (22.0–26.8): the cards fly into the agenda, it closes, the camera pulls back
+    thu: 22.0, thuDur: 0.5, rise: 22.0, hand: 22.55, fly: 22.6, s7Head: 22.6, close: 23.9, press7: 24.25,
+    back: 24.45, s7Out1: 24.4, s7bHead: 24.78, s7Out: 26.75,
+    // 8 · the risk (26.8–29.8)
+    whip8: 26.8, checks: 27.25, s8Head: 28.22, seal: 28.25, nocontract: 28.5, s8Out: 29.75,
+    // 9 · call to action (29.8–33.9): the seal becomes the button, cables, pull, release, settle
+    pill: 29.8, logo: 30.05, cables: 30.1, catch: 30.35, txt: 30.42, url: 30.5, grab: 30.6, pull9: 30.66,
+    release: 31.02, sheen: 32.3, end: 33.9,
   };
 
   SS.D_SEARCH = { x: 540, y: 700, w: 900, h: 112 }; // the search bar the play bar's track becomes
@@ -178,6 +180,29 @@
     SS.tl.fromTo(tp.el, { scale: 1 }, { scale: 0.86, duration: 0.08, ease: 'power2.out' }, at);
     SS.tl.fromTo(tp.ring, { autoAlpha: 0.9, scale: 1 }, { autoAlpha: 0, scale: 1.9, duration: 0.5, ease: SS.EZ.out }, at);
     SS.tl.fromTo(tp.el, { autoAlpha: 1, scale: 0.86 }, { autoAlpha: 0, scale: 1.08, duration: 0.24, ease: 'power1.out' }, at + (o.hold || 0.14));
+  };
+
+  // ---- a light phone (frame, screen, island) -------------------------------------------------------
+  SS.D.phone = (parent, o = {}) => {
+    const W = 820, H = 1700;
+    const el = SS.el('div', 'dm', parent);
+    Object.assign(el.style, { width: W + 'px', height: H + 'px', borderRadius: '112px', background: 'linear-gradient(160deg,#FDFEFE,#EEF4F4)',
+      boxShadow: '0 2px 4px rgba(18,44,40,.10), 0 60px 100px -46px rgba(18,74,66,.50), 0 0 0 2px #D5E0DF, inset 0 0 0 2px #fff, inset 0 0 0 9px #E7EEEE' });
+    const scr = SS.el('div', 'dm', el);
+    Object.assign(scr.style, { left: '18px', top: '18px', width: W - 36 + 'px', height: H - 36 + 'px', borderRadius: '96px', overflow: 'hidden',
+      background: o.wall || 'linear-gradient(170deg,#F4FCFB 0%,#E2F4F1 60%,#D3EEEA 100%)' });
+    const island = SS.el('div', 'dm', el);
+    Object.assign(island.style, { left: W / 2 - 80 + 'px', top: '40px', width: '160px', height: '44px', borderRadius: '22px', background: '#151515' });
+    return { el, scr, island, W, H };
+  };
+  // a text-message bubble (left = received, right = sent)
+  SS.D.bubble = (parent, txt, o = {}) => {
+    const el = SS.el('div', 'dm', parent);
+    Object.assign(el.style, { maxWidth: (o.max || 660) + 'px', width: 'max-content', padding: '24px 32px', borderRadius: '38px',
+      fontSize: (o.size || 38) + 'px', fontWeight: 500, lineHeight: 1.28, letterSpacing: '-.01em', whiteSpace: 'normal',
+      background: o.bg || '#E9EFEF', color: o.fg || SS.DC.ink, boxSizing: 'border-box' });
+    el.innerHTML = txt;
+    return el;
   };
 
   // ---- headlines in Instrument Sans ------------------------------------------------------------------

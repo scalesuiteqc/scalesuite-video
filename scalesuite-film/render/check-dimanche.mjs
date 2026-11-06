@@ -36,12 +36,12 @@ const dump = (f) => f.page.evaluate(() => {
 
 try {
   if (mode === 'determinism') {
-    const times = (arg || '0.3,1.0,2.0,2.9,3.4,3.9,4.6,5.75,5.9,6.3,7.0,7.65,7.8,8.0,8.4,8.9,9.1,9.3').split(',').map(Number);
+    const times = (arg || '0.3,1.0,2.0,2.9,3.4,4.6,5.75,5.9,7.0,7.8,8.9,9.5,9.9,10.4,11.5,13.4,14.3,15.2,16.3,16.9,17.4,18.2,19.6,20.6,21.6,22.3,22.6,22.9,23.5,24.1,24.3,24.7,25.6,27.1,27.6,28.3,29.0,29.9,30.2,30.5,30.9,31.3,31.7,33.5').split(',').map(Number);
     const a = await openFilmV3(browser, base, 1), b = await openFilmV3(browser, base, 1);
     let worst = 0, domBad = 0;
     for (const t of times) {
       const A = await a.shot(t);                                          // page A: increasing order
-      for (const x of [9.35, 0.1, t + 1.3]) await b.shot(x);              // page B: jumps around first
+      for (const x of [33.8, 0.1, t + 1.3]) await b.shot(x);              // page B: jumps around first
       const B = await b.shot(t);
       const [da, db] = [await dump(a), await dump(b)];
       const dd = da.filter((s, i) => s !== db[i]).length;
@@ -51,10 +51,10 @@ try {
     }
     console.log(domBad ? `FAIL: ${domBad} DOM differences` : `OK: 0 DOM differences, worst pixel ${worst}/255`);
   } else {
-    const end = parseFloat(arg) || 33.9;
+    const [beg, end] = arg && arg.includes(':') ? arg.split(':').map(Number) : [0, parseFloat(arg) || 33.9]; // motion [end] or motion start:end
     const f = await openFilmV3(browser, base, 1, 0.25);
     const rows = []; let prev = null;
-    for (let i = 0; i <= Math.round(end * 30); i++) {
+    for (let i = Math.round(beg * 30); i <= Math.round(end * 30); i++) {
       const png = await f.shot(i / 30);
       rows.push([i / 30, prev ? (await diffPixels(f.page, png, prev)).mean : 0]);
       prev = png;
