@@ -428,3 +428,34 @@ la plus longue après la scène 5, dont le geste du lundi demande 4,6 s.
   33,9 s, AAC 48 kHz ; image 0 = affiche (t = 2,0 s) ; images relues dans le MP4 lui-même.
 - Dates relues à l'écran : jeu. 12 novembre, dim. 8 novembre (21 h 14, 21:15), lun. 9 novembre (9:00),
   jeu. 24 septembre, jeu. 5 novembre, semaine du 9 novembre : tous les jours de semaine sont justes en 2026.
+
+---
+
+## Passe de finition avec les nouveaux skills (review-animations, choreograph, emil-design-eng, impeccable)
+
+Revue du mouvement et du rendu contre ces quatre grilles. `animate` a servi de référence pour les valeurs
+(courbes, échelles de départ). `mobile-native` ne s'applique pas (applications web sur téléphone). Les
+règles d'interface pure (fréquence d'usage, survol, `prefers-reduced-motion`, durée sous 300 ms) ne
+s'appliquent pas à un film : c'est un contenu explicatif vu une fois, où des durées plus longues sont
+admises.
+
+| Avant | Après | Pourquoi (skill) |
+| --- | --- | --- |
+| Titres : décalage uniforme de 60 ms entre les mots | Départs répartis sur une courbe ease-out (les écarts se resserrent), le mot d'accent arrive en dernier, un peu plus lent | Un décalage uniforme se lit comme un métronome ; le mot clé est le « lead » (choreograph, règle 3) |
+| Garantie : titre qui monte comme les autres | Révélation courte (0,45 s, écart total 0,1 s) calée sur l'impact du sceau | L'accent atterrit avec le geste principal (choreograph, étape 3) ; une entrée identique partout est à éviter (impeccable) |
+| Mentions « Exemple. Noms fictifs. » : montée des mots | Fondu sur place, sans mouvement | Décoration : fondu seulement (choreograph, étape 1) |
+| Cartes : liseré coloré de 12 px à gauche, carton blanc | Carton teinté par carte (bleu, turquoise, bleu profond), heure dans la teinte, contour fin | Le liseré épais est un réflexe à refuser (impeccable) ; des cartons de couleurs distinctes rendent les couches lisibles, comme dans la référence |
+| Sortie des cartes : écarts égaux de 120 ms | Écarts de 140 puis 100 ms (retour en arrière : 120 puis 80 ms) | Pas de cascade uniforme (choreograph) |
+| Crochets : un toutes les 160 ms | Cadence qui accélère (200, 160, 130, 110 ms) jusqu'au sceau | Un élan qui mène à l'impact plutôt qu'une file d'attente |
+| Page de l'équipe : la page s'ouvre, puis bandeau, sous-titre, champs et bouton montent un par un | Le contenu est porté par l'ouverture de la page, un seul fondu court quand le titre a fini de voyager | Une seule entrée par conteneur ; pas d'élément qui en traverse un autre (choreograph) |
+| Fil de Julie : ouverture, puis en-tête, date et bulle qui montent | Contenu porté par l'ouverture, fondu court commun | Une seule entrée par conteneur (choreograph) |
+| Résultats Google en squelette : montée décalée après l'annonce | Fondu en même temps que l'annonce, sans mouvement | Décoration, ensemble avec le lead (choreograph) |
+| Ancrages des câbles depuis `scale(0)` ; signets qui se déplient depuis `scaleY(0)` | Ancrages depuis `scale(0.6)` + opacité ; signets qui se déroulent sous la couverture (rognage) | Rien n'apparaît de nulle part (review-animations, standard 5) |
+| Bulles de texto depuis `scale(0.7)` ; icône de recherche depuis 0,7 | Depuis 0,86 et 0,9, origine à la queue de la bulle (déjà en place) | Échelle de départ de 0,9 environ, depuis le point d'origine (emil-design-eng) |
+| Fondus réponse de Marc → carte, sceau → bouton, formulaire → jeton | Flou léger (2,5 à 3 px, procédural) pendant le passage | Le flou fait lire un fondu comme une seule transformation (emil-design-eng) |
+| Heures de l'agenda en `#9AA7A4` (2,5:1) | `#7E8C89` (3,5:1) | Contraste minimum de 3:1 pour du grand texte (impeccable) |
+
+Contrôles refaits sur le nouveau rendu : déterminisme OK (0 différence de DOM), mouvement OK (aucun saut
+isolé ; pic au coup de fouet vers la scène 8, 27,1 s, progressif), plus petit texte 30 px, 5 effets de
+9,2 à 11,5 dB sous la musique, master −14,9 LUFS, crête −1,6 dB, 1080 × 1920, 60 fps, 33,9 s. Le timing
+des scènes et de la voix ne change pas.

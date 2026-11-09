@@ -25,7 +25,7 @@
     'Une réponse en 1 jour ouvrable',
     'Un bilan chaque mois',
   ];
-  const M = { k: 0, slam: 0, cab: 0, fing: 0, press: 0, shake: 0 };
+  const M = { k: 0, slam: 0, cab: 0, fing: 0, press: 0, shake: 0, xb: 0 };
   const CK = LINES.map(() => ({ k: 0 }));
 
   // ---- the simulation (precomputed) -----------------------------------------------------------------
@@ -108,7 +108,7 @@
     SEAL.y = CARD.top + H + 40; // bottom-right corner, clear of the rows' text
     gsap.set(cbox, { y: 1300 });
     SS.tl.fromTo(cbox, { y: 1300 }, { y: 0, duration: SS.SPR.soft.dur, ease: SS.SPR.soft.ease }, T.whip8 + 0.1);
-    CK.forEach((c, i) => SS.tl.fromTo(c, { k: 0 }, { k: 1, duration: 0.34, ease: 'none' }, T.checks + i * 0.16));
+    CK.forEach((c, i) => SS.tl.fromTo(c, { k: 0 }, { k: 1, duration: 0.34, ease: 'none' }, T.checks + [0, 0.2, 0.36, 0.49, 0.6][i])); // momentum into the seal
     SS.cue(T.checks, 'm-checks');
     // the seal (a rubber stamp in deep blue ink, slightly irregular), wrapper positioned by render(t);
     // it lives in the top layer (L9) so it stays above the card, then becomes the pill
@@ -157,6 +157,8 @@
       { width: PILL.w, height: PILL.h, left: -PILL.w / 2, top: -PILL.h / 2, borderRadius: PILL.h / 2, backgroundColor: C.ink, duration: pd, ease: SS.EZ.inOut }, T.pill + 0.1);
     SS.tl.fromTo(art, { autoAlpha: 1, scale: 1 }, { autoAlpha: 0, scale: 0.7, duration: 0.2, ease: 'power1.in' }, T.pill + 0.08);
     SS.tl.fromTo(face, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power1.out' }, T.pill + 0.22);
+    SS.tl.fromTo(M, { xb: 0 }, { xb: 2.5, duration: 0.14, ease: 'power1.in' }, T.pill + 0.08);
+    SS.tl.fromTo(M, { xb: 2.5 }, { xb: 0, duration: 0.2, ease: 'power1.out' }, T.pill + 0.22);
     SS.tl.fromTo(word, { yPercent: SS.HIDE }, { yPercent: 0, duration: 0.6, ease: SS.EZ.out }, T.txt);
     SS.tl.fromTo(sheen, { x: 0 }, { x: PILL.w + 260, duration: 0.7, ease: 'sine.inOut' }, T.sheen);
     SS.cue(T.pill, 'm-pill');
@@ -178,10 +180,10 @@
       const e = SS.el('div', 'a3', L9);
       Object.assign(e.style, { width: '34px', height: '34px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, #5A6567, #151515 70%)',
         boxShadow: '0 3px 6px rgba(0,0,0,.35), inset 0 1px 1px rgba(255,255,255,.3)' });
-      SS.place(e, p.x, p.y, { scale: 0 });
+      SS.place(e, p.x, p.y, { scale: 0.6, autoAlpha: 0 });
       return e;
     });
-    SS.tl.fromTo(pegs, { scale: 0 }, { scale: 1, duration: 0.3, ease: SS.EZ.pop, stagger: 0.05 }, T.cables - 0.12);
+    SS.tl.fromTo(pegs, { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.3, ease: SS.EZ.pop, stagger: 0.05 }, T.cables - 0.12);
     SS.tl.fromTo(M, { cab: 0 }, { cab: 1, duration: T.catch - T.cables + 0.02, ease: SS.EZ.out }, T.cables);
     // the finger
     const fing = SS.el('div', 'a3', L9);
@@ -207,7 +209,7 @@
     SS.cue(T.logo, 'm-logo');
 
     simulate();
-    R = { L8, L9, cbox, pw, pi, shadow, cab, fing, logo, LP, H, checks };
+    R = { L8, L9, cbox, pw, pi, shadow, cab, fing, logo, LP, H, checks, art, face };
     R.relSim = simAt(T.release);
   }
 
@@ -254,6 +256,7 @@
     R.fing.style.visibility = M.fing > 0.002 ? 'visible' : 'hidden';
     R.logo.mark(R.LP.mark);
     R.logo.sheen(R.LP.sheen);
+    SS.blur(R.art, M.xb); SS.blur(R.face, M.xb);
   }
   const scene = { name: 'fin', a: -1, b: 99, render, ranges: [] };
   scene.build = (stage) => {

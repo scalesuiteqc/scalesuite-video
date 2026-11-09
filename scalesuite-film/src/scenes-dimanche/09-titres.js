@@ -8,9 +8,10 @@
   function notice(layer, src, y, inAt, outAt) {
     const N = SS.text(layer, src, { size: 31, weight: 540, color: C.soft, tracking: -0.005 });
     SS.place(N.el, 540, y);
-    if (inAt == null) gsap.set(N.words.map((w) => w.el), { yPercent: 0 });
-    else { SS.hideWords(N); SS.wordsIn(N, inAt, { st: 0.03, dur: 0.5 }); }
-    if (outAt != null) SS.wordsOut(N, outAt, { st: 0.01 });
+    gsap.set(N.words.map((w) => w.el), { yPercent: 0 });
+    // decoration (skill choreograph): fades in place, never moves
+    if (inAt != null) { gsap.set(N.el, { autoAlpha: 0 }); SS.tl.fromTo(N.el, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35, ease: 'power1.out' }, inAt); }
+    if (outAt != null) SS.tl.fromTo(N.el, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.22, ease: 'power1.out' }, outAt);
     return N;
   }
   function build(stage) {
@@ -51,7 +52,7 @@
     lab('Kevin, nouveau', 780, 1206, 46, 720, C.ink, rv + 0.1);
     lab('2 rencontres', 780, 1260, 36, 560, C.soft, rv + 0.16);
     // 8 · the risk
-    SS.D.title(layer, 'On livre, ou le mois\nest *gratuit.*', 330, T.s8Head, T.s8Out);
+    SS.D.title(layer, 'On livre, ou le mois\nest *gratuit.*', 330, T.seal - 0.03, T.s8Out, { punch: true }); // lands with the seal's impact
     SS.D.title(layer, 'Pas de contrat.', 512, T.nocontract, T.s8Out, { size: 60, weight: 600, color: C.ink2, tracking: -0.025 });
     SS.cue(T.s2Head, 'm-s2'); SS.cue(T.s3Head, 'm-s3'); SS.cue(T.s7bHead, 'm-mandats'); SS.cue(T.s8Head, 'm-garantie');
     R = { layer };

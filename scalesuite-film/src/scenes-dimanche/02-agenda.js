@@ -14,23 +14,26 @@
   const POCKET = { top: 540, h: 266 }; // local to the planner (bottom = page bottom)
   const CARD = { w: 800, h: 220, x: 50, rest: 550, fan: [175, 295, 415] };
   const CARDS = [ // back → front (chronological, top → bottom)
-    { tm: '17 h 15', nm: 'Annie, maison, Ahuntsic', r: -0.5, edge: '#2FB0DE' },
-    { tm: '18 h 30', nm: 'Sophie, condo, Rosemont', r: 0.35, edge: '#1FBFA8' },
-    { tm: '19 h 45', nm: 'Marc, duplex, Villeray', r: -0.2, edge: '#16708F' },
+    // each card is its own tinted card stock (the layers read apart, as the reference's cards do); `edge` colours its ribbon
+    { tm: '17 h 15', nm: 'Annie, maison, Ahuntsic', r: -0.5, edge: '#2FB0DE', tint: '#EEF8FC', tint2: '#E2F2F9', ring: 'rgba(47,176,222,.34)', time: '#17739A' },
+    { tm: '18 h 30', nm: 'Sophie, condo, Rosemont', r: 0.35, edge: '#1FBFA8', tint: '#EBF8F5', tint2: '#DEF3EE', ring: 'rgba(31,191,168,.36)', time: '#0F7B6F' },
+    { tm: '19 h 45', nm: 'Marc, duplex, Villeray', r: -0.2, edge: '#16708F', tint: '#EBF2F5', tint2: '#DDE9EE', ring: 'rgba(22,112,143,.30)', time: '#16708F' },
   ];
   SS.AGENDA = { AG, POCKET, CARD, CARDS };
   const KEV = { x: 1500 };                       // Kevin's agenda, beside Julie's (world)
   const REVEAL = { x: 1020, y: 1170, s: 0.5 };   // the team's week: Julie at x 300, Kevin at x 780 on screen
   SS.AGENDA.REVEAL = REVEAL;
+  const RB_OUT = 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 86%, 0% 100%)', RB_IN = 'polygon(0% 0%, 100% 0%, 100% 0%, 50% 0%, 0% 0%)';
   const SWING = [SS.springEase(0.16, 13), SS.springEase(0.17, 14.5), SS.springEase(0.15, 12)]; // ribbons (light damping)
 
   // a meeting card (also used by the scenes that make or fly cards)
   SS.D.card = (parent, d) => {
     const el = SS.el('div', 'dm-card', parent);
-    Object.assign(el.style, { width: CARD.w + 'px', height: CARD.h + 'px', boxShadow: SS.DSH.card,
-      backgroundImage: 'linear-gradient(180deg, #FFFFFF 0%, #FBFDFD 100%)' });
-    el.innerHTML = `<div class="edge" style="background:${d.edge || '#1FBFA8'}"></div><div class="row"><span class="tm">${d.tm}</span><span class="nm">${d.nm}</span></div>
-      <div class="sk" style="top:124px;width:420px"></div><div class="sk" style="top:156px;width:300px"></div>`;
+    Object.assign(el.style, { width: CARD.w + 'px', height: CARD.h + 'px',
+      boxShadow: `${SS.DSH.card}, inset 0 0 0 1.5px ${d.ring}, inset 0 1.5px 0 rgba(255,255,255,.9)`,
+      backgroundImage: `linear-gradient(180deg, ${d.tint} 0%, ${d.tint2} 100%)` });
+    el.innerHTML = `<div class="row"><span class="tm" style="color:${d.time}">${d.tm}</span><span class="nm">${d.nm}</span></div>
+      <div class="sk" style="top:124px;width:420px;background:${d.ring};opacity:.45"></div><div class="sk" style="top:156px;width:300px;background:${d.ring};opacity:.45"></div>`;
     return el;
   };
 
@@ -63,7 +66,7 @@
     const page = SS.el('div', 'dm', root);
     Object.assign(page.style, { left: '20px', top: '20px', width: '860px', height: '786px', borderRadius: '18px',
       background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFCFB 100%)', boxShadow: '0 1px 0 rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.035)' });
-    const HOURS = ['17 h', '18 h', '19 h', '20 h'].map((h, i) => `<div style="position:absolute;left:46px;top:${176 + i * 95}px;font-size:34px;font-weight:560;color:${C.faint};white-space:nowrap">${h}</div>` +
+    const HOURS = ['17 h', '18 h', '19 h', '20 h'].map((h, i) => `<div style="position:absolute;left:46px;top:${176 + i * 95}px;font-size:34px;font-weight:560;color:#7E8C89;white-space:nowrap">${h}</div>` +
       (i ? `<div style="position:absolute;left:30px;right:30px;top:${160 + i * 95}px;height:2px;background:#EEF3F3"></div>` : '')).join('');
     page.innerHTML = `<div style="position:absolute;left:46px;top:50px;display:flex;align-items:baseline;gap:18px;white-space:nowrap">
         <span class="dm-ttl" style="font-size:64px;font-weight:700;letter-spacing:-.035em;color:${C.ink}">Jeudi</span>
@@ -102,7 +105,7 @@
 
     // ---- 1 · the cards slide out in layers (back card first)
     cards.forEach((el, i) => {
-      SS.tl.fromTo(el, { y: CARD.rest }, { y: CARD.fan[i], duration: SS.SPR.card.dur, ease: SS.SPR.card.ease }, T.cards + i * T.cardsSt);
+      SS.tl.fromTo(el, { y: CARD.rest }, { y: CARD.fan[i], duration: SS.SPR.card.dur, ease: SS.SPR.card.ease }, T.cards + [0, 0.14, 0.24][i]);
     });
     SS.cue(T.cards, 'm-cards');
     // camera: slow push on the hook, then pull back to make room for the play bar
@@ -111,7 +114,7 @@
 
     // ---- 2 · rewind: the cards go back in, front card first (the hook played backwards)
     [2, 1, 0].forEach((i, k) => {
-      SS.tl.fromTo(cards[i], { y: CARD.fan[i] }, { y: CARD.rest, duration: SS.SPR.card.dur, ease: SS.SPR.card.rev }, T.retract + k * T.retractSt);
+      SS.tl.fromTo(cards[i], { y: CARD.fan[i] }, { y: CARD.rest, duration: SS.SPR.card.dur, ease: SS.SPR.card.rev }, T.retract + [0, 0.12, 0.2][k]);
     });
     // exit: the camera tilts down fast (the planner leaves through the top, accelerating, speed blur),
     // ahead of the bar's track, which rises behind it into the search bar (no overlap at any frame)
@@ -160,9 +163,9 @@
     SS.cue(T.press7, 'sfx-close');
     // one ribbon per meeting drops out of the closed agenda and swings (precomputed light spring)
     ribbons(root, CARDS.map((d) => d.edge), [600, 640, 680]).forEach((rb, i) => {
-      gsap.set(rb, { autoAlpha: 0, scaleY: 0, rotation: 0 });
+      gsap.set(rb, { autoAlpha: 0, clipPath: RB_IN, rotation: 0 });
       SS.tl.fromTo(rb, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, ease: 'none' }, T.press7 + 0.02 + i * 0.05);
-      SS.tl.fromTo(rb, { scaleY: 0 }, { scaleY: 1, duration: 0.22, ease: SS.EZ.out }, T.press7 + 0.02 + i * 0.05);
+      SS.tl.fromTo(rb, { clipPath: RB_IN }, { clipPath: RB_OUT, duration: 0.26, ease: SS.EZ.out }, T.press7 + 0.02 + i * 0.05);
       const sw = SWING[i];
       SS.tl.fromTo(rb, { rotation: 12 - 3 * i }, { rotation: 0, duration: sw.dur, ease: sw.ease }, T.press7 + 0.02 + i * 0.05);
     });
@@ -189,7 +192,7 @@
       const rb = SS.el('div', 'dm', parent);
       Object.assign(rb.style, { left: xs[i] - 13 + 'px', top: '812px', width: '26px', height: '150px', transformOrigin: '50% 0%',
         background: `linear-gradient(90deg, rgba(0,0,0,.14), rgba(255,255,255,.18) 45%, rgba(0,0,0,.08)), ${c}`,
-        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%)', boxShadow: '0 2px 3px rgba(0,0,0,.2)' });
+        clipPath: RB_OUT, boxShadow: '0 2px 3px rgba(0,0,0,.2)' });
       return rb;
     });
   }

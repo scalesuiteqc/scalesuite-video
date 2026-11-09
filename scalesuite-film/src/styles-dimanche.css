@@ -20,12 +20,11 @@
 .dm-ttl { font-family: 'Instrument Sans', 'Inter', sans-serif; font-variation-settings: 'wdth' 100; }
 .dm { position: absolute; left: 0; top: 0; box-sizing: border-box; }
 .dm-num { font-feature-settings: 'tnum' 1; }
-/* meeting card: white card stock, turquoise edge */
+/* meeting card: tinted card stock (colour set per card in SS.D.card) */
 .dm-card { position: absolute; left: 0; top: 0; box-sizing: border-box; border-radius: 22px; background: #fff; overflow: hidden; }
 .dm-card .row { position: absolute; left: 46px; top: 30px; display: flex; align-items: baseline; gap: 26px; white-space: nowrap; }
 .dm-card .tm { font-size: 46px; font-weight: 760; letter-spacing: -.02em; color: #151515; font-feature-settings: 'tnum' 1; }
 .dm-card .nm { font-size: 40px; font-weight: 600; letter-spacing: -.015em; color: #2C2C2A; }
-.dm-card .edge { position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: #1FBFA8; }
 .dm-card .sk { position: absolute; left: 46px; height: 14px; border-radius: 7px; background: #EDF2F2; }
 /* web UI (search, ad, landing page) */
 .dm-ui { position: absolute; left: 0; top: 0; box-sizing: border-box; background: #fff; }

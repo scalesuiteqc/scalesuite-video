@@ -211,7 +211,18 @@
       tracking: -0.035, lh: 1.02, cls: 'dm-ttl' }, opt));
     SS.place(T.el, 540, y);
     if (inAt == null) gsap.set(T.words.map((w) => w.el), { yPercent: 0 });
-    else { SS.hideWords(T); SS.wordsIn(T, inAt, { st: opt.st || 0.06, dur: opt.dur || 0.7 }); }
+    else {
+      // choreography (skill choreograph): no metronome stagger. Word starts follow an ease-out spread, so the
+      // gaps shrink along the line (a wave, not a queue); the accent word is the lead: it lands last, slower.
+      SS.hideWords(T);
+      const n = T.words.length, spread = opt.punch ? 0.1 : Math.min(0.42, 0.065 * (n - 1));
+      T.words.forEach((w, i) => {
+        const u = n > 1 ? i / (n - 1) : 0, lead = !!w.el.style.color;
+        const at = inAt + spread * (1 - (1 - u) * (1 - u)) + (lead && !opt.punch ? 0.04 : 0);
+        const dur = opt.punch ? 0.45 : (opt.dur || 0.7) + (lead ? 0.12 : 0);
+        SS.tl.fromTo(w.el, { yPercent: SS.HIDE }, { yPercent: 0, duration: dur, ease: SS.EZ.out }, +at.toFixed(4));
+      });
+    }
     if (outAt != null) SS.wordsOut(T, outAt, { st: 0.02 });
     return T;
   };

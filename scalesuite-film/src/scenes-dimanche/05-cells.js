@@ -15,7 +15,7 @@
   const LE = { cx: 1940, top: 2190, s: 0.55 };  // the leader's phone, whole, standing
   const JU = { cx: 3340, top: 2200, s: 0.8 };   // Julie's phone
   const CAMY = 2560;                            // phone tops at y 600 on screen
-  const P = { tok: 0, shakeS: 0, morph: 0 };
+  const P = { tok: 0, shakeS: 0, morph: 0, pblur: 0 };
 
   function statusBar(scr, time, size = 34) {
     const b = SS.el('div', 'dm', scr);
@@ -38,6 +38,8 @@
     SS.tl.fromTo(page, { scale: 1.02 }, { scale: 1, duration: 0.12, ease: 'power2.in' }, T.squeeze + 0.1);
     SS.tl.fromTo(page, { clipPath: SS.OPEN }, { clipPath: tokClip, duration: 0.22, ease: SS.EZ.inOut }, T.squeeze);
     SS.tl.fromTo(ink, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.18, ease: 'power1.in' }, T.squeeze + 0.03);
+    // the form blurs as the ink covers it (skill emil-design-eng: blur bridges a crossfade into one transformation)
+    SS.tl.fromTo(P, { pblur: 0 }, { pblur: 3, duration: 0.18, ease: 'power1.in' }, T.squeeze + 0.02);
     SS.tl.fromTo(title, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.12, ease: 'power1.in' }, T.squeeze + 0.02);
     SS.tl.set(page, { autoAlpha: 0 }, T.token);
     // the token (ink, the only dark element of the film)
@@ -143,7 +145,7 @@
     gsap.set(ul, { scaleX: 0 });
     const thClip0 = SS.clipR(500, 28, 1664 - 750, 28, 44);
     gsap.set(thr, { autoAlpha: 0, clipPath: thClip0 });
-    gsap.set([th, thDate, tb], { autoAlpha: 0, y: 16 });
+    gsap.set([th, thDate, tb], { autoAlpha: 0 });
     // the call screen
     const call = SS.el('div', 'dm', jp.scr);
     Object.assign(call.style, { left: 0, top: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg,#F7FCFB 0%,#E4F4F1 100%)' });
@@ -161,7 +163,8 @@
     SS.tl.fromTo(note, { scale: 1 }, { scale: 0.97, duration: 0.08, ease: 'power2.out' }, T.tapNote);
     SS.tl.set(thr, { autoAlpha: 1 }, T.thread);
     SS.tl.fromTo(thr, { clipPath: thClip0 }, { clipPath: SS.clipR(0, 0, 0, 0, 96), duration: 0.4, ease: SS.EZ.inOut }, T.thread);
-    SS.tl.fromTo([th, thDate, tb], { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: SS.EZ.out, stagger: 0.05 }, T.thread + 0.12);
+    // the thread's content is carried by the notice opening into it: together, a short fade, no second movement
+    SS.tl.fromTo([th, thDate, tb], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power1.out' }, T.thread + 0.1);
     SS.tl.fromTo(ul, { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: SS.EZ.out }, T.under);
     const tp2 = SS.D.touch(w, 96);
     SS.D.tapAt(tp2, rr.left + rr.width / 2, rr.top + rr.height / 2, T.tapNum);
@@ -185,6 +188,7 @@
     const k = P.shakeS, dx = k > 0 && k < 1 ? 7 * Math.sin(k * Math.PI * 2 * 3) * (1 - k) : 0;
     R.shS.style.transform = `translate(${dx.toFixed(2)}px,0px)`;
     R.chk.set(R.PC.k);
+    SS.blur(SS.WB.pc, P.pblur);
   }
   const scene = { name: 'cells', a: -1, b: 99, render, ranges: [] };
   scene.build = () => { build(); };

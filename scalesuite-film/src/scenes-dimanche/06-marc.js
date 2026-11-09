@@ -8,6 +8,7 @@
   const SS = window.SS, T = SS.DT, C = SS.DC;
   const MC = { top: 560, w: 860, h: 300 };
   const HANDOFF = { cy: 980 }; // screen centre of Marc's meeting card when the agenda takes it (local top 315)
+  const XB = { b: 0 };
   let R;
   function build(stage) {
     const L = SS.el('div', 'layer', stage);
@@ -37,12 +38,12 @@
     const rw = rp.offsetWidth, rh = rp.offsetHeight, fh = fu.offsetHeight;
     const RP = { left: 930 - rw, top: 900 + fh + 20, w: rw, h: rh };
     Object.assign(rp.style, { left: RP.left + 'px', top: RP.top + 'px', transformOrigin: '100% 100%' });
-    gsap.set(fu, { autoAlpha: 0, scale: 0.7 });
-    gsap.set(rp, { autoAlpha: 0, scale: 0.7 });
+    gsap.set(fu, { autoAlpha: 0, scale: 0.86 });
+    gsap.set(rp, { autoAlpha: 0, scale: 0.86 });
     SS.tl.fromTo(fu, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15, ease: 'power1.out' }, T.follow);
-    SS.tl.fromTo(fu, { scale: 0.7 }, { scale: 1, duration: SS.SPR.pop.dur, ease: SS.SPR.pop.ease }, T.follow);
+    SS.tl.fromTo(fu, { scale: 0.86 }, { scale: 1, duration: SS.SPR.pop.dur, ease: SS.SPR.pop.ease }, T.follow);
     SS.tl.fromTo(rp, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15, ease: 'power1.out' }, T.reply);
-    SS.tl.fromTo(rp, { scale: 0.7 }, { scale: 1, duration: SS.SPR.pop.dur, ease: SS.SPR.pop.ease }, T.reply);
+    SS.tl.fromTo(rp, { scale: 0.86 }, { scale: 1, duration: SS.SPR.pop.dur, ease: SS.SPR.pop.ease }, T.reply);
     SS.cue(T.reply, 'm-reply');
     // ---- the answer contracts into Marc's meeting card (same card as in the agenda)
     const D = SS.AGENDA.CARDS[2];
@@ -56,12 +57,16 @@
     SS.tl.fromTo(card, { x: c0.x }, { x: 540, duration: 0.45, ease: SS.EZ.out }, T.born);
     SS.tl.fromTo(card, { y: c0.y, rotation: 0 }, { y: HANDOFF.cy, rotation: D.r, duration: 0.75, ease: SS.EZ.inOut }, T.dExit + 0.1);
     SS.tl.set(card, { autoAlpha: 0 }, T.hand); // the agenda's own Marc card takes over, identical
+    SS.tl.fromTo(XB, { b: 0 }, { b: 2.5, duration: 0.12, ease: 'power1.in' }, T.born);
+    SS.tl.fromTo(XB, { b: 2.5 }, { b: 0, duration: 0.18, ease: 'power1.out' }, T.born + 0.12);
     SS.cue(T.born, 'm-born');
     // ---- the rest leaves through the top (the story keeps going down)
     SS.tl.fromTo(box, { y: 0 }, { y: -1100, duration: 0.45, ease: 'power2.in' }, T.dExit);
-    R = { L };
+    R = { L, card, rp };
   }
-  const scene = { name: 'marc', a: -1, b: -1, ranges: [] };
+  // the answer → card crossfade is bridged by a light blur on both (procedural, from the XB proxy)
+  function render() { SS.blur(R.card, XB.b); SS.blur(R.rp, XB.b); }
+  const scene = { name: 'marc', a: -1, b: 99, render, ranges: [] };
   scene.build = (stage) => { build(stage); scene.ranges = [[R.L, T.sept, T.hand + 0.05]]; };
   SS.scenes.push(scene);
 })();
