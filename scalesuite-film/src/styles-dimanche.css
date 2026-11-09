@@ -1,0 +1,33 @@
+/* « Dimanche, 21 h 14 » : additions on top of styles.css (V2) and styles-v3.css, both loaded read-only.
+   Titles in Instrument Sans (the site's headline face, self-hosted, OFL), interface in Inter.
+   No will-change anywhere (see styles-v3.css): plain 2D transforms are re-rasterised at every scale. */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: block;
+  src: url(../assets/fonts/InstrumentSans-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: block;
+  src: url(../assets/fonts/InstrumentSans-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+.dm-ttl { font-family: 'Instrument Sans', 'Inter', sans-serif; font-variation-settings: 'wdth' 100; }
+.dm { position: absolute; left: 0; top: 0; box-sizing: border-box; }
+.dm-num { font-feature-settings: 'tnum' 1; }
+/* meeting card: tinted card stock (colour set per card in SS.D.card) */
+.dm-card { position: absolute; left: 0; top: 0; box-sizing: border-box; border-radius: 22px; background: #fff; overflow: hidden; }
+.dm-card .row { position: absolute; left: 46px; top: 30px; display: flex; align-items: baseline; gap: 26px; white-space: nowrap; }
+.dm-card .tm { font-size: 46px; font-weight: 760; letter-spacing: -.02em; color: #151515; font-feature-settings: 'tnum' 1; }
+.dm-card .nm { font-size: 40px; font-weight: 600; letter-spacing: -.015em; color: #2C2C2A; }
+.dm-card .sk { position: absolute; left: 46px; height: 14px; border-radius: 7px; background: #EDF2F2; }
+/* web UI (search, ad, landing page) */
+.dm-ui { position: absolute; left: 0; top: 0; box-sizing: border-box; background: #fff; }
+.dm-field { position: absolute; box-sizing: border-box; border-radius: 18px; background: #FBFDFD; }
+.dm-field .v { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); font-size: 40px; font-weight: 560; letter-spacing: -.01em; color: #151515; white-space: nowrap; }
+.dm-caret { display: inline-block; width: 3px; height: 1.1em; margin-left: 2px; vertical-align: -0.16em; background: #1FBFA8; border-radius: 2px; }
