@@ -56,6 +56,11 @@ body.qr #stage { color: var(--qr-white); font-feature-settings: 'cv11' 1, 'ss03'
 .qr-chipw { position: relative; display: inline-block; padding: 0 .17em; margin: 0 -.05em; line-height: 1.16; }
 .qr-chipw .ov { position: absolute; inset: 0; padding: 0 .17em; border-radius: .14em; background: var(--qr-turq); color: var(--qr-chip-ink); white-space: nowrap; text-align: left; }
 
+/* word-by-word subtitles (9:16) */
+.qr-sub { white-space: nowrap; font-weight: 800; letter-spacing: -.025em; line-height: 1.2; }
+.qr-sub span { display: inline-block; padding: .02em .16em .06em; margin: 0 -.03em; border-radius: .14em; }
+.qr-sub span.on { background: var(--qr-turq); color: var(--qr-chip-ink); }
+
 /* phone mock-up (light scenes) */
 .qr-phone { position: absolute; left: 0; top: 0; width: 360px; height: 740px; border-radius: 58px; background: #0C1218;
   box-shadow: inset 0 0 0 2px #2A3644, 0 60px 100px -36px rgba(10,70,64,.5), 0 22px 40px -20px rgba(10,40,52,.42); }

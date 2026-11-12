@@ -14,7 +14,7 @@
   const STEPS = [['24', 'Demandes'], ['19', 'Joints'], ['7', 'Rencontres']]; // example figures
   const L = Q.pick(
     { size: 68, y: 196, mail: [1380, 640], mailY: 640, num: 56, gap: 20 },
-    { size: 52, y: 420, mail: [980, 900], mailY: 1040, num: 50, gap: 18 },
+    { size: 52, y: 420, mail: [1380, 640], mailS: 0.69, mailY: 700, num: 56, gap: 20 },
   );
 
   let R;
@@ -63,7 +63,7 @@
     R.box.style.transform = `translateX(${((1 - Q.k(u, 0, T.arrive, Q.E.out)) * Q.W * 0.5).toFixed(2)}px)`;
     R.line.put(Q.CX, L.y, u, { at: [T.line, T.chip], chip: T.chip });
     const ks = Q.k(u, T.mail, 0.5, Q.E.springSoft);
-    Q.st(R.mail, { x: Q.CX, y: L.mailY + (1 - ks) * 160, s: Q.lerp(0.96, 1, ks), o: Q.k(u, T.mail, 0.16, Q.E.sine) });
+    Q.st(R.mail, { x: Q.pick(Q.CX, 510), y: L.mailY + (1 - ks) * 160, s: (L.mailS || 1) * Q.lerp(0.96, 1, ks), o: Q.k(u, T.mail, 0.16, Q.E.sine) });
     R.pills.forEach((p, i) => {
       const k = Q.k(u, T.steps[i], 0.38, Q.E.springSoft);
       Q.st(p.el, { x: p.x, y: (1 - k) * 22, s: Q.lerp(0.8, 1, k), o: Q.k(u, T.steps[i], 0.1, Q.E.sine) });

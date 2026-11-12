@@ -17,7 +17,7 @@
   T.fig = T.rather + 0.25; T.lift = T.rather + 0.1; T.liftDur = 0.4; T.src = T.sub;
   const L = Q.pick(
     { line: 66, lineY0: 540, lineY1: 250, fig: 400, figY: 520, sub: 60, subY: 806, src: 24, srcY: 928 },
-    { line: 52, lineY0: 800, lineY1: 520, fig: 330, figY: 780, sub: 50, subY: 1040, src: 26, srcY: 1340 },
+    { line: 52, lineY0: 800, lineY1: 520, fig: 280, figY: 700, sub: 50, subY: 1040, src: 22, srcY: 1000 },
   );
   const SRC = Q.pick(
     ['Oldroyd et InsideSales.com, Lead Response Management Study, 2007.', 'Plus de 15 000 demandes Web, tous secteurs.'],

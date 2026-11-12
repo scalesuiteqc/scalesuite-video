@@ -49,6 +49,23 @@ CUES = {
     8: {'pour': 47.70, 'n138': (48.80, True), 'n51': (50.95, True), 'moins64': (53.42, True)},
     9: {'commente': 55.84, 'cinqMinutes': (56.25, True), 'pis': 57.04},
 }
+# what each chunk says, as written in the subtitles (one string per chunk, same order as CHUNKS). Word times inside
+# a chunk are spread in proportion to the length of each word as it is SPOKEN (figures count as their words).
+TEXTS = {
+    1: ['2 h du matin.', 'Tu viens de recevoir', '3 demandes de vendeurs.'],
+    2: ['Qui leur répond,', 'pour vrai?', 'Toi?', 'Ou ton équipe?'],
+    3: ['Rappelle en 5 minutes', 'plutôt qu’en 30,', 'pis t’as 100 fois plus de chances de joindre le vendeur.'],
+    4: ['79 % des vendeurs ne contactent', 'qu’un seul courtier.', 'Ce courtier là,', 'ce devrait être toi.', 'Attends 30 minutes,', 'pis il est passé à autre chose.'],
+    5: ['Voici le Système Vendeurs 5 minutes.'],
+    6: ['Google Ads amène les vendeurs sur la page de ton équipe.', 'Chaque demande arrive au bon courtier,', 'par texto,', 'en moins de 60 secondes.',
+        'Le vendeur reçoit une confirmation', 'tout de suite,', 'le jour comme la nuit.', 'Ton courtier répond avec un chiffre.', 'Tu sais qui a été rappelé.',
+        'Des demandes qui appartiennent à ton équipe.', 'Jamais partagées ni revendues.'],
+    7: ['Chaque semaine,', 'un compte rendu écrit.'],
+    8: ['Pour le Groupe Mackay :', '138 demandes depuis avril,', 'à 51 $ de pub', 'par demande.', 'C’est 64 %', 'de moins que la moyenne du marché.'],
+    9: ['Commente « 5 minutes »,', 'pis je te prépare le diagnostic de ton secteur.'],
+}
+SPOKEN = {'2': 'deux', 'h': 'heures', '3': 'trois', '5': 'cinq', '30,': 'trente', '30': 'trente', '100': 'cent', '79': 'soixantedixneuf', '%': 'pourcent', '60': 'soixante',
+          '138': 'centtrentehuit', '51': 'cinquanteetun', '$': 'dollars', '64': 'soixantequatre', ':': '', '«': '', '»,': ''}
 PRE = {n: 0.08 for n in CHUNKS}
 POST = {1: 1.1, 2: 0.6, 3: 0.5, 4: 0.2, 5: 1.0, 6: 0.2, 7: 0.24, 8: 1.3, 9: 1.0}  # scene 8: 1,2 s held on the final grid
 # The five breaths (everything else stays tight):
@@ -114,7 +131,14 @@ for sc, chunks in CHUNKS.items():
     for k, v in CUES[sc].items():
         ts, key = (v if isinstance(v, tuple) else (v, False))
         cues[k] = {'t': loc(ts), 'key': key}
-    timing[f's{sc}'] = {'dur': dur, 'voice': [PRE[sc], round(PRE[sc] + voice, 3)], 'cues': cues}
+    words = []   # subtitles: [text, start, end, chunk index], seconds from the scene start
+    for ci, ((a, b, g), text) in enumerate(zip(chunks, TEXTS[sc])):
+        toks = text.split(' '); wts = [max(0, len(SPOKEN.get(k, k))) for k in toks]; tot = float(sum(wts)); acc = 0.0
+        for k, wt in zip(toks, wts):
+            if wt == 0 and words and words[-1][3] == ci:   # silent punctuation joins the previous word
+                words[-1][0] += ' ' + k; continue
+            words.append([k, loc(a + (b - a) * acc / tot), loc(a + (b - a) * (acc + wt) / tot), ci]); acc += wt
+    timing[f's{sc}'] = {'dur': dur, 'voice': [PRE[sc], round(PRE[sc] + voice, 3)], 'cues': cues, 'words': words}
     track.append(np.zeros(int(round((t0 + PRE[sc]) * SR)) - sum(len(p) for p in track), dtype=np.float32)); track.append(y)
     t0 += dur
 track.append(np.zeros(max(0, int(round(t0 * SR)) - sum(len(p) for p in track)), dtype=np.float32))

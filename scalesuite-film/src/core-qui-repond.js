@@ -122,7 +122,7 @@
         const sc = (1 + o.impact * imp) * Q.lerp(1, 0.95, out);
         const left = o.align === 'center' ? x - r.width / 2 : x;
         root.style.transform = `translate(${left.toFixed(2)}px,${(y - r.height / 2).toFixed(2)}px) scale(${sc.toFixed(5)})`;
-        const vis = u >= at[0] - 0.02 && out < 0.999;
+        const vis = u >= at[0] - 0.02 && out < 0.999 && (Q.wide || o.keepTall); // 9:16: the word-by-word subtitles carry the sentences
         root.style.opacity = vis ? (1 - out).toFixed(3) : '0';
         root.style.visibility = vis ? 'visible' : 'hidden';
         root.style.filter = out > 0.004 ? `blur(${(out * 14).toFixed(2)}px)` : 'none';
@@ -136,6 +136,54 @@
           const t0 = a.chip ? (Array.isArray(a.chip) ? a.chip[j] : a.chip) : at[c.g], k = Q.k(u, t0, 0.3, Q.E.expo);
           c.ov.style.clipPath = `inset(0 ${((1 - k) * 100).toFixed(2)}% 0 0 round .14em)`;
           c.ov.style.visibility = k <= 0.0005 ? 'hidden' : 'visible';
+        });
+      },
+    };
+  };
+
+  // ---- Word-by-word subtitles (9:16 cut) ---------------------------------------------------------------
+  // Built from the word times of the voice (vo-timing.js). Inter 800; the word being spoken sits in the turquoise
+  // chip, the others are white on dark scenes and ink on light scenes. Groups of a few words, one line at a time.
+  // Kept clear of the platform interface: nothing in the bottom 250 px nor in the 120 px on the right.
+  Q.subtitles = (stage, QR, opt) => {
+    const o = Object.assign({ size: 66, maxChars: 20, x: (Q.W - 120) / 2 + 20, y: 1250, yCentre: 900 }, opt);
+    const layer = Q.div(stage, 'layer', { pointerEvents: 'none' });
+    const groups = [];
+    QR.ORDER.forEach((id) => {
+      const vo = QR.VO[id]; if (!vo || !vo.words) return;
+      let cur = null;
+      vo.words.forEach(([text, t0, t1, ci]) => {
+        if ((opt.skip || []).includes(id + ':' + ci)) return;
+        const len = cur ? cur.words.reduce((s, w) => s + w.text.length + 1, 0) : 0;
+        if (!cur || cur.ci !== ci || len + text.length > o.maxChars) { cur = { id, ci, words: [], t0: QR.START[id] + t0 }; groups.push(cur); }
+        cur.words.push({ text, t0: QR.START[id] + t0, t1: QR.START[id] + t1 });
+        cur.t1 = QR.START[id] + t1;
+      });
+    });
+    groups.forEach((g, i) => {
+      const next = groups[i + 1];
+      g.end = next && next.t0 - g.t1 < 0.5 ? next.t0 - 0.04 : g.t1 + 0.3;
+      g.el = Q.div(layer, 'qr-abs qr-sub', { fontSize: o.size + 'px' });
+      g.words.forEach((w) => { w.el = SS.el('span', '', g.el); w.el.textContent = w.text; });
+    });
+    return {
+      groups,
+      // light: (t) → true on the light scenes ; centre: (t) → true when the frame holds nothing but the sentence
+      render(t, light, centre) {
+        const isLight = light(t), y = centre(t) ? o.yCentre : o.y;
+        groups.forEach((g) => {
+          const on = t >= g.t0 - 0.04 && t < g.end;
+          g.el.style.display = on ? '' : 'none';
+          if (!on) return;
+          const k = Q.k(t, g.t0 - 0.04, 0.16, Q.E.out);
+          g.el.style.transform = `translate(${o.x}px,${y}px) translate(-50%,-50%) scale(${Q.lerp(0.92, 1, k).toFixed(4)})`;
+          g.el.style.opacity = Q.k(t, g.t0 - 0.04, 0.08, Q.E.sine).toFixed(3);
+          g.el.style.color = isLight ? Q.C.ink : Q.C.white;
+          g.words.forEach((w) => {
+            const act = t >= w.t0 - 0.02 && t < w.t1;
+            w.el.className = act ? 'on' : '';
+            w.el.style.transform = `scale(${(1 + 0.06 * (act ? 1 - Q.k(t, w.t0 - 0.02, 0.18, Q.E.out) : 0)).toFixed(4)})`;
+          });
         });
       },
     };

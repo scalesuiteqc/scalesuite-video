@@ -15,7 +15,7 @@
   const N1 = SEG[0].t.length, N2 = N1 + SEG[1].t.length + 1;
   const L = Q.pick(
     { head: 92, headY: 200, w: 1120, cardY: 590, s: 1, logoH: 230, logoY: 448, tag: 62, tagY: 684, banner: false },
-    { head: 64, headY: 500, w: 1120, cardY: 900, s: 0.84, logoH: 150, logoY: 820, tag: 46, tagY: 990, banner: true },
+    { head: 64, headY: 500, w: 1120, cardY: 800, s: 0.8, logoH: 170, logoY: 800, tag: 50, tagY: 970, banner: true },
   );
   const KEY = '5 MINUTES';
   const neutral = (d) => `<span style="width:${d}px;height:${d}px;border-radius:50%;flex:none;display:block">${SS.icon.person('#8FA5A2', '#DCE9E6')}</span>`;
@@ -42,7 +42,7 @@
     const logo = SS.logo(lbox, L.logoH, {});
     Object.assign(lbox.style, { width: logo.w + 'px', height: logo.h + 'px' });
     logo.mark(1);
-    const tag = Q.phrase(layer, [[{ t: 'On livre, ou le mois est gratuit.' }]], { size: L.tag, weight: 700, color: Q.C.ink });
+    const tag = Q.phrase(layer, [[{ t: 'On livre, ou le mois est gratuit.' }]], { size: L.tag, weight: 700, color: Q.C.ink, keepTall: true });
     let banner = null;
     if (L.banner) {
       banner = Q.div(layer, 'qr-abs', { width: '960px', padding: '26px 0 28px', borderRadius: '30px', background: '#fff', color: Q.C.ink, textAlign: 'center', whiteSpace: 'nowrap',
@@ -60,9 +60,9 @@
     R.ui.style.filter = out > 0.004 ? `blur(${(out * 14).toFixed(2)}px)` : 'none';
 
     const n = u < T.chip ? Math.min(N1, Q.typeN(u, T.type, N1 / (T.chip - T.type - 0.06), N1)) : N1 + Q.typeN(u, T.chip, (N2 - N1) / T.chipDur, N2 - N1);
-    R.head.put(n, Q.CX, L.headY, { o: u >= T.type - 0.02 ? 1 : 0, caret: u < T.post && (n < N2 || ((u - T.chip) * 2) % 1 < 0.6) });
+    R.head.put(n, Q.CX, L.headY, { o: Q.wide && u >= T.type - 0.02 ? 1 : 0, caret: u < T.post && (n < N2 || ((u - T.chip) * 2) % 1 < 0.6) });
     const kc = Q.k(u, 0.02, 0.5, Q.E.springSoft);
-    Q.st(R.card, { x: Q.CX, y: L.cardY + (1 - kc) * 140, s: L.s * Q.lerp(0.95, 1, kc), o: Q.k(u, 0.02, 0.16, Q.E.sine) });
+    Q.st(R.card, { x: Q.pick(Q.CX, 510), y: L.cardY + (1 - kc) * 140, s: L.s * Q.lerp(0.95, 1, kc), o: Q.k(u, 0.02, 0.16, Q.E.sine) });
     const typed = Math.floor(Q.typeN(u, T.key, KEY.length / T.keyDur, KEY.length)), posted = u >= T.post;
     R.tx.textContent = posted ? '' : KEY.slice(0, typed);
     R.ph.style.display = !posted && typed > 0 ? 'none' : '';
@@ -77,7 +77,7 @@
     Q.st(R.lbox, { x: Q.CX + (1 - kw) * R.logo.w * 0.36, y: L.logoY, s: Q.lerp(0.7, 1, km), o: v >= 0 ? 1 : 0 });
     R.logo.letters.forEach((g, i) => g.setAttribute('transform', `translate(${(-(1 - Q.k(v, 0.12 + i * 0.012, 0.44, Q.E.out)) * 420).toFixed(2)} 0)`));
     R.tag.put(Q.CX, L.tagY, u, { at: [T.tag] });
-    if (R.banner) { const kb = Q.k(u, 0.05, 0.5, Q.E.springSoft); Q.st(R.banner, { x: Q.CX, y: 150 - (1 - kb) * 200, o: 1 }); }
+    if (R.banner) { const kb = Q.k(u, 0.05, 0.5, Q.E.springSoft); Q.st(R.banner, { x: Q.CX, y: 190 - (1 - kb) * 260, o: 1 }); }
   }
 
   QR.scene({ id: 's9', build, render, cuts: [0, T.reply, T.logo] });

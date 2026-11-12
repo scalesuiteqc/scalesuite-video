@@ -101,16 +101,18 @@ for w in ['chaque', 'leVendeur', 'tonCourtier', 'tuSais', 'desDemandes']:
     add(sfx, whoosh(), cue('s6', w) - 0.3, 0.07, pan=0.2)
 add(sfx, whoosh(0.3), S['s7'] - 0.2, 0.06)
 
-# voice, ducking (music −9 dB and effects −4 dB under the voice; 60 ms attack, 350 ms release)
+# voice, ducking: the music sits 15 to 18 dB under the voice for as long as a sentence runs (60 ms attack, slow
+# 0,9 s release so that it does not come back between two words or two sentences) and comes back up only on
+# the holds without voice (logo of scene 5, grid of scene 8, final logo). Effects: −4 dB under the voice.
 w = wave.open(VO); v = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float64) / 32768; w.close()
 voice = np.zeros(N); voice[:min(N, len(v))] = v[:N]
 voice *= 0.5 / max(1e-9, np.sqrt(np.mean(voice[np.abs(voice) > 0.02] ** 2))) * 0.25
 hop = 480; env = np.sqrt(np.mean(voice[:N // hop * hop].reshape(-1, hop) ** 2, axis=1)); act = (env > 0.006).astype(float)
 g = np.empty_like(act); z = 0.0
 for i, a in enumerate(act):
-    z += (a - z) * (1 - np.exp(-0.01 / (0.06 if a > z else 0.35))); g[i] = z
+    z += (a - z) * (1 - np.exp(-0.01 / (0.06 if a > z else 0.9))); g[i] = z
 duck = np.interp(np.arange(N), np.arange(len(g)) * hop, g)
-music_d = music * (10 ** (-9 * duck / 20)); sfx_d = sfx * (10 ** (-4 * duck / 20))
+music_d = music * (10 ** (-18 * duck / 20)); sfx_d = sfx * (10 ** (-4 * duck / 20))
 mix = np.vstack([voice, voice]) + music_d + sfx_d
 fade = np.minimum(1, (TOTAL - t_all) / 0.5).clip(0, 1); mix *= fade
 
@@ -123,5 +125,7 @@ def save(name, y):
 save('music.wav', music * fade); save('sfx.wav', sfx * fade); save('mix-raw.wav', mix[:, :int(TOTAL * SR)])
 rms = lambda x: 20 * np.log10(np.sqrt(np.mean(x ** 2)) + 1e-12)
 sp = duck > 0.9
+gapm = (duck > 0.5) & (np.abs(voice) < 0.004)   # between words, voice silent but the sentence still running
 print(f'under the voice: music {rms(music_d[:, sp]) - rms(voice[sp]):.1f} dB, effects {rms(sfx_d[:, sp]) - rms(voice[sp]):.1f} dB (relative to the voice)')
+print(f'between words: music {rms(music_d[:, gapm]) - rms(voice[sp]):.1f} dB relative to the voice level')
 print(f'silence before Voici: {silence0:.2f} → {voici:.2f} s, music peak {np.abs(music[:, int(silence0 * SR):int(voici * SR)]).max():.4f}')

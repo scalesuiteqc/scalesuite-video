@@ -70,7 +70,7 @@
   TEXT[4].chip = [C.sais, C.sais + 0.1];
   const L = Q.pick(
     { step: 2500, tx: 200, ty: 540, size: 64, ps: 1.3, top: 150, px: 1420, list5: { x: 1400, y: 560, s: 1.9 } },
-    { step: 1500, tx: 70, ty: 430, size: 54, ps: 1.3, top: 760, px: 540, list5: { x: 540, y: 1200, s: 2.2 } },
+    { step: 1500, tx: 70, ty: 430, size: 54, ps: 1.42, top: 140, px: 510, list5: { x: 510, y: 690, s: 2.3 } },
   );
 
   const ICON = {

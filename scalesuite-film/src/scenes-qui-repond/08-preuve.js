@@ -29,22 +29,24 @@
   ];
   const FOOT = () => [(QR.OPT.clientName ? 'Groupe Mackay, campagne Vendeurs' : 'Campagne Vendeurs d’une agence cliente') + ', 1er avril au 11 novembre 2026, demandes comptées par Google Ads.',
     'Marché : LocaliQ, Real Estate Search Advertising Benchmarks 2026, près de 900 campagnes américaines, converti en $ CA à 1,40.'];
+  // 9:16: the same footnote on narrower lines
+  const FOOT_TALL = () => [(QR.OPT.clientName ? 'Groupe Mackay, campagne Vendeurs' : 'Campagne Vendeurs d’une agence cliente') + ', 1er avril au 11 novembre 2026,', 'demandes comptées par Google Ads. Marché : LocaliQ, Real Estate Search', 'Advertising Benchmarks 2026, près de 900 campagnes américaines,', 'converti en $ CA à 1,40.'];
   const L = Q.pick(
     { headY: 150, fig: 320, figY: 470, line: 54, lineY: 720, barX: 250, barW: 760, barY: [450, 660], barH: 104, chipX: 1520, chipY: 555, chip: 112,
       rowW: 1440, rowH: 118, rowY: [410, 548, 686], colX: [-670, -150, 190, 470], footY: 934, foot: 22 },
-    { headY: 300, fig: 260, figY: 760, line: 40, lineY: 960, barX: 90, barW: 700, barY: [760, 900], barH: 96, chipX: 800, chipY: 1080, chip: 110,
-      rowW: 980, rowH: 150, rowY: [700, 880, 1060], colX: [-460, -80, 150, 370], footY: 1560, foot: 20 },
+    { headY: 320, fig: 280, figY: 600, line: 46, lineY: 840, barX: 110, barW: 520, barY: [560, 780], barH: 104, chipX: 510, chipY: 960, chip: 112, gs: 0.66, gx: 510,
+      rowW: 1440, rowH: 118, rowY: [860, 1010, 1160], colX: [-670, -150, 190, 470], footY: 1110, foot: 20 },
   );
   const TILE = '#131E2A';
 
   let R;
   function build(layer) {
     Q.night(layer);
-    const head = Q.phrase(layer, [[{ t: TITLE() }]], { size: 46, weight: 750, color: '#9FB3C2' });
+    const head = Q.phrase(layer, [[{ t: TITLE() }]], { size: 46, weight: 750, color: '#9FB3C2', keepTall: true });
     // a) the counter
     const a = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 50%' });
     const fig = Q.figure(a, { digits: '138', size: L.fig, turns: [0, 1, 2] });
-    const line = Q.phrase(a, [[{ t: 'demandes de la campagne Vendeurs depuis avril 2026' }]], { size: L.line, weight: 700 });
+    const line = Q.phrase(a, Q.pick([[{ t: 'demandes de la campagne Vendeurs depuis avril 2026' }]], [[{ t: 'demandes de la campagne' }], [{ t: 'Vendeurs depuis avril 2026' }]]), { size: L.line, weight: 700, keepTall: true });
     // b) the two bars, c) the gap
     const b = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 50%' });
     const bar = (label, value, frac, turq) => {
@@ -71,7 +73,7 @@
       const chip = cell(L.colX[3], `<span class="qr-chip" style="font-size:46px;font-weight:800;letter-spacing:-.03em">${r[3]}</span>`, {});
       return { row, chip: chip.firstChild };
     });
-    const foot = Q.src(layer, FOOT(), L.foot);
+    const foot = Q.src(layer, Q.wide ? FOOT() : FOOT_TALL(), L.foot);
     let quote = null;
     if (QR.OPT.quote) {
       quote = Q.div(layer, 'qr-abs', { textAlign: 'center', whiteSpace: 'nowrap', color: Q.C.white });
@@ -108,7 +110,8 @@
     const kl = Q.k(u, T.less, 0.4, Q.E.springSoft);
     Q.st(R.less, { x: L.chipX, y: L.chipY, s: Q.lerp(0.5, 1, kl), o: Q.k(u, T.less, 0.1, Q.E.sine) });
     // d) the grid, during the hold
-    R.g.style.transform = `translate(${Q.CX}px,0px)`;
+    R.g.style.transform = `translate(${L.gx || Q.CX}px,0px) scale(${L.gs || 1})`;
+    R.g.style.transformOrigin = '0 0';
     R.cols.forEach((c, i) => { c.style.transform = `translate(${L.colX[i]}px,${L.rowY[0] - L.rowH / 2 - 48}px)`; c.style.opacity = Q.k(u, T.grid, 0.25, Q.E.sine).toFixed(3); });
     R.rows.forEach((r, i) => {
       const at = T.grid + i * 0.1, k = Q.k(u, at, 0.42, Q.E.springSoft);
@@ -118,7 +121,7 @@
       r.chip.style.opacity = Q.k(u, at + 0.16, 0.1, Q.E.sine).toFixed(3);
     });
     const kf = Q.k(u, T.foot, 0.4, Q.E.out);
-    Q.st(R.foot, { x: Q.CX, y: L.footY + (1 - kf) * 12, o: Q.k(u, T.foot, 0.3, Q.E.sine) * 0.62 });
+    Q.st(R.foot, { x: Q.pick(Q.CX, 510), y: L.footY + (1 - kf) * 12, o: Q.k(u, T.foot, 0.3, Q.E.sine) * 0.62 });
     if (R.quote) Q.st(R.quote, { x: Q.CX, y: L.footY - 96, o: Q.k(u, T.grid + 0.4, 0.3, Q.E.sine) });
   }
 

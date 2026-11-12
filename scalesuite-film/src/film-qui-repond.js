@@ -15,6 +15,15 @@
     await Promise.all([...document.images].map((im) => im.decode().catch(() => {}))); // photos are decoded before the first frame
     const grain = SS.el('div', 'layer', stage);
     Object.assign(grain.style, { backgroundImage: `url(${SS.grain(256, 256, 10)})`, pointerEvents: 'none', opacity: 0.7 });
+    let subs = null;
+    if (!Q.wide && QR.VO) {
+      const c = (sc, w) => QR.START[sc] + QR.cue(sc, w);
+      // « Toi? » and « Ou ton équipe? » already sit on screen as chips: no subtitle for them
+      subs = Q.subtitles(stage, QR, { skip: ['s2:2', 's2:3', 's5:0'] }); // « Voici » and the system's name are on screen in scene 5
+      subs.light = (t) => (t >= c('s5', 'systeme') && t < QR.START.s8) || t >= QR.START.s9;
+      // moments where the frame holds nothing but the sentence: the subtitles move to the centre
+      subs.centre = (t) => t < c('s1', 'trois') + 0.95 || (t >= QR.START.s2 && t < c('s2', 'toi') - 0.2) || (t >= c('s4', 'ceCourtier') - 0.2 && t < c('s4', 'attends') - 0.22);
+    }
     const last = QR.scenes[QR.scenes.length - 1];
 
     // Global virtual camera: every scene is always moving, holds included. A slow continuous push
@@ -42,6 +51,7 @@
         s.layer.style.display = on ? '' : 'none';
         if (on) { const u = Math.max(0, t - s.t0); s.render(u, t); camera(s, u, t); }
       }
+      if (subs) subs.render(t, subs.light, subs.centre);
     };
     const q = new URLSearchParams(location.search);
     if (q.has('play')) {

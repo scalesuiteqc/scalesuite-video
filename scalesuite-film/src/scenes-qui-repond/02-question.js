@@ -18,7 +18,7 @@
   const N1 = SEG[0].t.length, N2 = N1 + SEG[1].t.length + 1;
   const L = Q.pick(
     { y: 540, base: 100, maxScale: 2.6, span: 0.6, tag: 60, toiY: 700, teamY: 600 },
-    { y: 800, base: 100, maxScale: 2.0, span: 0.82, tag: 54, toiY: 1250, teamY: 1000 },
+    { y: 800, base: 100, maxScale: 2.0, span: 0.82, tag: 64, toiY: 1010, teamY: 830 },
   );
 
   let R;
@@ -27,11 +27,13 @@
     const line = Q.typed(layer, SEG, { size: L.base, weight: 700 });
     // b) the phone, full frame
     const shotBox = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 52%' });
-    const shot = Q.phoneShot(shotBox, Q.W, Q.H, Q.pick(1.42, 1.25)); // the phone almost fills the frame
+    const shot = Q.phoneShot(shotBox, Q.W, Q.H, Q.pick(1.42, 0.82)); // the phone almost fills the frame
     Q.div(shotBox, 'layer', { background: 'radial-gradient(75% 85% at 50% 52%, rgba(3,6,10,0) 40%, rgba(3,6,10,.8) 100%)' });
     // c) the office, full frame
     const offBox = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 40%' });
-    const office = Q.office(offBox, Q.W, Q.H);
+    // the office is drawn 16:9 ; the vertical cut crops into it (centred) so that it fills the frame
+    const offIn = Q.wide ? offBox : Q.div(offBox, 'qr-abs', { width: '1920px', height: '1080px', transformOrigin: '0 0', transform: `translate(${Q.W / 2 - 960 * (Q.H / 1080)}px,0px) scale(${Q.H / 1080})` });
+    const office = Q.office(offIn, 1920, 1080);
     Q.div(offBox, 'layer', { background: 'radial-gradient(90% 95% at 50% 44%, rgba(3,6,10,0) 40%, rgba(3,6,10,.78) 100%)' });
     const tagCss = { fontSize: L.tag + 'px', fontWeight: 750, letterSpacing: '-.02em', lineHeight: 1.16, position: 'absolute', left: '0', top: '0', boxShadow: '0 18px 44px -12px rgba(0,0,0,.7)' };
     const you = Q.chip(layer, 'Toi?', tagCss), team = Q.chip(layer, 'Ou ton équipe?', tagCss);
@@ -44,7 +46,7 @@
     const n = u < T.chip ? Math.min(N1, Q.typeN(u, T.type, N1 / (T.chip - T.type - 0.08), N1)) : N1 + Q.typeN(u, T.chip, (N2 - N1) / T.chipDur, N2 - N1);
     const w = Math.max(R.line.wAt(Math.max(n, 1)), 1), s = Math.min(L.maxScale, (Q.W * L.span) / w);
     const dive = Q.k(u, T.toi - T.dive, T.dive + 0.1, Q.E.inOut);
-    R.line.put(n, Q.CX, L.y, { s: s * Q.lerp(1, 1.5, dive), o: (u >= T.type - 0.02 ? 1 : 0) * (1 - Q.clamp(dive * 1.6)), blur: dive * 20, caret: u < T.toi - T.dive && (n < N2 || ((u - T.chip) * 2) % 1 < 0.6) });
+    R.line.put(n, Q.CX, L.y, { s: s * Q.lerp(1, 1.5, dive), o: (Q.wide && u >= T.type - 0.02 ? 1 : 0) * (1 - Q.clamp(dive * 1.6)), blur: dive * 20, caret: u < T.toi - T.dive && (n < N2 || ((u - T.chip) * 2) % 1 < 0.6) });
 
     // ---- b) dive onto the phone, then c) pull of focus to the office
     const fk = Q.k(u, T.team - T.focus, T.focus + 0.16, Q.E.inOut);

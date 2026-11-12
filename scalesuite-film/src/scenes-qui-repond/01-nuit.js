@@ -35,7 +35,12 @@
         { x: 1456, y: 852, r: 4, s: 1.18, blur: 2.2, turq: true, par: 1.9, title: 'Vendre mon condo', city: 'Laval' },
         { x: 1420, y: 520, r: -3, s: 0.9, blur: 1.1, turq: false, par: 0.5, title: 'Maison à vendre', city: 'Lévis' },
       ] },
-    { size: 64, y: 760, clockSize: 250, clockY: 420, cards: [] },
+    { size: 64, y: 760, clockSize: 190, clockY: 330, room: { base: 2.3, px: 540, py: 1150 },
+      cards: [
+        { x: 330, y: 720, r: -5, s: 1.0, blur: 0, turq: false, par: 1.0, title: 'Évaluation', city: 'Sainte Julie' },
+        { x: 620, y: 1460, r: 4, s: 1.15, blur: 2.2, turq: true, par: 1.9, title: 'Vendre mon condo', city: 'Laval' },
+        { x: 690, y: 560, r: -3, s: 0.82, blur: 1.1, turq: false, par: 0.5, title: 'Maison à vendre', city: 'Lévis' },
+      ] },
   );
 
   let R;
@@ -64,6 +69,7 @@
     const room = Q.bedroom(world);
     const vign = Q.div(b, 'layer', { background: 'radial-gradient(115% 115% at 50% 52%, rgba(3,6,10,0) 42%, rgba(3,6,10,.72) 100%)' });
     const clock = Q.typed(b, [{ t: '2 h 14' }], { size: L.clockSize, weight: 560, caret: true });
+    if (L.room) Object.assign(world.style, { width: '1920px', height: '1080px' });
     clock.el.style.letterSpacing = '-.045em';
     const cards = L.cards.map((c) => Object.assign({ el: Q.card(b, c) }, c));
     R = { a, b, night, group, words, gap, world, room, vign, clock, cards };
@@ -87,13 +93,15 @@
         x += (w.w + R.gap) * lay[i];
       });
       R.group.style.transform = `translate(${Q.CX}px,${L.y}px)`;
+      R.group.style.display = Q.wide ? '' : 'none'; // 9:16: the subtitles carry the sentence
       return;
     }
 
     // ---- bedroom
     const k = Q.k(u, T.cut, QR.DUR.s1 - T.cut + 0.6, Q.E.sine);
     const zoom = 1 + T.zoom * k;
-    R.world.style.transform = `scale(${zoom.toFixed(5)})`;
+    if (L.room) { const sc = L.room.base * zoom; R.world.style.transformOrigin = '0 0'; R.world.style.transform = `translate(${(L.room.px - Q.PHONE.x * sc).toFixed(2)}px,${(L.room.py - Q.PHONE.y * sc).toFixed(2)}px) scale(${sc.toFixed(5)})`; }
+    else R.world.style.transform = `scale(${zoom.toFixed(5)})`;
     let buzz = 0, pulse = 0;
     T.cards.forEach((at) => { buzz += Q.buzz(u, at + 0.05, 0.32, 17); pulse += Q.env(u, at, 0.12, at + 0.14, 0.4); });
     const wake = Q.k(u, T.light, T.lightDur, Q.E.p3);

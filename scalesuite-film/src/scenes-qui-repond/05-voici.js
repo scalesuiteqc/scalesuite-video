@@ -12,7 +12,7 @@
   const T = { voici: cue('voici'), cut: cue('systeme'), five: cue('cinqMinutes'), glide: 0.26 };
   const L = Q.pick(
     { word: 124, y: 540, logoH: 200, logoY: 470, name: 64, nameY: 678 },
-    { word: 110, y: 860, logoH: 120, logoY: 840, name: 50, nameY: 990 },
+    { word: 130, y: 860, logoH: 170, logoY: 800, name: 54, nameY: 960 },
   );
 
   let R;
@@ -30,7 +30,7 @@
     const logo = SS.logo(lbox, L.logoH, {});
     Object.assign(lbox.style, { width: logo.w + 'px', height: logo.h + 'px' });
     logo.mark(1);
-    const name = Q.phrase(box, [[{ t: 'Système Vendeurs' }, { t: '5 minutes', chip: true, g: 1 }]], { size: L.name, weight: 700, color: Q.C.ink });
+    const name = Q.phrase(box, [[{ t: 'Système Vendeurs' }, { t: '5 minutes', chip: true, g: 1 }]], { size: L.name, weight: 700, color: Q.C.ink, keepTall: true });
     R = { dark, mask, word, light, box, lbox, logo, name };
   }
 

@@ -20,7 +20,7 @@
   T.land = T.fig + 0.42; T.aOut = T.b - 0.2; T.bOut = T.c - 0.22; T.card = T.c - 0.25; T.cOut = QR.DUR.s4 - 0.2;
   const L = Q.pick(
     { fig: 400, figY: 430, sub: 60, subY: 744, src: 24, srcY: 928, b: 84, bY: 540, c: 60, cY: 396, cardX: 960, cardY: 640, cardS: 1.4 },
-    { fig: 330, figY: 700, sub: 46, subY: 960, src: 26, srcY: 1340, b: 60, bY: 800, c: 46, cY: 640, cardX: 540, cardY: 900, cardS: 1.5 },
+    { fig: 300, figY: 700, sub: 46, subY: 960, src: 22, srcY: 1000, b: 60, bY: 800, c: 46, cY: 640, cardX: 510, cardY: 880, cardS: 1.6 },
   );
 
   let R;
