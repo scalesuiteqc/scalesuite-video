@@ -1,10 +1,10 @@
 // Quality checks for « Qui répond à 2 h du matin? » (same checks as check-v3.mjs):
 //   node render/check-qui-repond.mjs determinism [t1,t2,...]   same frame after different seek histories → pixel diff
-//   node render/check-qui-repond.mjs motion [end] [cuts]        frame-to-frame change at 30 fps → isolated spikes
+//   node render/check-qui-repond.mjs motion [end] [cuts] [start]  frame-to-frame change at 30 fps → isolated spikes
 // The film has three intended hard cuts (2,4 s, 3,9 s and 8,2 s): they are listed and not counted.
 import { chromium, serve, openFilmQR } from './lib-qui-repond.mjs';
 
-const [mode = 'determinism', arg, cutsArg] = process.argv.slice(2);
+const [mode = 'determinism', arg, cutsArg, startArg] = process.argv.slice(2);
 const { srv, base } = await serve();
 const browser = await chromium.launch();
 const diffPixels = (page, A, B) => page.evaluate(async ([x, y]) => {
@@ -38,7 +38,7 @@ try {
     const end = parseFloat(arg) || await f.page.evaluate(() => window.SS.DURATION);
     const cuts = (cutsArg || '2.4,3.9,8.2').split(',').map(Number);
     const rows = []; let prev = null;
-    for (let i = 0; i <= Math.round(end * 30); i++) {
+    for (let i = Math.round((parseFloat(startArg) || 0) * 30); i <= Math.round(end * 30); i++) {
       const png = await f.shot(i / 30);
       rows.push([i / 30, prev ? (await diffPixels(f.page, png, prev)).mean : 0]);
       prev = png;

@@ -59,9 +59,9 @@
   ];
   const L = Q.pick(
     // phones are framed tight and cut by the bottom of the frame (ps = scale of the front phone)
-    { tx: 200, ty: 540, size: 62, ps: 1.3, ps4: 1.15, top: 176, front: { x: 1420 }, back: { x: 1565 }, front4: { x: 1516 }, off: 2250, backS: 0.8,
+    { tx: 200, ty: 540, size: 62, ps: 1.3, ps4: 1.15, top: 176, front: { x: 1420 }, back: { x: 1565 }, front4: { x: 1516 }, off: 2250, apart: 250, backS: 0.8,
       ad: { x: 1400, y: 470, s: 1.12 }, list: { x: 1238, y: 772, s: 1.1 }, list5: { x: 1390, y: 548, s: 1.25 }, tag: 28 },
-    { tx: 70, ty: 430, size: 54, ps: 1.3, ps4: 1.1, top: 760, front: { x: 540 }, back: { x: 760 }, front4: { x: 720 }, off: 1500, backS: 0.8,
+    { tx: 70, ty: 430, size: 54, ps: 1.3, ps4: 1.1, top: 760, front: { x: 540 }, back: { x: 760 }, front4: { x: 720 }, off: 1500, apart: 230, backS: 0.8,
       ad: { x: 540, y: 1000, s: 1.3 }, list: { x: 400, y: 1380, s: 1.2 }, list5: { x: 540, y: 1180, s: 1.4 }, tag: 30 },
   );
 
@@ -128,7 +128,6 @@
   function place(p, lab, x, dy, ps, f, extraO, speed) {
     const s = Q.lerp(L.backS, 1, f) * ps, top = L.top + (1 - f) * 34 + dy;
     Q.st(p.el, { x, y: top + 370 * s, s, o: Q.lerp(0.72, 1, f) * extraO, blur: (1 - f) * 4 + Math.min(7, speed * 0.16) });
-    p.el.style.zIndex = f > 0.5 ? 3 : 2;
     Q.st(lab, { x, y: top - 30, o: Q.clamp((f - 0.88) / 0.12) * extraO * (speed > 6 ? 0 : 1 - speed / 6) });
   }
 
@@ -148,17 +147,23 @@
     const phones = (v) => {
       const s2 = Q.k(v, B[1], T.swap, Q.E.inOut), s3 = Q.k(v, B[2], T.swap, Q.E.inOut), s4 = Q.k(v, B[3], T.swap, Q.E.inOut);
       const fA = 1 - s2 + s3, fB = 1 - s3 + s4;
-      const aIn = Q.k(v, T.phone, 0.62, Q.E.springSoft), aExit = Q.k(v, B[3], 0.5, Q.E.in);
-      let xA = Q.lerp(L.back.x, L.front.x, fA);
-      xA += aExit * (L.off - xA);
+      const aIn = Q.k(v, T.phone, 0.62, Q.E.springSoft), aExit = Q.k(v, B[3], 0.46, Q.E.in);
+      // a swap is a shuffle: the two phones move apart sideways while they trade places, so they do not
+      // overlap at the instant the one behind comes to the front (no pop in the stacking order)
+      const apart = L.apart * Math.sin(Math.PI * s3);
+      const xA = Q.lerp(L.back.x, L.front.x, fA) - apart;
       const bIn = Q.k(v, B[1] + 0.04, 0.66, Q.E.out), bExit = Q.k(v, B[4], 0.46, Q.E.in);
-      let xB = Q.lerp(L.back.x, Q.lerp(L.front.x, L.front4.x, s4), fB);
+      let xB = Q.lerp(L.back.x, Q.lerp(L.front.x, L.front4.x, s4), fB) + apart;
       xB += (1 - bIn) * (L.off - xB) + bExit * (L.off - xB);
-      return { fA, fB, xA, dyA: (1 - aIn) * 1000, xB, psB: Q.lerp(L.ps, L.ps4, s4) };
+      // the seller's phone leaves by dropping out of the bottom of the frame, still in front
+      return { fA, fB, xA, dyA: (1 - aIn) * 1000 + aExit * 1150, xB, psB: Q.lerp(L.ps, L.ps4, s4), aTop: aExit > 0 && aExit < 1 };
     };
     const p = phones(u), q = phones(u - 1 / 30);
-    place(R.A, R.labA, p.xA, p.dyA, L.ps, p.fA, u < T.phone ? 0 : 1, Math.hypot(p.xA - q.xA, p.dyA - q.dyA));
+    place(R.A, R.labA, p.xA, p.dyA, L.ps, p.fA, u < T.phone || u >= B[3] + 0.46 ? 0 : 1, Math.hypot(p.xA - q.xA, p.dyA - q.dyA));
     place(R.Bp, R.labB, p.xB, 0, p.psB, p.fB, u < B[1] ? 0 : 1, Math.abs(p.xB - q.xB));
+    // stacking order: during the first swap the broker's phone arrives from the side, in front
+    R.A.el.style.zIndex = p.aTop ? 4 : u < B[1] + T.swap / 2 ? 3 : p.fA > 0.5 ? 3 : 2;
+    R.Bp.el.style.zIndex = u < B[1] + T.swap / 2 ? 4 : p.fB > 0.5 ? 3 : 2;
 
     // seller's phone: day page, then the night conversation
     const night = u >= T.night;
