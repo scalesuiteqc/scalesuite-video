@@ -1,10 +1,10 @@
 # ScaleSuite « Qui répond à 2 h du matin? » : plan scène par scène (validé, avec corrections)
 
-Vidéo promo du Système Vendeurs 5 minutes · français (Québec), tutoiement · 30 i/s
+Vidéo promo du Système Vendeurs 5 minutes · français (Québec), tutoiement · 60 i/s · 108 BPM
 Fichiers : suffixe `qui-repond` partout (sources et sorties). Aucun fichier existant n'est modifié.
 
-- **Export A (à filmer)** : 1920 × 1080, scènes 1 à 9, **49,6 s**, sans bandeau, marges généreuses.
-- **Export B (direct)** : 1080 × 1920, mise en page verticale refaite, bandeau épinglé en scène 9, sous titres.
+- **Export A (à filmer)** : 1920 × 1080, scènes 1 à 9, **45,0 s**, 60 i/s, sans bandeau, marges généreuses.
+- **Export B (direct)** : 1080 × 1920, 60 i/s, mise en page verticale refaite, bandeau épinglé en scène 9, sous titres.
 - La scène 0 (face caméra, 3 s) est filmée par Mathieu. Les temps ci dessous partent de 0 au début de
   la scène 1 ; ajouter 3 s pour retrouver les temps du brief.
 
@@ -75,32 +75,49 @@ plus une fois l'écran filmé.
 Aucune photo ni image externe : tout est généré dans la page (SVG, dégradés, flous, lumières). Aucun
 personnage.
 
-| # | Temps | Durée | Texte à l'écran | Ce qu'on voit, animation | Transition |
-|---|---|---|---|---|---|
-| 1 · La nuit | 0,0 – 3,9 | 3,9 s | « Tu viens de recevoir [3] demandes de vendeurs. » puis « 2 h 14 » | 0,0 : noir (`#070D14`, vignettage). 0,3 : les mots arrivent un par un (flou 12 px vers net, échelle 1,15 vers 1 ; le premier mot plus gros et plus flou, échelle 1,6). La ligne reste centrée pendant qu'elle s'allonge. La puce arrive avec le chiffre, qui roule de 0 à 3. 2,4 : coupe franche vers une chambre générée, suggérée par la lumière : fenêtre avec lueur de ville, table de chevet, lampe éteinte, oreiller. Un cellulaire posé à plat s'allume et projette un halo turquoise et bleu. Zoom avant de 3 %. Horloge géante « 2 h 14 » tapée en haut. Trois cartes « Nouvelle demande » en cascade (2,52 / 2,68 / 2,84 s) sur trois profondeurs, le cellulaire vibre à chaque carte. | Coupe vers le noir. |
-| 2 · La question | 3,9 – 8,2 | 4,3 s | « Qui leur répond, [pour vrai]? » puis « Toi? » puis « Ou ton équipe? » | 3,9 : la question se tape lettre par lettre avec un gros curseur arrondi. « Qui » commence à 260 px, puis la ligne rapetisse en continu pour occuper 60 % de la largeur. « pour vrai » se tape dans la puce, qui s'élargit. 6,2 : panneau portrait à coins arrondis (28 % de la largeur), gros plan du cellulaire allumé, étiquette « Toi? ». 7,1 : flash turquoise, le panneau s'élargit à 85 % : bureau d'équipe vide généré (rangées de postes, écrans en veille, fenêtre avec lumières de ville floues), étiquette « Ou ton équipe? », ligne de progression turquoise en bas du panneau. | Coupe vers le noir. |
-| 3 · La vitesse | 8,2 – 13,0 | 4,8 s | « Rappelle en [5 minutes], » puis « 100× » puis « plus de chances de joindre le vendeur. » Source en bas. | La ligne se tape petite et centrée, puis monte. Le compteur roule jusqu'à 100 (flou vertical), le « × » turquoise arrive en ressort, halo qui s'ouvre. La seconde ligne se tape dessous. Source : « Lead Response Management Study, MIT et InsideSales, 2007. Comparaison 5 minutes contre 30 minutes. Demandes Web, tous secteurs. » | Le chiffre recule en flou. |
-| 4 · Un seul courtier | 13,0 – 20,2 | 7,2 s | « 81 % » + « des vendeurs ne contactent [qu'un seul courtier]. » Source en bas. Puis « Ce courtier là, ce devrait être toi. » Puis « Attends 30 minutes, et [il est passé à autre chose]. » | 13,0 : « 81 % » roule, halo, la phrase se tape (tenue 0,9 s). 16,05 : « Ce courtier là, ce devrait être toi. » seul au centre. 17,7 : la carte « Sainte Julie » revient ; 17,85 : la dernière phrase se tape ; quand la puce se déploie, la carte perd sa couleur, pâlit et disparaît. | Le noir reste ; un point turquoise naît au centre. |
-| 5 · Révélation | 20,2 – 23,4 | 3,2 s | « Voici » puis logo ScaleSuite puis « Système Vendeurs 5 minutes » | Mot géant en dégradé turquoise et bleu, pulsation en anneaux concentriques, logo, nom du système tapé dessous. | Un anneau turquoise pâle couvre le cadre : bascule vers la lumière. |
-| 6 · Le système | 23,4 – 36,6 | 13,2 s | Cinq messages (détail plus bas) | Fond turquoise pâle. Texte à gauche, interface à droite qui glisse et se construit. La seconde partie de chaque phrase reçoit la puce. | Les demandes de la liste deviennent les pastilles de l'entonnoir. |
-| 7 · Compte rendu | 36,6 – 40,4 | 3,8 s | « Chaque semaine, [un compte rendu écrit]. » | Feuille « Compte rendu de la semaine » avec un entonnoir en pastilles : « 24 Demandes », flèche, « 19 Joints », flèche, « 7 Rencontres ». Flèches sans pourcentage. Étiquette « Exemple » bien visible. | Iris qui se referme : retour à la nuit. |
-| 8 · La preuve | 40,4 – 44,6 | 4,2 s | « 124 » + « demandes générées pour Groupe Mackay en moins de 7 mois. » + « [54 $] de budget Google Ads par demande en moyenne. » | Fond nuit, cartes floues en arrière plan, compteur mécanique jusqu'à 124. Variante sans le nom (« pour une de nos équipes clientes ») par la constante `QR.OPT.clientName`. | La lumière s'ouvre depuis le centre vers la scène 9. |
-| 9 · Appel à l'action | 44,6 – 49,6 | 5,0 s | « Commente [5 MINUTES]. » puis « Je te prépare le Diagnostic de ton secteur. » puis logo + « On livre, ou le mois est gratuit. » | **Fond menthe `#E8F9F7`, comme le site** : la lumière s'ouvre depuis le centre (même transition qu'en scène 5). Champ de commentaire générique où « 5 MINUTES » se tape, réponse en carte, logo final dans sa version fond clair (« Scale » en noir). Export B seulement : bandeau blanc épinglé en haut. | Fin. |
+**Grille des temps : 108 BPM, un temps = 0,5556 s, 81 temps = 45,0 s.** Chaque scène dure un nombre
+entier de temps. Chaque changement de scène, chaque arrivée de phrase et chaque déploiement de puce tombe
+sur un temps ; les demi temps ne servent qu'aux éléments secondaires (cartes, pastilles). La table est
+dans `scenes-qui-repond/00-timing.js` (`QR.BEATS`). La musique et les effets suivront cette grille.
 
-Durées : 3,9 · 4,3 · 4,8 · 7,2 · 3,2 · 13,2 · 3,8 · 4,2 · 5,0 = **49,6 s** (table `QR.DUR` dans
-`scenes-qui-repond/00-timing.js`). La scène 4 est passée de 6,6 à 7,2 s pour que chacune de ses trois
-phrases reste lisible environ 0,9 s après la frappe. La scène 9 est passée de 4,6 à 5,0 s pour tenir le
-logo final et sa promesse environ 1,2 s.
+| Scène | Temps | Secondes | Durée | Ce qu'on voit |
+|---|---|---|---|---|
+| 1 · La nuit | 0–7 | 0,00 – 3,89 | 3,89 s | Noir, puis « Tu viens de recevoir [3] demandes de vendeurs. » : un mot par quart de temps, avec mise au point. Temps 4 : coupe franche vers la chambre générée, horloge « 2 h 14 » tapée, trois cartes sur les demi temps 4,5 / 5 / 5,5. |
+| 2 · La question | 7–15 | 3,89 – 8,33 | 4,44 s | « Qui leur répond, [pour vrai]? » tapé lettre par lettre (la puce commence au temps 1,5). Temps 4 : panneau « Toi? » avec la notification. Temps 6 : flash, bureau « Ou ton équipe? ». |
+| 3 · La vitesse | 15–22 | 8,33 – 12,22 | 3,89 s | Temps 0 : « Rappelle en [5 minutes], » mot par mot, puce au temps 1. Le compteur roule et s'arrête sur le temps 3 avec le « × ». Temps 4 : « plus de chances de joindre le vendeur. » et la source. |
+| 4 · Un seul courtier | 22–33 | 12,22 – 18,33 | 6,11 s | Temps 0 à 4 : « 81 % » (arrêt au temps 1), « des vendeurs ne contactent [qu'un seul courtier.] », puce au temps 2, source. Temps 4 : « Ce courtier là, ce devrait être toi. ». Temps 7 : « Attends 30 minutes, et [il est passé à autre chose.] », puce au temps 8, la carte pâlit. |
+| 5 · Révélation | 33–39 | 18,33 – 21,67 | 3,33 s | « Voici », éclatement en anneaux au temps 1,5, logo au temps 2, « Système Vendeurs [5 minutes] » au temps 3, puce au temps 4. La lumière s'ouvre en 0,5 s jusqu'au temps 6. |
+| 6 · Le système | 39–59 | 21,67 – 32,78 | 11,11 s | Cinq messages de quatre temps. Dans chacun : début de phrase au temps 0, phrase clé au temps 1, puce au temps 2. La caméra passe d'un message à l'autre par un panoramique filé (messages 1 à 4), puis par une poussée à travers la liste (message 5). Aucun fondu. |
+| 7 · Compte rendu | 59–65 | 32,78 – 36,11 | 3,33 s | La scène arrive sur le panoramique qui quitte la scène 6. « Chaque semaine, [un compte rendu écrit.] », puce au temps 1, feuille au temps 1, pastilles aux temps 2 / 2,5 / 3. Iris de 0,6 s vers la nuit. |
+| 8 · La preuve | 65–72 | 36,11 – 40,00 | 3,89 s | Le compteur s'arrête sur le temps 1 avec « demandes générées pour Groupe Mackay / en moins de 7 mois. ». Temps 3 : « [54 $] de budget Google Ads par demande en moyenne. », puce au temps 4. La lumière s'ouvre en 0,5 s. |
+| 9 · Appel à l'action | 72–81 | 40,00 – 45,00 | 5,00 s | Fond menthe. « Commente [5 MINUTES]. » tapé, champ de commentaire, publication au temps 2, réponse signée Mathieu au temps 3, logo version fond clair au temps 6, « On livre, ou le mois est gratuit. » au temps 7. Export B : bandeau épinglé. |
+
+### Finition (style serré, caméra toujours en mouvement)
+
+- **Caméra virtuelle globale** : poussée lente et continue (1,2 % par seconde) avec une légère dérive, sur
+  toutes les scènes, tenues comprises. À chaque nouveau plan, la poussée repart et ce qu'elle avait gagné
+  se relâche en 0,25 s.
+- **Impact** : à chaque arrivée de phrase, échelle de 1,03 à 1 en 0,25 s.
+- **Frappe lettre par lettre** seulement pour la question de l'intro, l'horloge et l'appel à l'action.
+  Partout ailleurs, les mots arrivent un par un avec mise au point.
+- **Bascules noir et clair** (fin des scènes 5 et 8) : 0,5 s, anneau sur une courbe expo avec bord
+  adouci, luminosité qui monte progressivement. **Iris** de la scène 7 : 0,6 s, même traitement à
+  l'envers.
+- **Flou de mouvement réel** : chaque image où quelque chose bouge vite est la moyenne de 8 sous images
+  (obturateur à 180 degrés). Rendu à **60 i/s**.
+- **Contrôles automatiques** (`render/check-frames-qui-repond.py`) : échec si plus de 3 images
+  consécutives sont identiques, ou si un saut isolé apparaît hors des trois coupes franches voulues
+  (temps 4, 7 et 15).
 
 ### Scène 6 en détail
 
-| Temps | Durée | Texte (gauche) | Interface (droite) |
+| Temps | Secondes | Texte (gauche) | Interface (droite) |
 |---|---|---|---|
-| 23,4 – 26,0 | 2,6 s | « Google Ads amène les vendeurs [sur la page de ton équipe]. » | Cellulaire : page de destination de l'équipe (en tête aux couleurs d'une agence fictive, titre, formulaire de 3 champs qui se remplit, bouton). |
-| 26,0 – 28,7 | 2,7 s | « Chaque demande arrive au bon courtier, [par texto, en moins de 60 secondes]. » | Texto d'alerte sur le cellulaire du courtier, **heure de jour (14 h 06)** : entre 22 h et 7 h le courtier reçoit un courriel, pas un texto. |
-| 28,7 – 31,5 | 2,8 s | « Le vendeur reçoit une confirmation [tout de suite]. Même à 2 h du matin. » | Second cellulaire, côté vendeur : texto de confirmation, heure 2 h 14. |
-| 31,5 – 34,3 | 2,8 s | « Ton courtier répond avec un chiffre. [Tu sais qui a été rappelé]. » | Le courtier envoie « 1 ». La carte « Demandes » monte : trois lignes avec statut « Joint », « Pas de réponse », « Rencontre ». |
-| 34,3 – 36,6 | 2,3 s | « Des demandes qui appartiennent à ton équipe. [Jamais partagées ni revendues]. » | Les trois demandes se rangent dans un cadre au nom de l'équipe, qui se ferme. Aucune flèche vers l'extérieur. |
+| 39–43 | 21,67 – 23,89 | « Google Ads amène les vendeurs [sur la page de ton équipe.] » | Annonce « Commandité », puis le cellulaire du vendeur : page de l'équipe, formulaire qui se remplit. |
+| 43–47 | 23,89 – 26,11 | « Chaque demande arrive au bon courtier, [par texto, en moins de 60 secondes.] » | Cellulaire du courtier, **14 h 06** : alerte envoyée par « Équipe Exemple », avec le menu de codes. |
+| 47–51 | 26,11 – 28,33 | « Le vendeur reçoit une confirmation [tout de suite.] Même à 2 h du matin. » | Cellulaire du vendeur en mode sombre, 2 h 14 : texto de confirmation. |
+| 51–55 | 28,33 – 30,56 | « Ton courtier répond avec un chiffre. [Tu sais qui a été rappelé.] » | Le courtier envoie « 1 » sous le menu de codes. La liste « Demandes » monte, la ligne passe à « Joint ». |
+| 55–59 | 30,56 – 32,78 | « Des demandes qui appartiennent à ton équipe. [Jamais partagées ni revendues.] » | La caméra traverse la liste, qui se retrouve dans un cadre « Équipe Exemple » fermé par un cadenas. |
 
 Codes réels du courtier : 1 Joint, 2 Pas de réponse, 3 Plus tard, 4 Rencontre, 5 Hors cible.
 
@@ -120,8 +137,7 @@ dans l'objet `COPY` de `06-systeme.js`) :
   3 Plus tard, 4 Rencontre, 5 Hors cible »
 - Texto au vendeur (2 h 14, expéditeur « Équipe Exemple ») : « Bonjour Marie, votre demande est bien
   reçue. Un courtier de l'Équipe Exemple communiquera avec vous. » (aucun délai promis)
-- Réponse du courtier : « 1 » (14 h 10). La conversation défile : le menu de codes reste visible juste
-  au dessus du « 1 ». La ligne de Paul Fictif passe à « Joint ».
+- Réponse du courtier : « 1 » (14 h 10), juste sous le menu de codes. La ligne de Paul Fictif passe à « Joint ».
 - Liste « Demandes » : Paul Fictif, Laval, « Joint » ; Marie Exemple, Sainte Julie, « Pas de
   réponse » ; Jean Démo, Lévis, « Rencontre ». Aucune colonne de délai, aucun classement.
 - Message 5 : la liste entre dans un cadre « Équipe Exemple » qui se ferme, avec un cadenas.
@@ -155,12 +171,13 @@ Trois lignes hiérarchisées, sans point médian : petite étiquette « Nouvelle
 - **Musique** discrète, synthétisée sur les repères de la timeline : nappe sombre et piano feutré en ré
   mineur pendant la nuit, ouverture en fa majeur sur « Voici », pulsation légère pendant le système,
   résolution sous le logo final. Mix à −15 LUFS.
-- **Effets : 5 au maximum**, feutrés, de 8 à 12 dB sous la musique, aucun « ding » :
-  double vibration sourde à la première notification (2,5 s) ; souffle grave à l'arrêt du « 100× »
-  (10,5 s) ; souffle montant sur « Voici » (21,0 s) ; souffle doux à l'arrêt du « 124 » (41,6 s) ; clic
-  feutré à la publication du commentaire (46,9 s). Aucun son de frappe.
+- **Effets : 5 au maximum**, feutrés, de 8 à 12 dB sous la musique, aucun « ding », tous posés sur
+  un temps : double vibration sourde à la première notification (temps 4,5, 2,50 s) ; souffle grave à
+  l'arrêt du « 100× » (temps 18, 10,00 s) ; souffle montant sur « Voici » (temps 34,5, 19,17 s) ;
+  souffle doux à l'arrêt du « 124 » (temps 66, 36,67 s) ; clic feutré à la publication du commentaire
+  (temps 74, 41,11 s). Aucun son de frappe.
 - **Voix** : je fournis un texte de voix hors champ calé sur le découpage et une feuille de timing. Les
-  textes à l'écran totalisent environ 160 mots, trop pour être lus mot à mot en 49 s : la voix sera une
+  textes à l'écran totalisent environ 160 mots, trop pour être lus mot à mot en 45 s : la voix sera une
   version plus courte de chaque scène (à valider avant l'export B). Mixage avec `mix_vo.py` quand la
   voix de Mathieu ou d'ElevenLabs est déposée dans le dépôt.
 
@@ -178,7 +195,7 @@ Trois lignes hiérarchisées, sans point médian : petite étiquette « Nouvelle
 
 ## Choix validés
 
-1. Durée d'environ 48 s : 49,6 s après la nouvelle intro et l'allongement des scènes 4 et 9.
+1. Durée : 45,0 s (81 temps à 108 BPM) après la passe de finition.
 2. Carte « 18 % » retirée.
 3. Tout est généré dans la page : aucune photo, aucun personnage.
 4. Interfaces de la scène 6 : brouillons marqués « à confirmer » en attendant les captures. Texte

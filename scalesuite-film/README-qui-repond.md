@@ -14,15 +14,30 @@ ffmpeg), avec deux différences :
 
 ```bash
 cd scalesuite-film
-./build-qui-repond.sh preview 16x9   # aperçu demi taille 30 i/s + planche contact (une rangée par scène)
-./build-qui-repond.sh final 16x9     # master 1920 × 1080, 30 i/s
+./build-qui-repond.sh preview 16x9   # aperçu demi taille 60 i/s + planche contact + rapport des contrôles
+./build-qui-repond.sh final 16x9     # master 1920 × 1080, 60 i/s + rapport des contrôles
 node render/stills-qui-repond.mjs --times=3.0,11.9 --out=dossier [--format=9x16]   # images fixes
-node render/check-qui-repond.mjs determinism   # même image quel que soit l'ordre de rendu
-node render/check-qui-repond.mjs motion        # aucun saut isolé hors des trois coupes franches voulues
+python3 render/check-frames-qui-repond.py <dossier d'images | fichier.mp4> 60 2.2222,3.8889,8.3333
 ```
 
 Aperçu dans un navigateur : `npx http-server . -p 8080`, puis
 `/index-qui-repond.html?format=16x9&t=12.3` (image fixe) ou `?play&t=20&end=24` (lecture).
+
+## Rythme
+
+- **108 BPM** : un temps = 60 / 108 = 0,5556 s. `QR.BEATS` (dans `00-timing.js`) donne la durée de chaque
+  scène en temps ; `QR.b(n)` convertit des temps en secondes. Les repères `T` de chaque scène sont écrits
+  en temps (`b(2)` = deuxième temps de la scène).
+- Chaque scène déclare ses `cuts` : les instants où la caméra globale relance sa poussée.
+
+## Rendu
+
+- `render/frames-qui-repond.mjs` rend d'abord une image nette par image vidéo. `render/mb-qui-repond.py`
+  repère les images où quelque chose bouge vite ; pour celles là seulement, 7 échantillons de plus sont
+  rendus sur la première moitié de l'intervalle (obturateur à 180 degrés) et moyennés en lumière
+  linéaire.
+- `render/check-frames-qui-repond.py` fait les contrôles : images figées (plus de 3 identiques de
+  suite), sauts isolés hors des coupes voulues, plus grand pas de luminosité d'une image à l'autre.
 
 ## Fichiers
 
@@ -38,8 +53,8 @@ Aperçu dans un navigateur : `npx http-server . -p 8080`, puis
 
 ## Ajuster le rythme
 
-- Durée d'une scène : `QR.DUR` dans `00-timing.js`. Les débuts des scènes suivantes se décalent seuls.
-- Repères à l'intérieur d'une scène : l'objet `T` en tête du fichier de la scène, en secondes depuis le
+- Durée d'une scène : `QR.BEATS` dans `00-timing.js`, en temps. Les débuts des scènes suivantes se décalent seuls.
+- Repères à l'intérieur d'une scène : l'objet `T` en tête du fichier de la scène, en temps depuis le
   début de la scène.
 - Après un changement de durée, mettre à jour les instants de la planche contact (`ROWS` dans
   `build-qui-repond.sh`).
