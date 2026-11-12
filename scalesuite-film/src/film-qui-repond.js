@@ -22,7 +22,7 @@
       subs = Q.subtitles(stage, QR, { skip: ['s2:2', 's2:3', 's5:0'] }); // « Voici » and the system's name are on screen in scene 5
       subs.light = (t) => (t >= c('s5', 'systeme') && t < QR.START.s8) || t >= QR.START.s9;
       // moments where the frame holds nothing but the sentence: the subtitles move to the centre
-      subs.centre = (t) => t < c('s1', 'trois') + 0.95 || (t >= QR.START.s2 && t < c('s2', 'toi') - 0.2) || (t >= c('s4', 'ceCourtier') - 0.2 && t < c('s4', 'attends') - 0.22);
+      subs.centre = (t) => t < c('s1', 'trois') + 0.95 || (t >= QR.START.s2 && t < c('s2', 'toi') - 0.2) || (t >= c('s4', 'ceCourtier') - 0.02 && t < c('s4', 'attends') - 0.22);
     }
     const last = QR.scenes[QR.scenes.length - 1];
 

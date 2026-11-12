@@ -30,12 +30,12 @@
   const FOOT = () => [(QR.OPT.clientName ? 'Groupe Mackay, campagne Vendeurs' : 'Campagne Vendeurs d’une agence cliente') + ', 1er avril au 11 novembre 2026, demandes comptées par Google Ads.',
     'Marché : LocaliQ, Real Estate Search Advertising Benchmarks 2026, près de 900 campagnes américaines, converti en $ CA à 1,40.'];
   // 9:16: the same footnote on narrower lines
-  const FOOT_TALL = () => [(QR.OPT.clientName ? 'Groupe Mackay, campagne Vendeurs' : 'Campagne Vendeurs d’une agence cliente') + ', 1er avril au 11 novembre 2026,', 'demandes comptées par Google Ads. Marché : LocaliQ, Real Estate Search', 'Advertising Benchmarks 2026, près de 900 campagnes américaines,', 'converti en $ CA à 1,40.'];
+  const FOOT_TALL = () => [(QR.OPT.clientName ? 'Groupe Mackay, campagne Vendeurs,' : 'Campagne Vendeurs d’une agence cliente,'), '1er avril au 11 novembre 2026, demandes comptées', 'par Google Ads. Marché : LocaliQ, Real Estate Search', 'Advertising Benchmarks 2026, près de 900 campagnes', 'américaines, converti en $ CA à 1,40.'];
   const L = Q.pick(
     { headY: 150, fig: 320, figY: 470, line: 54, lineY: 720, barX: 250, barW: 760, barY: [450, 660], barH: 104, chipX: 1520, chipY: 555, chip: 112,
       rowW: 1440, rowH: 118, rowY: [410, 548, 686], colX: [-670, -150, 190, 470], footY: 934, foot: 22 },
-    { headY: 320, fig: 280, figY: 600, line: 46, lineY: 840, barX: 110, barW: 520, barY: [560, 780], barH: 104, chipX: 510, chipY: 960, chip: 112, gs: 0.66, gx: 510,
-      rowW: 1440, rowH: 118, rowY: [860, 1010, 1160], colX: [-670, -150, 190, 470], footY: 1110, foot: 20 },
+    { headY: 300, fig: 280, figY: 580, line: 46, lineY: 820, barX: 80, barW: 590, barY: [580, 800], barH: 110, chipX: 510, chipY: 1000, chip: 120, gx: 510,
+      rowW: 920, rowH: 176, rowY: [600, 800, 1000], footY: 1440, foot: 28, cards: true },
   );
   const TILE = '#131E2A';
 
@@ -66,6 +66,13 @@
     const cols = ['', CLIENT(), 'Marché', 'Écart'].map((t, i) => { const c = Q.div(g, 'qr-abs', { fontSize: '26px', fontWeight: 700, color: '#8499A8', whiteSpace: 'nowrap' }); c.textContent = t; return c; });
     const rows = ROWS.map((r) => {
       const row = Q.div(g, 'qr-abs', { width: L.rowW + 'px', height: L.rowH + 'px', borderRadius: '26px', background: TILE, boxShadow: '0 18px 40px -22px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.05)' });
+      if (L.cards) { // 9:16: one full-width card per metric, the client's figure large, the market, the gap in a chip
+        row.innerHTML = `<div style="position:absolute;left:36px;top:22px;font-size:32px;font-weight:720;color:#C9D6DC;white-space:nowrap">${r[0]}</div>
+          <div style="position:absolute;left:36px;bottom:20px;font-size:84px;font-weight:800;letter-spacing:-.03em;line-height:1;color:${Q.C.turqHi};white-space:nowrap;font-feature-settings:'tnum' 1">${r[1]}</div>
+          <div style="position:absolute;left:400px;bottom:30px;font-size:34px;font-weight:650;color:#9FB3C2;white-space:nowrap">marché ${r[2]}</div>
+          <div class="cc" style="position:absolute;right:30px;top:50%;margin-top:-40px;height:80px;display:flex;align-items:center"><span class="qr-chip" style="font-size:58px;font-weight:800;letter-spacing:-.03em">${r[3]}</span></div>`;
+        return { row, chip: row.querySelector('.qr-chip') };
+      }
       const cell = (x, html, css) => { const c = Q.div(row, 'qr-abs', Object.assign({ left: L.rowW / 2 + x + 'px', top: '0', height: L.rowH + 'px', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }, css)); c.innerHTML = html; return c; };
       cell(L.colX[0], r[0], { fontSize: '38px', fontWeight: 720, letterSpacing: '-.02em', color: Q.C.white });
       cell(L.colX[1], r[1], { fontSize: '56px', fontWeight: 800, letterSpacing: '-.03em', color: Q.C.turqHi, fontFeatureSettings: "'tnum' 1" });
@@ -112,7 +119,7 @@
     // d) the grid, during the hold
     R.g.style.transform = `translate(${L.gx || Q.CX}px,0px) scale(${L.gs || 1})`;
     R.g.style.transformOrigin = '0 0';
-    R.cols.forEach((c, i) => { c.style.transform = `translate(${L.colX[i]}px,${L.rowY[0] - L.rowH / 2 - 48}px)`; c.style.opacity = Q.k(u, T.grid, 0.25, Q.E.sine).toFixed(3); });
+    R.cols.forEach((c, i) => { if (L.cards) { c.style.display = 'none'; return; } c.style.transform = `translate(${L.colX[i]}px,${L.rowY[0] - L.rowH / 2 - 48}px)`; c.style.opacity = Q.k(u, T.grid, 0.25, Q.E.sine).toFixed(3); });
     R.rows.forEach((r, i) => {
       const at = T.grid + i * 0.1, k = Q.k(u, at, 0.42, Q.E.springSoft);
       Q.st(r.row, { x: 0, y: L.rowY[i] + (1 - k) * 36, s: Q.lerp(0.96, 1, k), o: Q.k(u, at, 0.12, Q.E.sine) });

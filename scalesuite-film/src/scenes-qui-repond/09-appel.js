@@ -15,7 +15,7 @@
   const N1 = SEG[0].t.length, N2 = N1 + SEG[1].t.length + 1;
   const L = Q.pick(
     { head: 92, headY: 200, w: 1120, cardY: 590, s: 1, logoH: 230, logoY: 448, tag: 62, tagY: 684, banner: false },
-    { head: 64, headY: 500, w: 1120, cardY: 800, s: 0.8, logoH: 170, logoY: 800, tag: 50, tagY: 970, banner: true },
+    { head: 64, headY: 500, w: 800, h: 540, cardY: 820, s: 1.2, logoH: 170, logoY: 800, tag: 50, tagY: 970, banner: true },
   );
   const KEY = '5 MINUTES';
   const neutral = (d) => `<span style="width:${d}px;height:${d}px;border-radius:50%;flex:none;display:block">${SS.icon.person('#8FA5A2', '#DCE9E6')}</span>`;
@@ -26,7 +26,7 @@
     Q.day(layer);
     const ui = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 45%' });
     const head = Q.typed(ui, SEG, { size: L.head, weight: 750, color: Q.C.ink, caretColor: Q.C.ink });
-    const card = Q.div(ui, 'qr-abs', { width: L.w + 'px', height: '470px', borderRadius: '36px', background: '#fff', color: Q.C.ink,
+    const card = Q.div(ui, 'qr-abs', { width: L.w + 'px', height: (L.h || 470) + 'px', borderRadius: '36px', background: '#fff', color: Q.C.ink,
       boxShadow: '0 2px 4px rgba(18,44,40,.06), 0 50px 90px -34px rgba(10,70,64,.42), 0 0 0 1px rgba(26,26,26,.05)', overflow: 'hidden' });
     card.innerHTML = `
       <div style="height:74px;display:flex;align-items:center;justify-content:center;border-bottom:1.5px solid #E9EEF0;font-size:28px;font-weight:760;letter-spacing:-.02em">Commentaires</div>

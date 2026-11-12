@@ -17,21 +17,22 @@
   T.fig = T.rather + 0.25; T.lift = T.rather + 0.1; T.liftDur = 0.4; T.src = T.sub;
   const L = Q.pick(
     { line: 66, lineY0: 540, lineY1: 250, fig: 400, figY: 520, sub: 60, subY: 806, src: 24, srcY: 928 },
-    { line: 52, lineY0: 800, lineY1: 520, fig: 280, figY: 700, sub: 50, subY: 1040, src: 22, srcY: 1000 },
+    { line: 50, lineY0: 700, lineY1: 700, fig: 280, figY: 460, sub: 48, subY: 822, src: 28, srcY: 1010 },
   );
   const SRC = Q.pick(
     ['Oldroyd et InsideSales.com, Lead Response Management Study, 2007.', 'Plus de 15 000 demandes Web, tous secteurs.'],
-    ['Oldroyd et InsideSales.com,', 'Lead Response Management Study, 2007.', 'Plus de 15 000 demandes Web, tous secteurs.'],
+    ['Oldroyd et InsideSales.com, Lead Response', 'Management Study, 2007. Plus de 15 000', 'demandes Web, tous secteurs.'],
   );
 
   let R;
   function build(layer) {
     Q.night(layer);
     const box = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 48%' });
-    const line = Q.phrase(box, [[{ t: 'Rappelle en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30,', g: 2 }]], { size: L.line, weight: 700 });
+    // 9:16: the sentence stays under the figure, so that a frozen frame or a screenshot is self-sufficient
+    const line = Q.phrase(box, Q.pick([[{ t: 'Rappelle en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30,', g: 2 }]], [[{ t: 'en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30', g: 2 }]]), { size: L.line, weight: 700, keepTall: true });
     const fig = Q.figure(box, { digits: '100', size: L.fig, turns: [1, 2, 3], tail: '×',
       tailCss: { fontSize: '.74em', alignSelf: 'center', marginLeft: '.06em', fontWeight: 700 } });
-    const sub = Q.phrase(box, [[{ t: 'plus de chances de joindre le vendeur.' }]], { size: L.sub, weight: 700 });
+    const sub = Q.phrase(box, Q.pick([[{ t: 'plus de chances de joindre le vendeur.' }]], [[{ t: 'plus de chances de' }], [{ t: 'joindre le vendeur' }]]), { size: L.sub, weight: 700, keepTall: true });
     const src = Q.src(box, SRC, L.src);
     R = { box, line, fig, sub, src };
   }
@@ -51,7 +52,7 @@
     R.fig.tail.style.opacity = Q.k(u, T.land, 0.08, Q.E.sine).toFixed(3);
     R.sub.put(Q.CX, L.subY, u, { at: [T.sub] });
     const ks = Q.k(u, T.src, 0.4, Q.E.out);
-    Q.st(R.src, { x: Q.CX, y: L.srcY + (1 - ks) * 14, o: Q.k(u, T.src, 0.3, Q.E.sine) * 0.6 });
+    Q.st(R.src, { x: Q.pick(Q.CX, 510), y: L.srcY + (1 - ks) * 14, o: Q.k(u, T.src, 0.3, Q.E.sine) * 0.6 });
   }
 
   QR.scene({ id: 's3', build, render, cuts: [0, T.land] });

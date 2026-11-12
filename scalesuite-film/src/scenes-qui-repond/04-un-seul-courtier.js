@@ -20,7 +20,7 @@
   T.land = T.fig + 0.42; T.aOut = T.b - 0.2; T.bOut = T.c - 0.22; T.card = T.c - 0.25; T.cOut = QR.DUR.s4 - 0.2;
   const L = Q.pick(
     { fig: 400, figY: 430, sub: 60, subY: 744, src: 24, srcY: 928, b: 84, bY: 540, c: 60, cY: 396, cardX: 960, cardY: 640, cardS: 1.4 },
-    { fig: 300, figY: 700, sub: 46, subY: 960, src: 22, srcY: 1000, b: 60, bY: 800, c: 46, cY: 640, cardX: 510, cardY: 880, cardS: 1.6 },
+    { fig: 300, figY: 470, sub: 48, subY: 736, src: 28, srcY: 940, b: 60, bY: 800, c: 46, cY: 640, cardX: 510, cardY: 880, cardS: 1.6 },
   );
 
   let R;
@@ -29,8 +29,8 @@
     const a = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 46%' });
     const fig = Q.figure(a, { digits: '79', size: L.fig, turns: [1, 2], tail: '%',
       tailCss: { fontSize: '.6em', alignSelf: 'flex-end', marginLeft: '.2em', marginBottom: '.135em', fontWeight: 700, lineHeight: 1 } });
-    const sub = Q.phrase(a, [[{ t: 'des vendeurs ne contactent' }, { t: 'qu’un seul courtier.', chip: true, g: 1 }]], { size: L.sub, weight: 700 });
-    const src = Q.src(a, ['NAR, Profile of Home Buyers and Sellers 2026, États Unis.'], L.src);
+    const sub = Q.phrase(a, Q.pick([[{ t: 'des vendeurs ne contactent' }, { t: 'qu’un seul courtier.', chip: true, g: 1 }]], [[{ t: 'des vendeurs ne contactent' }], [{ t: 'qu’un seul courtier', chip: true, g: 1 }]]), { size: L.sub, weight: 700, keepTall: true });
+    const src = Q.src(a, Q.pick(['NAR, Profile of Home Buyers and Sellers 2026, États Unis.'], ['NAR, Profile of Home Buyers and Sellers 2026,', 'États Unis.']), L.src);
     const pb = Q.phrase(layer, [[{ t: 'Ce courtier là,' }, { t: 'ce devrait être' }, { t: 'toi.', g: 1 }]], { size: L.b, weight: 750 });
     const pc = Q.phrase(layer, [[{ t: 'Attends 30 minutes, et' }, { t: 'il est passé à autre chose.', chip: true, g: 1 }]], { size: L.c, weight: 700 });
     const card = Q.card(layer, { title: 'Évaluation', city: 'Sainte Julie' });
@@ -51,7 +51,7 @@
     R.fig.tail.style.opacity = Q.k(u, T.land, 0.08, Q.E.sine).toFixed(3);
     R.sub.put(Q.CX, L.subY, u, { at: [T.sub, T.one], chip: T.one });
     const ks = Q.k(u, T.sub, 0.4, Q.E.out);
-    Q.st(R.src, { x: Q.CX, y: L.srcY + (1 - ks) * 14, o: Q.k(u, T.sub, 0.3, Q.E.sine) * 0.6 });
+    Q.st(R.src, { x: Q.pick(Q.CX, 510), y: L.srcY + (1 - ks) * 14, o: Q.k(u, T.sub, 0.3, Q.E.sine) * 0.6 });
 
     R.pb.put(Q.CX, L.bY, u, { at: [T.b, T.you], out: T.bOut, outDur: 0.2 });
 
