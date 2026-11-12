@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # Build « Qui répond à 2 h du matin? ». Earlier build scripts and outputs are left untouched.
-#   ./build-qui-repond.sh preview [16x9|9x16]  → half-size 30 fps preview (silent until the score exists) + contact sheet
-#   ./build-qui-repond.sh final   [16x9|9x16]  → full-size 30 fps master (1920×1080 or 1080×1920)
+#   ./build-qui-repond.sh preview [16x9|9x16]  → half-size 60 fps preview + contact sheet + control report
+#   ./build-qui-repond.sh final   [16x9|9x16]  → full-size 60 fps master (1920×1080 or 1080×1920) + control report
+# Frames are rendered with real motion blur (render/frames-qui-repond.mjs: 8 samples, 180° shutter, on the
+# frames where something moves fast). The controls (render/check-frames-qui-repond.py) run on the rendered
+# frames AND on the encoded file: no frozen picture (more than 3 identical frames), no isolated jump.
+# STAGE=2 reuses the stage 1 frames already in the work folder.
 set -euo pipefail
 cd "$(dirname "$0")"
 MODE=${1:-preview}
@@ -9,28 +13,43 @@ FORMAT=${2:-16x9}
 OUT=../brag-output
 WORK=$OUT/work-qui-repond
 NAME=scalesuite-qui-repond-$FORMAT
+CUTS=$(node -e "const b=60/108;console.log([4,7,15].map(n=>(n*b).toFixed(4)).join(','))")   # the three intended hard cuts (beats 4, 7 and 15)
 mkdir -p "$WORK" "$OUT/previews"
 AUDIO=()
-[ -f "$WORK/music.wav" ] && AUDIO=(-i "$WORK/music.wav" -map 0:v -map 1:a -c:a aac -b:a 160k -shortest)
+[ -f "$WORK/music.wav" ] && AUDIO=(-i "$WORK/music.wav" -map 0:v -map 1:a -c:a aac -b:a 192k -shortest)
+
+if [ "$MODE" = preview ]; then SHOT=0.5; F="$WORK/pv60-$FORMAT"; DEST="$OUT/previews/$NAME-preview-60fps.mp4"; ENC=(-c:v libx264 -preset medium -crf 18)
+else SHOT=1; F="$WORK/final-$FORMAT"; DEST="$OUT/$NAME.mp4"; ENC=(-c:v libx264 -preset slow -crf 15 -profile:v high); fi
+REPORT="$OUT/$NAME-controles-$MODE.txt"
+
+if [ "${STAGE:-all}" != 2 ]; then rm -rf "${F:?}"; fi
+mkdir -p "$F"
+node render/frames-qui-repond.mjs --fps=60 --workers=4 --format="$FORMAT" --shot="$SHOT" --mb=8 --stage="${STAGE:-all}" --out="$F"
+ffmpeg -hide_banner -loglevel error -y -framerate 60 -i "$F/%05d.png" "${AUDIO[@]}" \
+  -vf "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p" "${ENC[@]}" -pix_fmt yuv420p \
+  -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -movflags +faststart "$DEST"
+{
+  echo "« Qui répond à 2 h du matin? » · $FORMAT · $MODE · 108 BPM, 81 temps"
+  echo
+  echo "== Rendered frames (before encoding) =="
+  python3 render/check-frames-qui-repond.py "$F" 60 "$CUTS" || true
+  echo
+  echo "== Encoded file =="
+  python3 render/check-frames-qui-repond.py "$DEST" 60 "$CUTS" || true
+} | tee "$REPORT"
 
 if [ "$MODE" = preview ]; then
-  F="$WORK/frames-preview-$FORMAT"
-  rm -rf "${F:?}" && mkdir -p "$F"
-  node render/frames-qui-repond.mjs --fps=30 --workers=4 --format="$FORMAT" --shot=0.5 --out="$F"
-  ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$F/%05d.png" "${AUDIO[@]}" \
-    -vf "format=yuv420p" -c:v libx264 -preset medium -crf 21 -pix_fmt yuv420p -movflags +faststart "$OUT/previews/$NAME-preview.mp4"
-  rm -rf "${F:?}"
-  # timestamped contact sheet: a few frames per scene, one row per scene
+  # timestamped contact sheet: one row per scene, frames taken on beats (seconds = beats × 60 / 108)
   ROWS=(
-    "1 · La nuit (0–3,9 s)|0.50,1.20,2.00,2.60,3.00,3.70"
-    "2 · La question (3,9–8,2 s)|4.30,5.00,5.90,6.60,7.15,7.60"
-    "3 · La vitesse (8,2–13,0 s)|9.00,9.85,10.60,11.20,11.90,12.90"
-    "4 · Un seul courtier (13,0–20,2 s)|13.60,15.30,16.50,17.20,18.50,19.70"
-    "5 · Révélation (20,2–23,4 s)|20.60,20.90,21.25,21.80,22.90,23.20"
-    "6 · Le système (23,4–36,6 s)|24.00,25.80,28.40,31.20,33.90,36.10"
-    "7 · Compte rendu (36,6–40,4 s)|37.20,38.00,39.60,40.05,40.20,40.33"
-    "8 · La preuve (40,4–44,6 s)|40.80,41.20,42.00,43.00,43.90,44.40"
-    "9 · Appel à l'action (44,6–49,6 s)|45.00,45.50,46.00,46.90,47.60,49.50"
+    "1 · La nuit (temps 0–7)|0.60,1.20,2.10,2.50,3.10,3.80"
+    "2 · La question (temps 7–15)|4.30,5.00,5.90,6.50,7.30,7.90"
+    "3 · La vitesse (temps 15–22)|8.90,9.50,10.05,10.40,11.20,12.10"
+    "4 · Un seul courtier (temps 22–33)|12.60,13.60,15.00,16.30,17.00,17.90"
+    "5 · Révélation (temps 33–39)|18.60,19.00,19.30,20.30,21.00,21.45"
+    "6 · Le système (temps 39–59)|23.00,23.80,25.60,27.90,30.00,32.20"
+    "7 · Compte rendu (temps 59–65)|33.00,33.60,34.60,35.40,35.80,36.00"
+    "8 · La preuve (temps 65–72)|36.40,37.00,37.90,38.60,39.30,39.75"
+    "9 · Appel à l'action (temps 72–81)|40.40,41.00,41.90,42.90,43.60,44.90"
   )
   ALL="" NAMES="" ARGS=()
   for i in "${!ROWS[@]}"; do
@@ -41,14 +60,5 @@ if [ "$MODE" = preview ]; then
   rm -rf "${WORK:?}/sheet-$FORMAT" && mkdir -p "$WORK/sheet-$FORMAT"
   node render/stills-qui-repond.mjs --format="$FORMAT" --times="${ALL#,}" --names="${NAMES#,}" --out="$WORK/sheet-$FORMAT"
   python3 render/sheet-v3.py "$OUT/$NAME-contact-sheet.jpg" 420 "${ARGS[@]}"
-else
-  F="$WORK/frames-final-$FORMAT"
-  rm -rf "${F:?}" && mkdir -p "$F"
-  node render/frames-qui-repond.mjs --fps=30 --workers=4 --format="$FORMAT" --out="$F"
-  ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$F/%05d.png" "${AUDIO[@]}" \
-    -vf "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p" \
-    -c:v libx264 -preset slow -crf 16 -profile:v high -pix_fmt yuv420p \
-    -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -movflags +faststart "$OUT/$NAME.mp4"
-  rm -rf "${F:?}"
 fi
-echo "done: $MODE $FORMAT"
+echo "done: $MODE $FORMAT → $DEST"

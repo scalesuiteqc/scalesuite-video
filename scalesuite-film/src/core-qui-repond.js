@@ -30,6 +30,7 @@
     out: E.out, soft: E.outSoft, quart: E.outQuart, inOut: E.inOut, in: E.in, inSoft: E.inSoft, sine: E.sine,
     spring: gsap.parseEase('back.out(1.7)'), springSoft: gsap.parseEase('back.out(1.2)'), springHi: gsap.parseEase('back.out(2.4)'),
     p3: gsap.parseEase('power3.out'), p4: gsap.parseEase('power4.out'), expo: gsap.parseEase('expo.out'),
+    p4io: gsap.parseEase('power4.inOut'), expoIn: gsap.parseEase('expo.in'),
   };
   // eased progress of t across [at, at + dur]
   Q.k = (t, at, dur, ease) => (ease || E.out)(clamp((t - at) / dur));
@@ -84,45 +85,102 @@
     return bg;
   };
 
-  // ---- Multi-line text block, left-aligned (light scenes) ---------------------------------------------
-  // lines: [[{t: 'Google Ads amène'}], [{t: 'sur la page de ton équipe', chip: true}, {t: '.', glue: true}]]
-  // Words come into focus one after the other; behind a key phrase the chip unfolds from left to right.
-  Q.block = (parent, lines, opt) => {
-    const o = Object.assign({ size: 62, weight: 650, color: Q.C.ink, lh: 1.3, st: 0.042 }, opt); // stagger: a whole sentence in about half a second
-    const root = Q.div(parent, 'qr-abs qr-block', { fontSize: o.size + 'px', fontWeight: o.weight, color: o.color, lineHeight: o.lh });
-    const seq = []; // reading order: words, each chip registered at its first word
+  // ---- Phrase: words come into focus one by one (fast), the chip unfolds on its own cue ------------------
+  // lines: [[{t: 'Rappelle en'}, {t: '5 minutes', chip: true}, {t: ',', glue: true}], [...]]
+  //   seg.g = group index (default 0): each group of words arrives on its own cue (a beat).
+  //   seg.chip: the key words sit in a chip that unfolds from left to right on ITS cue, after the words.
+  //   seg.glue: no space before (punctuation after a chip).
+  // put(x, y, u, {at: [seconds per group], chip: [seconds per chip], out, align})
+  //   Every group arrival gives the phrase a small impact: scale 1,03 → 1 in 0,25 s.
+  Q.phrase = (parent, lines, opt) => {
+    const o = Object.assign({ size: 62, weight: 650, color: Q.C.white, lh: 1.3, st: 0.045, align: 'center', impact: 0.03 }, opt);
+    const root = Q.div(parent, 'qr-abs qr-block', { fontSize: o.size + 'px', fontWeight: o.weight, color: o.color, lineHeight: o.lh, textAlign: o.align,
+      transformOrigin: o.align === 'center' ? '50% 50%' : '0 50%' });
+    const groups = [], chips = [];
     lines.forEach((segs) => {
       const ln = SS.el('div', 'ln', root);
       segs.forEach((seg, si) => {
         if (si > 0 && !seg.glue) ln.appendChild(document.createTextNode(' '));
-        let box = ln, bg = null;
-        if (seg.chip) { box = SS.el('span', 'qr-chipw', ln); bg = SS.el('span', 'bg', box); }
+        let box = ln, ov = null;
+        if (seg.chip) { box = SS.el('span', 'qr-chipw', ln); ov = document.createElement('span'); ov.className = 'ov'; chips.push({ ov, g: seg.g || 0 }); }
         seg.t.split(' ').forEach((w, wi) => {
-          if (wi > 0) box.appendChild(document.createTextNode(' '));
+          if (wi > 0) { box.appendChild(document.createTextNode(' ')); if (ov) ov.appendChild(document.createTextNode(' ')); }
           const el = SS.el('span', 'w', box);
           el.textContent = w;
-          seq.push({ el, bg: wi === 0 ? bg : null, n: seg.t.split(' ').length });
+          if (seg.glue && wi === 0) el.style.marginLeft = '-.07em'; // punctuation hugs the chip it follows
+          if (ov) { const c = SS.el('span', '', ov); c.textContent = w; }
+          (groups[seg.g || 0] = groups[seg.g || 0] || []).push(el);
         });
+        if (ov) box.appendChild(ov);
       });
     });
     const r = root.getBoundingClientRect();
     return {
-      el: root, w: r.width, h: r.height, n: seq.length,
-      doneAt: (at) => at + seq.length * o.st + 0.36,
-      // left edge x, vertical centre y; words start at `at`, the block leaves at `out`
-      put(x, y, u, at, out) {
-        const k = out == null ? 0 : Q.k(u, out, 0.24, Q.E.in);
-        root.style.transform = `translate(${x.toFixed(2)}px,${(y - r.height / 2 - k * 26).toFixed(2)}px)`;
-        root.style.opacity = (u < at - 0.02 ? 0 : 1 - k).toFixed(3);
-        root.style.visibility = u < at - 0.02 || k >= 0.999 ? 'hidden' : 'visible';
-        root.style.filter = k > 0.004 ? `blur(${(k * 12).toFixed(2)}px)` : 'none';
-        seq.forEach((s, i) => {
-          const t0 = at + i * o.st, kin = Q.k(u, t0, 0.36, Q.E.out);
-          s.el.style.transform = `translateY(${((1 - kin) * 0.22).toFixed(4)}em)`;
-          s.el.style.opacity = Q.k(u, t0, 0.2, Q.E.sine).toFixed(3);
-          s.el.style.filter = kin < 0.995 ? `blur(${((1 - kin) * 9).toFixed(2)}px)` : 'none';
-          if (s.bg) s.bg.style.transform = `scaleX(${Q.k(u, t0 - 0.02, 0.3 + s.n * o.st, Q.E.inOut).toFixed(4)})`;
+      el: root, w: r.width, h: r.height, groups, chips,
+      put(x, y, u, a) {
+        const at = a.at, out = a.out == null ? 0 : Q.k(u, a.out, a.outDur || 0.2, Q.E.in);
+        let imp = 0;
+        at.forEach((t0) => { if (u >= t0) imp = Math.max(imp, 1 - Q.E.out(Q.clamp((u - t0) / 0.25))); });
+        const sc = (1 + o.impact * imp) * Q.lerp(1, 0.95, out);
+        const left = o.align === 'center' ? x - r.width / 2 : x;
+        root.style.transform = `translate(${left.toFixed(2)}px,${(y - r.height / 2).toFixed(2)}px) scale(${sc.toFixed(5)})`;
+        const vis = u >= at[0] - 0.02 && out < 0.999;
+        root.style.opacity = vis ? (1 - out).toFixed(3) : '0';
+        root.style.visibility = vis ? 'visible' : 'hidden';
+        root.style.filter = out > 0.004 ? `blur(${(out * 14).toFixed(2)}px)` : 'none';
+        groups.forEach((ws, g) => ws.forEach((el, i) => {
+          const t0 = at[g] + i * o.st, kin = Q.k(u, t0, 0.3, Q.E.out);
+          el.style.transform = `translateY(${((1 - kin) * 0.12).toFixed(4)}em) scale(${Q.lerp(1.14, 1, kin).toFixed(4)})`;
+          el.style.opacity = Q.k(u, t0, 0.14, Q.E.sine).toFixed(3);
+          el.style.filter = kin < 0.995 ? `blur(${((1 - kin) * 10).toFixed(2)}px)` : 'none';
+        }));
+        chips.forEach((c, j) => {
+          const t0 = a.chip ? (Array.isArray(a.chip) ? a.chip[j] : a.chip) : at[c.g], k = Q.k(u, t0, 0.3, Q.E.expo);
+          c.ov.style.clipPath = `inset(0 ${((1 - k) * 100).toFixed(2)}% 0 0 round .14em)`;
+          c.ov.style.visibility = k <= 0.0005 ? 'hidden' : 'visible';
         });
+      },
+    };
+  };
+
+  // ---- Light and dark transitions (0,5 s and 0,6 s): no flash ------------------------------------------
+  // The ring grows on an expo curve with a feathered edge while the brightness rises progressively:
+  // what the disc reveals starts dimmed and reaches its full brightness only at the end.
+  // lightDisc: the day backdrop opens from the centre. irisClose: the night closes in from the edges.
+  const ringEl = (layer) => Q.div(layer, 'qr-abs', { width: '200px', height: '200px', borderRadius: '50%', boxSizing: 'border-box', border: `9px solid ${Q.C.turqHi}` });
+  const RMAX = () => Math.hypot(Q.W, Q.H) / 2 + 60;
+  Q.lightDisc = (layer) => {
+    const disc = Q.div(layer, 'layer');
+    Q.day(disc);
+    const dim = Q.div(disc, 'layer', { background: '#0A2A30' });
+    const ring = ringEl(layer);
+    const rad = (k) => RMAX() * Q.E.expo(Q.clamp(k));
+    return {
+      set(k) {
+        const on = k > 0.0005, r = rad(k), v = r - rad(k - 1 / 30), feather = Math.max(24, r * 0.3);
+        disc.style.visibility = on ? 'visible' : 'hidden';
+        const m = `radial-gradient(circle at 50% 50%, #000 ${Math.max(0, r - feather).toFixed(1)}px, rgba(0,0,0,0) ${r.toFixed(1)}px)`;
+        disc.style.webkitMaskImage = m; disc.style.maskImage = m;
+        dim.style.opacity = (0.9 * (1 - Q.E.sine(Q.clamp(k)))).toFixed(3);
+        Q.st(ring, { x: Q.CX, y: Q.CY, s: Math.max(0.001, r / 100), o: on && k < 0.999 ? 0.85 * (1 - Q.E.sine(Q.clamp(k))) : 0, blur: Math.min(16, Math.abs(v) * 0.05) });
+      },
+    };
+  };
+  Q.irisClose = (layer) => {
+    const veil = Q.div(layer, 'layer'), dark = Q.div(layer, 'layer');
+    Q.night(veil); Q.night(dark);
+    const ring = ringEl(layer);
+    // the opening played backwards: the picture dims progressively while the hole is still wide, then the ring
+    // collapses fast on what is already dark (no flash to black)
+    const rad = (k) => RMAX() * Q.E.expo(Q.clamp(1 - k));
+    return {
+      set(k) {
+        const on = k > 0.0005, r = rad(k), v = r - rad(k - 1 / 30), feather = Math.max(24, r * 0.3);
+        dark.style.visibility = veil.style.visibility = on ? 'visible' : 'hidden';
+        const m = `radial-gradient(circle at 50% 50%, rgba(0,0,0,0) ${Math.max(0, r - feather).toFixed(1)}px, #000 ${r.toFixed(1)}px)`;
+        dark.style.webkitMaskImage = m; dark.style.maskImage = m;
+        veil.style.opacity = (0.92 * Q.E.sine(Q.clamp(k))).toFixed(3);
+        Q.st(ring, { x: Q.CX, y: Q.CY, s: Math.max(0.001, r / 100), o: on && k < 0.999 ? 0.85 * Q.E.sine(Q.clamp(k)) : 0, blur: Math.min(16, Math.abs(v) * 0.05) });
       },
     };
   };

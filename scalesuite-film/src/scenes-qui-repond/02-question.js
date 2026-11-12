@@ -1,4 +1,4 @@
-/* Scene 2 · La question (3,9 – 8,2 s).
+/* Scene 2 · La question (8 beats, 3,89 – 8,33 s).
    a) Back to black. « Qui leur répond, [pour vrai]? » is typed letter by letter with a big rounded
       caret. « Qui » starts huge, then the line shrinks continuously while it is typed so that it
       always spans about 60 % of the frame width. The key word is typed inside the chip.
@@ -9,18 +9,18 @@
 (function () {
   const SS = window.SS, Q = SS.Q, QR = SS.QR;
 
+  const b = QR.b; // beats → seconds (108 BPM)
   const T = {
-    type: 0.1, cps: 18,       // typing start and speed (characters per second)
-    textOut: 2.14, textOutDur: 0.26,
-    panel: 2.3, panelDur: 0.46, // portrait panel opens
-    wake: 2.34, note: 2.4,    // the phone screen wakes, the notification drops in
-    you: 2.5,                 // « Toi? »
-    flash: 3.2,               // turquoise flash, the panel widens
-    widen: 0.55,
-    team: 3.44,               // « Ou ton équipe? »
-    line: 3.3,                // progress line start (ends with the scene)
+    type: 0.04, cps: 17 / (b(1.5) - 0.04), // typing speed set so that the chip (17th character) starts on beat 1,5
+    textOut: b(4) - 0.22, textOutDur: 0.2,
+    panel: b(4) - 0.03, panelDur: 0.42, // portrait panel opens on beat 4
+    wake: b(4) + 0.03, note: b(4) + 0.09, // the phone screen wakes, the notification drops in
+    you: b(4.5),              // « Toi? »
+    flash: b(6),              // turquoise flash, the panel widens
+    widen: 0.5,
+    team: b(6.5),             // « Ou ton équipe? »
+    line: b(6) + 0.04,        // progress line start (ends with the scene)
   };
-
   const L = Q.pick(
     { y: 540, base: 100, maxScale: 2.6, span: 0.6, pw: 540, PW: 1632, ph: 760, rad: 40, tag: 46, youDy: 84 },
     { y: 800, base: 100, maxScale: 2.0, span: 0.82, pw: 520, PW: 960, ph: 980, rad: 40, tag: 44, youDy: 120 },
@@ -100,5 +100,5 @@
     Q.st(R.team, { x: Q.CX, y: L.y + 8, s: Q.lerp(0.6, 1, kt), o: Q.k(u, T.team, 0.14, Q.E.sine) });
   }
 
-  QR.scene({ id: 's2', build, render });
+  QR.scene({ id: 's2', build, render, cuts: [0, T.panel, T.flash] });
 })();

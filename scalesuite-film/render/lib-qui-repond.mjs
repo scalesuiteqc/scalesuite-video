@@ -17,9 +17,10 @@ export async function openFilmQR(browser, base, format = '16x9', scale = 1, shot
   const err = await page.evaluate(() => window.SS.error);
   if (err) throw new Error(err);
   const cdp = await ctx.newCDPSession(page);
-  const shot = async (t) => {
+  // jpeg: motion blur samples (averaged afterwards); png: the frames themselves
+  const shot = async (t, jpeg) => {
     await page.evaluate((tt) => new Promise((r) => { window.SS.renderFrame(tt); requestAnimationFrame(() => r()); }), t);
-    const opt = { format: 'png', optimizeForSpeed: true };
+    const opt = jpeg ? { format: 'jpeg', quality: 97, optimizeForSpeed: true } : { format: 'png', optimizeForSpeed: true };
     if (shotScale !== 1) opt.clip = { x: 0, y: 0, width: vp.width, height: vp.height, scale: shotScale };
     const { data } = await cdp.send('Page.captureScreenshot', opt);
     return Buffer.from(data, 'base64');

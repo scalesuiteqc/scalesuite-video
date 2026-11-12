@@ -49,13 +49,12 @@ body.qr #stage { color: var(--qr-white); font-feature-settings: 'cv11' 1, 'ss03'
 .qr-panel { position: absolute; left: 0; top: 0; overflow: hidden; background: #05090E;
   box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 50px 120px -30px rgba(0,0,0,.9), 0 0 140px -30px rgba(43,191,179,.28); }
 
-/* multi-line text block (light scenes): the chip unfolds behind the key phrase */
+/* phrase: words in focus one by one; the chip (.ov, same words in chip ink on turquoise) unfolds over them */
 .qr-block { white-space: nowrap; letter-spacing: -.028em; }
 .qr-block .ln { display: block; }
 .qr-block .w { display: inline-block; position: relative; }
 .qr-chipw { position: relative; display: inline-block; padding: 0 .17em; margin: 0 -.05em; line-height: 1.16; }
-.qr-chipw .bg { position: absolute; inset: 0; border-radius: .14em; background: var(--qr-turq); transform-origin: 0 50%; }
-.qr-chipw .w { color: var(--qr-chip-ink); }
+.qr-chipw .ov { position: absolute; inset: 0; padding: 0 .17em; border-radius: .14em; background: var(--qr-turq); color: var(--qr-chip-ink); white-space: nowrap; text-align: left; }
 
 /* phone mock-up (light scenes) */
 .qr-phone { position: absolute; left: 0; top: 0; width: 360px; height: 740px; border-radius: 58px; background: #0C1218;

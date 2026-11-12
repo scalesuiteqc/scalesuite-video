@@ -1,4 +1,4 @@
-/* Scene 1 · La nuit (0 – 3,9 s).
+/* Scene 1 · La nuit (7 beats, 0 – 3,89 s).
    a) Black, then « Tu viens de recevoir [3] demandes de vendeurs. »: the words come into focus one by
       one (blur 12 px → sharp, scale 1,15 → 1; the first word is bigger and blurrier, like a camera
       pulling focus). The line stays centred while it grows. The digit rolls 0 → 3 inside its chip.
@@ -8,18 +8,19 @@
 (function () {
   const SS = window.SS, Q = SS.Q, QR = SS.QR;
 
+  const b = QR.b; // beats → seconds (108 BPM)
   const T = {
-    black: 0.3,            // first word
-    wordGap: 0.2,          // delay between two words
-    wordDur: 0.44,         // focus-in of one word
-    firstDur: 0.58,        // focus-in of the first word (bigger, blurrier)
-    digit: 1.12,           // the digit starts rolling (0 → 3)
-    digitDur: 0.5,
-    cut: 2.4,              // hard cut to the bedroom
-    light: 2.4, lightDur: 0.4, // the phone screen wakes up
-    clock: 2.47, clockCps: 22,
-    cards: [2.52, 2.68, 2.84], // cascade
-    cardDur: 0.52,
+    black: b(0.5),         // first word
+    wordGap: b(0.25),      // one word every quarter beat
+    wordDur: 0.38,         // focus-in of one word
+    firstDur: 0.5,         // focus-in of the first word (bigger, blurrier)
+    digit: b(0.5) + 4 * b(0.25), // the digit rolls 0 → 3 as its chip arrives
+    digitDur: 0.42,
+    cut: b(4),             // hard cut to the bedroom, on the beat
+    light: b(4), lightDur: 0.4, // the phone screen wakes up
+    clock: b(4) + 0.03, clockCps: 26,
+    cards: [b(4.5), b(5), b(5.5)], // cascade, on the half beats
+    cardDur: 0.5,
     zoom: 0.03,            // slow push-in over the whole shot
   };
 
@@ -72,7 +73,7 @@
 
     if (sentence) {
       // layout progress of each word drives the centring; its own focus-in is a little longer
-      const lay = R.words.map((w, i) => Q.k(u, T.black + i * T.wordGap, 0.36, Q.E.out));
+      const lay = R.words.map((w, i) => Q.k(u, T.black + i * T.wordGap, 0.3, Q.E.out));
       const total = R.words.reduce((s, w, i) => s + (w.w + R.gap) * lay[i], 0) - R.gap * lay[lay.length - 1];
       let x = -total / 2;
       R.words.forEach((w, i) => {
@@ -84,7 +85,7 @@
         x += (w.w + R.gap) * lay[i];
       });
       // the whole line eases back a touch while it builds (camera settling)
-      const z = Q.lerp(1.1, 1, Q.k(u, T.black, 1.9, Q.E.soft));
+      const z = Q.lerp(1.1, 1, Q.k(u, T.black, 1.6, Q.E.soft));
       R.group.style.transform = `translate(${Q.CX}px,${L.y}px) scale(${z.toFixed(4)})`;
       return;
     }
@@ -115,5 +116,5 @@
     });
   }
 
-  QR.scene({ id: 's1', build, render });
+  QR.scene({ id: 's1', build, render, cuts: [0, T.cut] });
 })();
