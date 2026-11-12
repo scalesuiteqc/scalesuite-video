@@ -1,0 +1,27 @@
+« Qui répond à 2 h du matin? » · 16x9 · preview · 108 BPM, 81 temps
+
+== Rendered frames (before encoding) ==
+CONTROLS  pv60-16x9  ·  2700 frames at 60 fps (45.00 s)
+FROZEN    OK: 0 run(s) of more than 3 identical frames
+          identical pairs of consecutive frames: 0 / 2699 ; smallest mean change between two frames: 0.0031 / 255
+JUMPS     OK: 0 isolated spike(s) outside the 3 intended cut(s)
+          intended cut at 2.222 s: change 7.5
+          intended cut at 3.889 s: change 26.3
+          intended cut at 8.333 s: change 9.4
+FLASH     largest brightness step outside the cuts: 34.7 / 255 in one frame, at 28.25 s
+
+== Encoded file ==
+CONTROLS  scalesuite-qui-repond-16x9-preview-60fps.mp4  ·  2700 frames at 60 fps (45.00 s)
+FROZEN    OK: 0 run(s) of more than 3 identical frames
+          identical pairs of consecutive frames: 1 / 2699 ; smallest mean change between two frames: 0.0000 / 255
+JUMPS     OK: 0 isolated spike(s) outside the 3 intended cut(s)
+          intended cut at 2.222 s: change 7.7
+          intended cut at 3.889 s: change 27.3
+          intended cut at 8.333 s: change 10.0
+FLASH     largest brightness step outside the cuts: 34.8 / 255 in one frame, at 28.25 s
+
+== Light and dark transitions (rendered frames, mean brightness 0-255) ==
+light opens, scene 5 to 6: 23 -> 241, spread over 31 frames (0.52 s), largest step 14.4 per frame
+iris closes, scene 7 to 8: 224 -> 16, spread over 36 frames (0.60 s), largest step 8.3 per frame
+light opens, scene 8 to 9: 45 -> 242, spread over 29 frames (0.48 s), largest step 9.9 per frame
+whip pan to message 3 (dark phone enters): 191 -> 237, spread over 11 frames (0.18 s), largest step 34.7 per frame
