@@ -17,7 +17,7 @@
   T.fig = T.rather + 0.25; T.lift = T.rather + 0.1; T.liftDur = 0.4; T.src = T.sub;
   const L = Q.pick(
     { line: 66, lineY0: 540, lineY1: 250, fig: 400, figY: 520, sub: 60, subY: 806, src: 24, srcY: 928 },
-    { line: 50, lineY0: 700, lineY1: 700, fig: 280, figY: 460, sub: 48, subY: 822, src: 28, srcY: 1010 },
+    { line: 44, lineY0: 700, lineY1: 700, fig: 280, figY: 460, sub: 48, subY: 822, src: 28, srcY: 1010 },
   );
   const SRC = Q.pick(
     ['Oldroyd et InsideSales.com, Lead Response Management Study, 2007.', 'Plus de 15 000 demandes Web, tous secteurs.'],
@@ -29,7 +29,7 @@
     Q.night(layer);
     const box = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 48%' });
     // 9:16: the sentence stays under the figure, so that a frozen frame or a screenshot is self-sufficient
-    const line = Q.phrase(box, Q.pick([[{ t: 'Rappelle en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30,', g: 2 }]], [[{ t: 'en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30', g: 2 }]]), { size: L.line, weight: 700, keepTall: true });
+    const line = Q.phrase(box, Q.pick([[{ t: 'Rappelle en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30,', g: 2 }]], [[{ t: 'Rappelle en' }, { t: '5 minutes', chip: true, g: 1 }, { t: 'plutôt qu’en 30', g: 2 }]]), { size: L.line, weight: 700, keepTall: true });
     const fig = Q.figure(box, { digits: '100', size: L.fig, turns: [1, 2, 3], tail: '×',
       tailCss: { fontSize: '.74em', alignSelf: 'center', marginLeft: '.06em', fontWeight: 700 } });
     const sub = Q.phrase(box, Q.pick([[{ t: 'plus de chances de joindre le vendeur.' }]], [[{ t: 'plus de chances de' }], [{ t: 'joindre le vendeur' }]]), { size: L.sub, weight: 700, keepTall: true });
