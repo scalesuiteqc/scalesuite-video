@@ -33,13 +33,23 @@
   // ?client=0 in the page address renders the variant without the client's name (see QR_QUERY in lib-qui-repond.mjs)
   if (new URLSearchParams(location.search).get('client') === '0') QR.OPT.clientName = false;
 
+  // THE VOICE IS THE MASTER TRACK (brief v2). vo-timing.js is generated from the voice-over take by
+  // audio/vo-qui-repond.py: it gives the duration of each scene (no sentence crosses a scene boundary)
+  // and the time of every cue word. QR.BEATS above is kept as the fallback when there is no voice;
+  // 108 BPM remains the grid of the score and of the transitions.
+  QR.VO = SS.VO || null;
+  QR.cue = (scene, word) => QR.VO[scene].cues[word].t; // seconds from the scene start
   QR.ORDER = Object.keys(QR.BEATS);
   QR.DUR = {};
   QR.START = {};
-  let n = 0;
-  QR.ORDER.forEach((id) => { QR.START[id] = QR.b(n); QR.DUR[id] = QR.b(QR.BEATS[id]); n += QR.BEATS[id]; });
+  let n = 0, t = 0;
+  QR.ORDER.forEach((id) => { QR.START[id] = t; QR.DUR[id] = QR.VO ? QR.VO[id].dur : QR.b(QR.BEATS[id]); t += QR.DUR[id]; n += QR.BEATS[id]; });
   QR.TOTAL_BEATS = n;
-  QR.TOTAL = QR.b(n);
+  QR.TOTAL = t;
+  // sync control: every scene declares when a cue word shows on screen; render/sync-qui-repond.mjs compares
+  // it with the voice (2 frames at 60 i/s for key words and figures, 4 frames for the rest)
+  QR.syncs = [];
+  QR.sync = (scene, word, screenT) => { QR.syncs.push({ scene, word, screen: screenT, voice: QR.cue(scene, word), key: QR.VO[scene].cues[word].key }); return screenT; };
 
   QR.scenes = [];
   // scene: {id, build(layer), render(u), cuts} with u = seconds since the scene start.

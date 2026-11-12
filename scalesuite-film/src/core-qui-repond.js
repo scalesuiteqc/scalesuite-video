@@ -72,16 +72,14 @@
   });
   Q.night = (layer) => {
     layer.style.background = Q.C.night;
-    const bg = Q.div(layer, 'layer', { background: `radial-gradient(120% 120% at 50% 46%, ${Q.C.night2} 0%, ${Q.C.night} 46%, #03060A 100%)` });
-    ambient(bg, 'rgba(43,191,179,.075)', 'rgba(47,176,222,.07)');
-    return bg;
+    // light falling from the top, gentle vignette (brief v2: no halo, no blurred ellipse)
+    return Q.div(layer, 'layer', { background: `radial-gradient(130% 100% at 50% -8%, #132233 0%, ${Q.C.night2} 30%, ${Q.C.night} 62%, #04070B 100%)` });
   };
 
   // ---- Light backdrop (solution scenes): pale turquoise, lighter in the centre -----------------------
   Q.day = (layer) => {
     layer.style.background = Q.C.mint;
-    const bg = Q.div(layer, 'layer', { background: `radial-gradient(95% 105% at 50% 44%, ${Q.C.off} 0%, ${Q.C.mint} 58%, #D6F2EE 100%)` });
-    ambient(bg, 'rgba(255,255,255,.75)', 'rgba(43,191,179,.13)');
+    const bg = Q.div(layer, 'layer', { background: `radial-gradient(130% 100% at 50% -8%, #FFFFFF 0%, ${Q.C.off} 26%, ${Q.C.mint} 64%, #DDF4F0 100%)` });
     return bg;
   };
 
@@ -302,12 +300,9 @@
   };
 
   // ---- Halo behind a giant figure ------------------------------------------------------------------
-  Q.halo = (parent, w, h) => {
-    const box = Q.div(parent, 'qr-abs', { width: w + 'px', height: h + 'px' });
-    Q.div(box, 'qr-abs', { inset: '0', filter: 'blur(46px)',
-      background: 'radial-gradient(closest-side, rgba(63,211,198,.9) 0%, rgba(43,191,179,.58) 30%, rgba(47,176,222,.28) 60%, rgba(47,176,222,0) 100%)' });
-    return box;
-  };
+  // (brief v2) no halo behind the figures any more: Q.halo is kept as an invisible placeholder so that
+  // the scenes that still position one keep working until they are reworked
+  Q.halo = (parent) => Q.div(parent, 'qr-abs', { display: 'none' });
 
   // ---- Notification card (no platform logo, no median dots) --------------------------------------------
   const HOUSE = (c) => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 11.2 12 4l8.4 7.2"/><path d="M5.8 9.6V19.5h12.4V9.6"/><path d="M10 19.5v-5.2h4v5.2"/></svg>`;
