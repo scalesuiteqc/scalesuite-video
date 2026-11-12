@@ -2,7 +2,8 @@
    a) Back to black. « Qui leur répond, [pour vrai]? » is typed letter by letter with a big rounded
       caret. « Qui » starts huge, then the line shrinks continuously while it is typed so that it
       always spans about 60 % of the frame width. The key word is typed inside the chip.
-   b) A portrait panel opens in the centre: close-up of the lit phone on the nightstand, « Toi? ».
+   b) A portrait panel opens in the centre: tight close-up of the phone on the nightstand, whose lock
+      screen lights up with a « Nouvelle demande » notification, « Toi? ».
    c) A turquoise flash fills the panel, which widens into a large rounded frame: an empty team
       office at night, « Ou ton équipe? », and a thin progress line at the bottom of the frame. */
 (function () {
@@ -12,7 +13,8 @@
     type: 0.1, cps: 18,       // typing start and speed (characters per second)
     textOut: 2.14, textOutDur: 0.26,
     panel: 2.3, panelDur: 0.46, // portrait panel opens
-    you: 2.46,                // « Toi? »
+    wake: 2.34, note: 2.4,    // the phone screen wakes, the notification drops in
+    you: 2.5,                 // « Toi? »
     flash: 3.2,               // turquoise flash, the panel widens
     widen: 0.55,
     team: 3.44,               // « Ou ton équipe? »
@@ -20,8 +22,8 @@
   };
 
   const L = Q.pick(
-    { y: 540, base: 100, maxScale: 2.6, span: 0.6, pw: 540, PW: 1632, ph: 760, rad: 40, tag: 46, closeUp: 1.42, closeDy: 0.13 },
-    { y: 800, base: 100, maxScale: 2.0, span: 0.82, pw: 520, PW: 960, ph: 980, rad: 40, tag: 44, closeUp: 1.4, closeDy: 0.13 },
+    { y: 540, base: 100, maxScale: 2.6, span: 0.6, pw: 540, PW: 1632, ph: 760, rad: 40, tag: 46, youDy: 84 },
+    { y: 800, base: 100, maxScale: 2.0, span: 0.82, pw: 520, PW: 960, ph: 980, rad: 40, tag: 44, youDy: 120 },
   );
 
   let R;
@@ -31,13 +33,11 @@
 
     const panel = Q.div(layer, 'qr-panel', { borderRadius: L.rad + 'px' });
     const inner = Q.div(panel, 'qr-abs', { left: '50%', top: '50%', width: '0', height: '0' });
-    // close-up of the bedroom phone
-    const closeBox = Q.div(inner, 'qr-abs', { width: '0', height: '0' });
-    const closeWorld = Q.div(closeBox, 'qr-abs', { width: '1920px', height: '1080px', transformOrigin: '0 0' });
-    const room = Q.bedroom(closeWorld);
-    room.set(1, 0, 0);
-    const closeVign = Q.div(inner, 'qr-abs', { width: L.PW + 'px', height: L.ph + 'px', left: -L.PW / 2 + 'px', top: -L.ph / 2 + 'px',
-      background: 'radial-gradient(60% 75% at 50% 50%, rgba(3,6,10,0) 30%, rgba(3,6,10,.78) 100%)' });
+    // tight close-up of the phone: the lock screen lights up with a readable notification
+    const closeBox = Q.div(inner, 'qr-abs', { width: L.pw + 'px', height: L.ph + 'px', left: -L.pw / 2 + 'px', top: -L.ph / 2 + 'px', transformOrigin: '50% 53%' });
+    const shot = Q.phoneShot(closeBox, L.pw, L.ph);
+    const closeVign = Q.div(inner, 'qr-abs', { width: L.pw + 'px', height: L.ph + 'px', left: -L.pw / 2 + 'px', top: -L.ph / 2 + 'px',
+      background: 'radial-gradient(85% 75% at 50% 56%, rgba(3,6,10,0) 45%, rgba(3,6,10,.7) 100%)' });
     // the office
     const offBox = Q.div(inner, 'qr-abs', { width: L.PW + 'px', height: L.ph + 'px', left: -L.PW / 2 + 'px', top: -L.ph / 2 + 'px', overflow: 'hidden' });
     const offWorld = Q.div(offBox, 'qr-abs', { width: L.PW + 'px', height: L.ph + 'px', transformOrigin: '50% 38%' });
@@ -48,7 +48,7 @@
     const tagCss = { fontSize: L.tag + 'px', fontWeight: 700, letterSpacing: '-.02em', lineHeight: 1.16, position: 'absolute', left: '0', top: '0',
       boxShadow: '0 18px 44px -12px rgba(0,0,0,.7)' };
     const you = Q.chip(layer, 'Toi?', tagCss), team = Q.chip(layer, 'Ou ton équipe?', tagCss);
-    R = { line, panel, closeBox, closeWorld, closeVign, room, offBox, offWorld, office, flash, bar, you, team };
+    R = { line, panel, closeBox, closeVign, shot, offBox, offWorld, office, flash, bar, you, team };
   }
 
   function render(u) {
@@ -76,10 +76,10 @@
     R.closeVign.style.display = office ? 'none' : '';
     R.offBox.style.display = office ? '' : 'none';
     if (!office) {
-      // slow push-in on the phone
-      const z = L.closeUp * (1 + 0.05 * Q.k(u, T.panel, 1.2, Q.E.sine));
-      R.closeWorld.style.transform = `translate(0px,${(L.ph * L.closeDy).toFixed(1)}px) scale(${z.toFixed(4)}) translate(${-Q.PHONE.x}px,${-Q.PHONE.y}px)`;
-      R.room.set(0.8 + 0.04 * Math.sin((u - T.panel) * 5.2), 0, 0);
+      // slow push-in; the screen wakes, then the notification drops in
+      const z = 1 + 0.06 * Q.k(u, T.panel, 1.3, Q.E.sine);
+      R.closeBox.style.transform = `scale(${z.toFixed(4)})`;
+      R.shot.set(Q.lerp(0.18, 1, Q.k(u, T.wake, 0.3, Q.E.p3)), Q.k(u, T.note, 0.5, Q.E.springSoft));
     } else {
       const z = 1.07 - 0.07 * Q.k(u, T.flash, QR.DUR.s2 - T.flash + 0.4, Q.E.out);
       R.offWorld.style.transform = `scale(${z.toFixed(4)})`;
@@ -95,7 +95,7 @@
     R.bar.style.opacity = office ? 1 : 0;
 
     const ky = Q.k(u, T.you, 0.4, Q.E.spring), yo = Q.k(u, T.you, 0.14, Q.E.sine) * (1 - Q.k(u, T.flash - 0.1, 0.1, Q.E.sine));
-    Q.st(R.you, { x: Q.CX, y: L.y - 20, s: Q.lerp(0.6, 1, ky), o: yo });
+    Q.st(R.you, { x: Q.CX, y: L.y + L.youDy, s: Q.lerp(0.6, 1, ky), o: yo });
     const kt = Q.k(u, T.team, 0.42, Q.E.spring);
     Q.st(R.team, { x: Q.CX, y: L.y + 8, s: Q.lerp(0.6, 1, kt), o: Q.k(u, T.team, 0.14, Q.E.sine) });
   }

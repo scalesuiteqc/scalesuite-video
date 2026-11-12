@@ -32,7 +32,7 @@
     const halo = Q.halo(box, L.halo[0], L.halo[1]);
     const line = Q.typed(box, [{ t: 'Rappelle en ' }, { t: '5 minutes', chip: true }, { t: ',' }], { size: L.line });
     const fig = Q.figure(box, { digits: '100', size: L.fig, turns: [1, 2, 3], tail: '×',
-      tailCss: { fontSize: '.74em', alignSelf: 'center', marginLeft: '.03em', fontWeight: 700 } });
+      tailCss: { fontSize: '.74em', alignSelf: 'center', marginLeft: '.06em', fontWeight: 700 } });
     const sub = Q.typed(box, [{ t: 'plus de chances de joindre le vendeur.' }], { size: L.sub });
     const src = Q.src(box, SRC, L.src);
     R = { box, halo, line, fig, sub, src };

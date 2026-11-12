@@ -63,6 +63,55 @@
     return Q.div(layer, 'layer', { background: `radial-gradient(120% 120% at 50% 46%, ${Q.C.night2} 0%, ${Q.C.night} 46%, #03060A 100%)` });
   };
 
+  // ---- Light backdrop (solution scenes): pale turquoise, lighter in the centre -----------------------
+  Q.day = (layer) => {
+    layer.style.background = Q.C.mint;
+    return Q.div(layer, 'layer', { background: `radial-gradient(95% 105% at 50% 44%, ${Q.C.off} 0%, ${Q.C.mint} 58%, #D6F2EE 100%)` });
+  };
+
+  // ---- Multi-line text block, left-aligned (light scenes) ---------------------------------------------
+  // lines: [[{t: 'Google Ads amène'}], [{t: 'sur la page de ton équipe', chip: true}, {t: '.', glue: true}]]
+  // Words come into focus one after the other; behind a key phrase the chip unfolds from left to right.
+  Q.block = (parent, lines, opt) => {
+    const o = Object.assign({ size: 62, weight: 650, color: Q.C.ink, lh: 1.3, st: 0.055 }, opt);
+    const root = Q.div(parent, 'qr-abs qr-block', { fontSize: o.size + 'px', fontWeight: o.weight, color: o.color, lineHeight: o.lh });
+    const seq = []; // reading order: words, each chip registered at its first word
+    lines.forEach((segs) => {
+      const ln = SS.el('div', 'ln', root);
+      segs.forEach((seg, si) => {
+        if (si > 0 && !seg.glue) ln.appendChild(document.createTextNode(' '));
+        let box = ln, bg = null;
+        if (seg.chip) { box = SS.el('span', 'qr-chipw', ln); bg = SS.el('span', 'bg', box); }
+        seg.t.split(' ').forEach((w, wi) => {
+          if (wi > 0) box.appendChild(document.createTextNode(' '));
+          const el = SS.el('span', 'w', box);
+          el.textContent = w;
+          seq.push({ el, bg: wi === 0 ? bg : null, n: seg.t.split(' ').length });
+        });
+      });
+    });
+    const r = root.getBoundingClientRect();
+    return {
+      el: root, w: r.width, h: r.height, n: seq.length,
+      doneAt: (at) => at + seq.length * o.st + 0.36,
+      // left edge x, vertical centre y; words start at `at`, the block leaves at `out`
+      put(x, y, u, at, out) {
+        const k = out == null ? 0 : Q.k(u, out, 0.24, Q.E.in);
+        root.style.transform = `translate(${x.toFixed(2)}px,${(y - r.height / 2 - k * 26).toFixed(2)}px)`;
+        root.style.opacity = (u < at - 0.02 ? 0 : 1 - k).toFixed(3);
+        root.style.visibility = u < at - 0.02 || k >= 0.999 ? 'hidden' : 'visible';
+        root.style.filter = k > 0.004 ? `blur(${(k * 12).toFixed(2)}px)` : 'none';
+        seq.forEach((s, i) => {
+          const t0 = at + i * o.st, kin = Q.k(u, t0, 0.36, Q.E.out);
+          s.el.style.transform = `translateY(${((1 - kin) * 0.22).toFixed(4)}em)`;
+          s.el.style.opacity = Q.k(u, t0, 0.2, Q.E.sine).toFixed(3);
+          s.el.style.filter = kin < 0.995 ? `blur(${((1 - kin) * 9).toFixed(2)}px)` : 'none';
+          if (s.bg) s.bg.style.transform = `scaleX(${Q.k(u, t0 - 0.02, 0.3 + s.n * o.st, Q.E.inOut).toFixed(4)})`;
+        });
+      },
+    };
+  };
+
   // ---- Highlight chip ---------------------------------------------------------------------------------
   Q.chip = (parent, text, css) => { const c = SS.el('span', 'qr-chip', parent); c.textContent = text; if (css) Object.assign(c.style, css); return c; };
 

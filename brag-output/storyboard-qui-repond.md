@@ -17,7 +17,7 @@ Fichiers : suffixe `qui-repond` partout (sources et sorties). Aucun fichier exis
 | Pipeline de rendu | `scalesuite-film/` : page HTML/SVG, timeline GSAP en pause (`SS.tl`), capture image par image avec Playwright, encodage ffmpeg | identique, donc rendu déterministe et images fixes à n'importe quel instant |
 | GSAP 3.13 + CustomEase | `vendor/gsap-3.13.0` | courbes `SS.EZ` (ease out, ressorts `back.out`), aucune interpolation linéaire |
 | Aides V2 et V3 (lecture seule) | `src/core.js`, `src/core-v3.js` | `SS.el`, `SS.svg`, `SS.place`, `SS.typer` (frappe avec curseur), `SS.counter`, `SS.odometer` (chiffres qui roulent), `SS.blur` (flou procédural), `SS.cue` (repères son), `SS.grain` |
-| Logo | `assets/logo/` + `src/logo.js` (`SS.logo`, tracé vectoriel du logo public) | révélation en scène 5, logo final en scène 9 (version fond sombre : « Scale » en blanc) |
+| Logo | `assets/logo/` + `src/logo.js` (`SS.logo`, tracé vectoriel du logo public) | révélation en scène 5, logo en scène 5 (version fond sombre : « Scale » en blanc), logo final en scène 9 (version fond clair) |
 | Police | Inter variable, auto hébergée (`assets/fonts`) | toute la vidéo, titres en 700 à 800, chiffres tabulaires |
 | Contrôles | `render/check-*.mjs` (déterminisme, continuité du mouvement), `render/sheet-v3.py` (planche contact) | contrôle qualité avant chaque envoi |
 | Son | `audio/music-lead-perdu.py` (instruments, effets feutrés de référence), `audio/mix_vo.py` | musique discrète synthétisée sur les repères, mixage de la voix |
@@ -39,8 +39,8 @@ scène). Changer une durée décale tout le reste sans toucher aux autres scène
 | « Scale » / « Suite » | `#1E1E1E` / `#1FBFA8` |
 | Turquoise de marque (puce de surlignage, accents) | `#2BBFB3`, texte foncé `#06211F` sur la puce |
 | Bleu du logo (seconde couleur du dégradé de « Voici », halos) | `#2FB0DE` |
-| Nuit (scènes 1 à 5, 8, 9) | fond `#070D14` à `#0B1622`, texte `#F2F7F9`, cartes `#F4F7F9` |
-| Lumière (scènes 6 et 7) | fond `#E8F9F7` (menthe du dépôt) à `#F7FBFA`, encre `#1A1A1A`, cartes blanches |
+| Nuit (scènes 1 à 5 et 8) | fond `#070D14` à `#0B1622`, texte `#F2F7F9`, cartes `#F4F7F9` |
+| Lumière (scènes 6, 7 et 9) | fond `#E8F9F7` (menthe du dépôt) à `#F7FBFA`, encre `#1A1A1A`, cartes blanches |
 
 La puce de surlignage est la même dans la nuit et dans la lumière : rectangle turquoise à coins de 8 px
 qui se déploie de gauche à droite (0,28 s, ease out), texte foncé dessus. Dans les scènes claires, je
@@ -59,7 +59,7 @@ plus une fois l'écran filmé.
 - **Transitions** par flou et échelle (0,35 à 0,5 s), jamais de coupe sèche. Entrées en ease out ou en
   ressort, sorties en ease in.
 - **Contraste narratif** : problème dans le noir (scènes 1 à 4), solution dans la lumière (6 et 7),
-  retour au sombre pour la preuve et l'appel à l'action (8 et 9).
+  retour au sombre pour la preuve (8), puis la lumière revient pour l'appel à l'action et le logo final (9).
 
 ## Zones sûres
 
@@ -83,9 +83,9 @@ personnage.
 | 4 · Un seul courtier | 13,0 – 20,2 | 7,2 s | « 81 % » + « des vendeurs ne contactent [qu'un seul courtier]. » Source en bas. Puis « Ce courtier là, ce devrait être toi. » Puis « Attends 30 minutes, et [il est passé à autre chose]. » | 13,0 : « 81 % » roule, halo, la phrase se tape (tenue 0,9 s). 16,05 : « Ce courtier là, ce devrait être toi. » seul au centre. 17,7 : la carte « Sainte Julie » revient ; 17,85 : la dernière phrase se tape ; quand la puce se déploie, la carte perd sa couleur, pâlit et disparaît. | Le noir reste ; un point turquoise naît au centre. |
 | 5 · Révélation | 20,2 – 23,4 | 3,2 s | « Voici » puis logo ScaleSuite puis « Système Vendeurs 5 minutes » | Mot géant en dégradé turquoise et bleu, pulsation en anneaux concentriques, logo, nom du système tapé dessous. | Un anneau turquoise pâle couvre le cadre : bascule vers la lumière. |
 | 6 · Le système | 23,4 – 36,6 | 13,2 s | Cinq messages (détail plus bas) | Fond turquoise pâle. Texte à gauche, interface à droite qui glisse et se construit. La seconde partie de chaque phrase reçoit la puce. | Les demandes de la liste deviennent les pastilles de l'entonnoir. |
-| 7 · Compte rendu | 36,6 – 40,4 | 3,8 s | « Chaque semaine, [un compte rendu écrit]. » | Entonnoir en pastilles : « 24 Demandes », flèche, « 19 Joints », flèche, « 7 Rencontres ». Flèches sans pourcentage. Étiquette « Exemple » bien visible. | Iris qui se referme : retour à la nuit. |
-| 8 · La preuve | 40,4 – 44,6 | 4,2 s | « 124 » + « demandes générées pour Groupe Mackay en moins de 7 mois. » + « [54 $] de budget Google Ads par demande en moyenne. » | Fond nuit, cartes floues en arrière plan, compteur mécanique jusqu'à 124. Variante sans le nom (« pour une de nos équipes clientes ») par la constante `QR.OPT.clientName`. | Flou et recul. |
-| 9 · Appel à l'action | 44,6 – 49,2 | 4,6 s | « Commente [5 MINUTES]. » puis « Je te prépare le Diagnostic de ton secteur. » puis logo + « On livre, ou le mois est gratuit. » | Champ de commentaire générique où « 5 MINUTES » se tape, réponse en carte, logo final. Export B seulement : bandeau blanc épinglé en haut. | Fin. |
+| 7 · Compte rendu | 36,6 – 40,4 | 3,8 s | « Chaque semaine, [un compte rendu écrit]. » | Feuille « Compte rendu de la semaine » avec un entonnoir en pastilles : « 24 Demandes », flèche, « 19 Joints », flèche, « 7 Rencontres ». Flèches sans pourcentage. Étiquette « Exemple » bien visible. | Iris qui se referme : retour à la nuit. |
+| 8 · La preuve | 40,4 – 44,6 | 4,2 s | « 124 » + « demandes générées pour Groupe Mackay en moins de 7 mois. » + « [54 $] de budget Google Ads par demande en moyenne. » | Fond nuit, cartes floues en arrière plan, compteur mécanique jusqu'à 124. Variante sans le nom (« pour une de nos équipes clientes ») par la constante `QR.OPT.clientName`. | La lumière s'ouvre depuis le centre vers la scène 9. |
+| 9 · Appel à l'action | 44,6 – 49,2 | 4,6 s | « Commente [5 MINUTES]. » puis « Je te prépare le Diagnostic de ton secteur. » puis logo + « On livre, ou le mois est gratuit. » | **Fond menthe `#E8F9F7`, comme le site** : la lumière s'ouvre depuis le centre (même transition qu'en scène 5). Champ de commentaire générique où « 5 MINUTES » se tape, réponse en carte, logo final dans sa version fond clair (« Scale » en noir). Export B seulement : bandeau blanc épinglé en haut. | Fin. |
 
 Durées : 3,9 · 4,3 · 4,8 · 7,2 · 3,2 · 13,2 · 3,8 · 4,2 · 4,6 = **49,2 s** (table `QR.DUR` dans
 `scenes-qui-repond/00-timing.js`). La scène 4 est passée de 6,6 à 7,2 s pour que chacune de ses trois
@@ -103,15 +103,24 @@ phrases reste lisible environ 0,9 s après la frappe.
 
 Codes réels du courtier : 1 Joint, 2 Pas de réponse, 3 Plus tard, 4 Rencontre, 5 Hors cible.
 
-Textes d'interface (**brouillons à confirmer**, en attente des captures des vrais textos) :
-- Page (vouvoiement, titre neutre, aucune offre d'évaluation gratuite) : « Équipe Exemple », « Vendez
-  votre propriété avec l'Équipe Exemple », champs Adresse, Nom, Téléphone, bouton d'envoi.
-- Texto d'alerte au courtier (14 h 06) : « Nouvelle demande de vendeur. Marie Exemple, Sainte Julie.
-  450 555 0142 »
-- Texto au vendeur (2 h 14) : « Bonjour Marie, votre demande est bien reçue. Un courtier de l'Équipe
-  Exemple communiquera avec vous. » (aucun délai promis)
-- Liste « Demandes » : Marie Exemple, Sainte Julie, « Joint » ; Paul Fictif, Laval, « Pas de
+Deux cellulaires alternent au premier plan, cadrés serré et coupés par le bas du cadre : celui du
+vendeur et celui du courtier, chacun avec son étiquette. Le cellulaire du vendeur passe en mode sombre
+pour le message de 2 h 14.
+
+Textes d'interface (**brouillons à confirmer**, en attente des captures des vrais textos ; tous réunis
+dans l'objet `COPY` de `06-systeme.js`) :
+- Annonce : « Commandité equipeexemple.ca », « Vendre ma propriété à Laval ».
+- Page (vouvoiement, titre neutre, aucune offre d'évaluation gratuite) : « ÉQUIPE EXEMPLE », « Vendez
+  votre propriété avec l'Équipe Exemple », champs Adresse, Nom, Téléphone, bouton « Envoyer ma
+  demande ». Heure du cellulaire : 14 h 05.
+- Texto d'alerte au courtier (14 h 06, expéditeur « ScaleSuite ») : « Nouvelle demande de vendeur.
+  Paul Fictif, Laval. 450 555 0142 »
+- Texto au vendeur (2 h 14, expéditeur « Équipe Exemple ») : « Bonjour Marie, votre demande est bien
+  reçue. Un courtier de l'Équipe Exemple communiquera avec vous. » (aucun délai promis)
+- Réponse du courtier : « 1 » (14 h 10). La ligne de Paul Fictif passe à « Joint ».
+- Liste « Demandes » : Paul Fictif, Laval, « Joint » ; Marie Exemple, Sainte Julie, « Pas de
   réponse » ; Jean Démo, Lévis, « Rencontre ». Aucune colonne de délai, aucun classement.
+- Message 5 : la liste entre dans un cadre « Équipe Exemple » qui se ferme, avec un cadenas.
 
 ### Cartes de notification (scènes 1, 4 et 8)
 

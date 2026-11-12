@@ -33,7 +33,7 @@
     const a = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px', transformOrigin: '50% 46%' });
     const halo = Q.halo(a, L.halo[0], L.halo[1]);
     const fig = Q.figure(a, { digits: '81', size: L.fig, turns: [1, 2], tail: '%',
-      tailCss: { fontSize: '.6em', alignSelf: 'flex-end', marginLeft: '.16em', marginBottom: '.135em', fontWeight: 700, lineHeight: 1 } });
+      tailCss: { fontSize: '.6em', alignSelf: 'flex-end', marginLeft: '.2em', marginBottom: '.135em', fontWeight: 700, lineHeight: 1 } });
     const sub = Q.typed(a, [{ t: 'des vendeurs ne contactent ' }, { t: 'qu’un seul courtier', chip: true }, { t: '.' }], { size: L.sub });
     const src = Q.src(a, ['NAR, 2025 Home Buyers and Sellers Generational Trends, États Unis.'], L.src);
     // b)

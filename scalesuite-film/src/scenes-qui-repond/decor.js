@@ -2,9 +2,11 @@
    shapes, gradients and blurs, and the rooms are suggested by light only.
      Q.bedroom(parent)      1920 × 1080 world: wall, window with city glow, nightstand, lamp, bed and
                             pillow, and a phone lying flat whose screen lights the surfaces around it.
-     Q.office(parent, w, h) empty team office at night in one-point perspective: rows of desks,
-                            monitors (a few in standby), chair backs, a window wall with blurred city
-                            lights. */
+     Q.office(parent, w, h) empty team office at night in one-point perspective, shallow depth of
+                            field: silhouettes of workstations, a few screens in standby, a window
+                            wall with city lights in bokeh.
+     Q.phoneShot(parent, w, h) tight shot of the phone on the nightstand: volume, glass reflection,
+                            lock screen that lights up with a readable notification. */
 (function () {
   const SS = window.SS, Q = SS.Q;
   let uid = 0;
@@ -108,97 +110,99 @@ ${obj(STEM, '#04070B', 0.3)}${obj(BASE, '#04070B', 0.35, 0.5)}${obj(SHADE, '#050
   };
 
   // ================================================================ office
+  // Cinematic, dark, shallow depth of field: the city and the far row are out of focus, the middle rows
+  // are sharp, the foreground row is a heavy blur. Workstations are reduced to silhouettes (a slab, a
+  // screen); a few screens glow in standby.
   Q.office = (parent, W, H) => {
     const id = 'of' + uid++, r = SS.rng(8);
-    const VP = { x: W / 2, y: H * 0.375 }, f = W * 0.54, CAM = 1.5, ZB = 9.2, HW = 8.5, CEIL = 3.1;
+    const VP = { x: W / 2, y: H * 0.37 }, f = W * 0.56, CAM = 1.22, ZB = 9.6, HW = 9;
     const P = (x, y, z) => [VP.x + (f * x) / z, VP.y - (f * (y - CAM)) / z];
     const pts = (a) => a.map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
     const quad = (a, fill, extra = '') => `<polygon points="${pts(a)}" fill="${fill}" ${extra}/>`;
     const mix = (a, b, k) => '#' + [0, 2, 4].map((i) => Math.round(parseInt(a.slice(1 + i, 3 + i), 16) * (1 - k) + parseInt(b.slice(1 + i, 3 + i), 16) * k).toString(16).padStart(2, '0')).join('');
-    const haze = (c, z) => mix(c, '#12263C', Math.max(0, Math.min(0.55, (z - 3) / 9)));
+    const haze = (c, z) => mix(c, '#0E2032', Math.max(0, Math.min(0.5, (z - 3.5) / 10)));
 
     const x0 = P(-HW, 0, ZB)[0], x1 = P(HW, 0, ZB)[0];
-    const yTop = P(0, CEIL, ZB)[1], yHead = P(0, 2.85, ZB)[1], ySill = P(0, 0.55, ZB)[1], yFloor = P(0, 0, ZB)[1];
+    const yHead = P(0, 3.4, ZB)[1], ySill = P(0, 0.5, ZB)[1], yFloor = P(0, 0, ZB)[1];
 
-    // city behind the glass
-    let towers = '', lights = '', bokeh = '';
+    // city behind the glass: soft towers, then bokeh discs (out of focus lights)
+    let towers = '', bokeh = '', bokehBig = '';
     for (let x = x0 - 10; x < x1;) {
-      const w = 46 + r() * 96, h = 40 + Math.pow(r(), 1.4) * (ySill - yHead - 40);
-      towers += `<rect x="${x.toFixed(0)}" y="${(ySill - h).toFixed(0)}" width="${w.toFixed(0)}" height="${(h + 4).toFixed(0)}" fill="${mix('#0A1524', '#10233A', r())}"/>`;
-      const n = Math.floor((w * h) / 520);
-      for (let i = 0; i < n; i++) if (r() < 0.5) lights += `<rect x="${(x + 5 + r() * (w - 12)).toFixed(1)}" y="${(ySill - h + 6 + r() * (h - 12)).toFixed(1)}" width="3.4" height="4.6" fill="${r() < 0.78 ? '#BFE4FF' : '#FFD9A6'}" opacity="${(0.25 + r() * 0.55).toFixed(2)}"/>`;
-      x += w + 3;
+      const w = 60 + r() * 130, h = 30 + Math.pow(r(), 1.5) * (ySill - yHead - 30);
+      towers += `<rect x="${x.toFixed(0)}" y="${(ySill - h).toFixed(0)}" width="${w.toFixed(0)}" height="${(h + 4).toFixed(0)}" fill="${mix('#081220', '#0E2136', r())}"/>`;
+      x += w + 2;
     }
-    const cols = ['#BFE8FF', '#8FD8F2', '#5FE0D3', '#D6ECFF', '#FFD9A6'];
-    for (let i = 0; i < 90; i++) {
-      const x = x0 + r() * (x1 - x0), y = ySill - Math.pow(r(), 1.6) * (ySill - yHead) * 0.85 - 4, rad = 3 + r() * 9, c = cols[Math.floor(r() * (r() < 0.8 ? 4 : 5))];
-      bokeh += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${c}" opacity="${(0.16 + r() * 0.5).toFixed(2)}"/>`;
+    const cols = ['#BFE8FF', '#8FD8F2', '#5FE0D3', '#D6ECFF', '#9CC8FF', '#FFD9A6'];
+    for (let i = 0; i < 120; i++) {
+      const x = x0 + r() * (x1 - x0), y = ySill - 6 - Math.pow(r(), 1.5) * (ySill - yHead) * 0.82, c = cols[Math.floor(r() * (r() < 0.84 ? 5 : 6))];
+      bokeh += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(3 + r() * 5).toFixed(1)}" fill="${c}" opacity="${(0.2 + r() * 0.5).toFixed(2)}"/>`;
     }
-    let mull = '', streaks = '';
-    for (let i = 0; i <= 8; i++) {
-      const x = P(-HW + i * (2 * HW / 8), 0, ZB)[0];
-      mull += `<rect x="${(x - 5).toFixed(1)}" y="${yHead.toFixed(1)}" width="10" height="${(ySill - yHead).toFixed(1)}" fill="#04070B"/>`;
+    for (let i = 0; i < 34; i++) {
+      const x = x0 + r() * (x1 - x0), y = ySill - 14 - Math.pow(r(), 1.3) * (ySill - yHead) * 0.74, c = cols[Math.floor(r() * (r() < 0.8 ? 5 : 6))];
+      bokehBig += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(10 + r() * 14).toFixed(1)}" fill="${c}" opacity="${(0.07 + r() * 0.16).toFixed(2)}"/>`;
     }
-    streaks = quad([P(-HW, 0, ZB), P(HW, 0, ZB), P(HW, 0, 2.2), P(-HW, 0, 2.2)], `url(#${id}st)`);
-    let fixtures = '';
-    for (const x of [-5.6, -1.9, 1.9, 5.6]) fixtures += quad([P(x - 0.12, CEIL, ZB), P(x + 0.12, CEIL, ZB), P(x + 0.12, CEIL, 1.6), P(x - 0.12, CEIL, 1.6)], '#070D15');
+    let mull = '';
+    for (let i = 0; i <= 6; i++) {
+      const x = P(-HW + i * (2 * HW / 6), 0, ZB)[0];
+      mull += `<rect x="${(x - 6).toFixed(1)}" y="${yHead.toFixed(1)}" width="12" height="${(ySill - yHead).toFixed(1)}" fill="#03060A"/>`;
+    }
 
-    // rows of workstations, far to near
-    let rows = '';
-    const standby = new Set(['7.6:-4.1', '7.6:1.9', '6:-6.3', '6:4.1', '4.6:-1.9', '4.6:6.3', '3.4:1.9']);
-    for (const z of [7.6, 6.0, 4.6, 3.4]) {
-      let far = '', near = '';
-      for (const x of [-6.3, -4.1, -1.9, 1.9, 4.1, 6.3]) {
-        const on = standby.has(z + ':' + x), zf = z - 0.42, zb = z + 0.42, zm = z + 0.12, zc = z - 0.9;
-        // desk top and front panel
-        far += quad([P(x - 0.95, 0.7, zb), P(x + 0.95, 0.7, zb), P(x + 0.95, 0.12, zb), P(x - 0.95, 0.12, zb)], haze('#05090E', z));
-        for (const sx of [-0.95, 0.89]) far += quad([P(x + sx, 0.7, zf), P(x + sx + 0.06, 0.7, zf), P(x + sx + 0.06, 0, zf), P(x + sx, 0, zf)], haze('#070C13', z));
-        far += quad([P(x - 0.95, 0.74, zb), P(x + 0.95, 0.74, zb), P(x + 0.95, 0.74, zf), P(x - 0.95, 0.74, zf)], haze('#0E1A27', z));
-        far += quad([P(x - 0.95, 0.74, zf), P(x + 0.95, 0.74, zf), P(x + 0.95, 0.7, zf), P(x - 0.95, 0.7, zf)], haze('#1A2C3F', z));
-        // monitor: stand, back plate, screen facing the camera
-        const m = [P(x - 0.33, 1.27, zm), P(x + 0.33, 1.27, zm), P(x + 0.33, 0.88, zm), P(x - 0.33, 0.88, zm)];
-        far += quad([P(x - 0.03, 0.9, zm), P(x + 0.03, 0.9, zm), P(x + 0.03, 0.74, zm), P(x - 0.03, 0.74, zm)], haze('#03060A', z));
-        far += quad([P(x - 0.13, 0.76, zm), P(x + 0.13, 0.76, zm), P(x + 0.13, 0.74, zm - 0.1), P(x - 0.13, 0.74, zm - 0.1)], haze('#03060A', z));
-        far += quad(m, haze('#03060A', z), `stroke="${haze('#101C29', z)}" stroke-width="1.5"`);
-        if (on) {
-          const c = P(x, 1.075, zm), sw = (0.62 * f) / zm, sh = (0.36 * f) / zm;
-          far += `<ellipse cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" rx="${(sw * 0.95).toFixed(1)}" ry="${(sh * 1.15).toFixed(1)}" fill="#2BBFB3" opacity=".2" filter="url(#${id}b12)" class="sb"/>`;
-          far += quad([P(x - 0.3, 1.24, zm), P(x + 0.3, 1.24, zm), P(x + 0.3, 0.91, zm), P(x - 0.3, 0.91, zm)], `url(#${id}sb)`, 'class="sb"');
-          far += quad([P(x - 0.6, 0.745, zm - 0.06), P(x + 0.6, 0.745, zm - 0.06), P(x + 0.75, 0.745, zf), P(x - 0.75, 0.745, zf)], '#2BBFB3', `opacity=".12" class="sb"`);
-        }
-        // chair back, seen from behind
-        const ct = P(x, 1.06, zc), cb = P(x, 0.52, zc), cw = (0.5 * f) / zc;
-        near += `<rect x="${(ct[0] - cw / 2).toFixed(1)}" y="${ct[1].toFixed(1)}" width="${cw.toFixed(1)}" height="${(cb[1] - ct[1]).toFixed(1)}" rx="${(cw * 0.2).toFixed(1)}" fill="${haze('#04070B', z)}"/>`;
-        near += `<rect x="${(ct[0] - cw / 2).toFixed(1)}" y="${ct[1].toFixed(1)}" width="${cw.toFixed(1)}" height="${(cw * 0.05).toFixed(1)}" rx="${(cw * 0.025).toFixed(1)}" fill="${haze('#16283A', z)}"/>`;
-        const p0 = P(x, 0.5, zc), p1 = P(x, 0.06, zc);
-        near += `<rect x="${(p0[0] - cw * 0.04).toFixed(1)}" y="${p0[1].toFixed(1)}" width="${(cw * 0.08).toFixed(1)}" height="${(p1[1] - p0[1]).toFixed(1)}" fill="${haze('#04070B', z)}"/>`;
-        near += `<ellipse cx="${p1[0].toFixed(1)}" cy="${p1[1].toFixed(1)}" rx="${(cw * 0.5).toFixed(1)}" ry="${(cw * 0.09).toFixed(1)}" fill="${haze('#04070B', z)}"/>`;
+    // one workstation, reduced to a silhouette: a slab, a short panel, a screen facing the camera
+    const station = (x, z, on) => {
+      const zf = z - 0.42, zb = z + 0.42, zm = z + 0.14;
+      let g = '';
+      g += quad([P(x - 0.9, 0.7, zb), P(x + 0.9, 0.7, zb), P(x + 0.9, 0.28, zb), P(x - 0.9, 0.28, zb)], haze('#03060A', z));
+      for (const sx of [-0.93, 0.87]) g += quad([P(x + sx, 0.7, zf), P(x + sx + 0.06, 0.7, zf), P(x + sx + 0.06, 0, zf), P(x + sx, 0, zf)], haze('#04070B', z));
+      g += quad([P(x - 0.95, 0.74, zb), P(x + 0.95, 0.74, zb), P(x + 0.95, 0.74, zf), P(x - 0.95, 0.74, zf)], haze('#0A1420', z));
+      g += quad([P(x - 0.95, 0.745, zb), P(x + 0.95, 0.745, zb), P(x + 0.95, 0.74, zb - 0.08), P(x - 0.95, 0.74, zb - 0.08)], haze('#213A54', z)); // window light on the far edge
+      g += quad([P(x - 0.95, 0.74, zf), P(x + 0.95, 0.74, zf), P(x + 0.95, 0.69, zf), P(x - 0.95, 0.69, zf)], haze('#05090E', z));
+      g += quad([P(x - 0.03, 0.9, zm), P(x + 0.03, 0.9, zm), P(x + 0.03, 0.74, zm), P(x - 0.03, 0.74, zm)], haze('#020406', z));
+      g += quad([P(x - 0.34, 1.28, zm), P(x + 0.34, 1.28, zm), P(x + 0.34, 0.88, zm), P(x - 0.34, 0.88, zm)], haze('#020406', z));
+      g += quad([P(x - 0.34, 1.285, zm), P(x + 0.34, 1.285, zm), P(x + 0.34, 1.265, zm), P(x - 0.34, 1.265, zm)], haze('#16293C', z)); // rim light on the top edge
+      if (on) {
+        const c = P(x, 1.08, zm), sw = (0.68 * f) / zm, sh = (0.4 * f) / zm;
+        g += `<ellipse cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" rx="${(sw * 1.05).toFixed(1)}" ry="${(sh * 1.3).toFixed(1)}" fill="#2BBFB3" opacity=".22" filter="url(#${id}g)" class="sb"/>`;
+        g += quad([P(x - 0.31, 1.25, zm), P(x + 0.31, 1.25, zm), P(x + 0.31, 0.91, zm), P(x - 0.31, 0.91, zm)], `url(#${id}sb)`, 'class="sb"');
+        g += quad([P(x - 0.55, 0.746, zm - 0.05), P(x + 0.55, 0.746, zm - 0.05), P(x + 0.8, 0.746, zf), P(x - 0.8, 0.746, zf)], '#2BBFB3', 'opacity=".12" class="sb"');
       }
-      rows += far + near;
-    }
+      return g;
+    };
+    const row = (z, xs, onSet) => xs.map((x) => station(x, z, onSet.includes(x))).join('');
+    const far = row(8.3, [-6.6, -4.4, -2.2, 2.2, 4.4, 6.6], [-4.4, 2.2]);
+    const mid = row(6.4, [-6.6, -4.4, -2.2, 2.2, 4.4, 6.6], [-2.2, 4.4]) + row(4.9, [-4.4, -2.2, 2.2, 4.4], [2.2]);
+    const near = station(-1.78, 2.6, true) + station(2.05, 2.8, false);
+    const aisle = P(0, 0, 5.2);
 
     const host = Q.div(parent, 'qr-abs', { width: W + 'px', height: H + 'px' });
     host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block">
 <defs>
-  <linearGradient id="${id}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#081120"/><stop offset=".55" stop-color="#0E2036"/><stop offset="1" stop-color="#1B3B58"/></linearGradient>
-  <linearGradient id="${id}fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#11253A"/><stop offset=".35" stop-color="#0A1522"/><stop offset="1" stop-color="#04070B"/></linearGradient>
-  <linearGradient id="${id}st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3C7FB0" stop-opacity=".26"/><stop offset="1" stop-color="#3C7FB0" stop-opacity="0"/></linearGradient>
-  <linearGradient id="${id}ce" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#030508"/><stop offset="1" stop-color="#08101A"/></linearGradient>
-  <linearGradient id="${id}sb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E6F78"/><stop offset="1" stop-color="#123E5C"/></linearGradient>
-  <filter id="${id}b2" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3"/></filter>
-  <filter id="${id}b5" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="6.5"/></filter>
-  <filter id="${id}b12" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="12"/></filter>
-  <clipPath id="${id}gl"><rect x="${x0.toFixed(1)}" y="${yHead.toFixed(1)}" width="${(x1 - x0).toFixed(1)}" height="${(ySill - yHead).toFixed(1)}"/></clipPath>
+  <linearGradient id="${id}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050B15"/><stop offset=".6" stop-color="#0A192B"/><stop offset="1" stop-color="#143049"/></linearGradient>
+  <linearGradient id="${id}fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13293F"/><stop offset=".35" stop-color="#0A1522"/><stop offset="1" stop-color="#03060A"/></linearGradient>
+  <linearGradient id="${id}ce" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#020305"/><stop offset="1" stop-color="#060C14"/></linearGradient>
+  <linearGradient id="${id}sb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#23808A"/><stop offset="1" stop-color="#15476A"/></linearGradient>
+  <linearGradient id="${id}fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E5B86" stop-opacity="0"/><stop offset=".5" stop-color="#1E5B86" stop-opacity=".16"/><stop offset="1" stop-color="#1E5B86" stop-opacity="0"/></linearGradient>
+  <filter id="${id}c" x="-5%" y="-20%" width="110%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>
+  <filter id="${id}bk" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="3.2"/></filter>
+  <filter id="${id}bb" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="1.6"/></filter>
+  <filter id="${id}m" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="2.4"/></filter>
+  <filter id="${id}far" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="${id}near" x="-20%" y="-30%" width="140%" height="160%"><feGaussianBlur stdDeviation="11"/></filter>
+  <filter id="${id}g" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="14"/></filter>
+  <filter id="${id}ai" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="48"/></filter>
+  <clipPath id="${id}gl"><rect x="0" y="${yHead.toFixed(1)}" width="${W}" height="${(ySill - yHead).toFixed(1)}"/></clipPath>
 </defs>
-<rect width="${W}" height="${H}" fill="#04070B"/>
-<rect x="${x0.toFixed(1)}" y="${yHead.toFixed(1)}" width="${(x1 - x0).toFixed(1)}" height="${(ySill - yHead).toFixed(1)}" fill="url(#${id}sky)"/>
-<g clip-path="url(#${id}gl)"><g filter="url(#${id}b2)">${towers}${lights}</g><g filter="url(#${id}b5)">${bokeh}</g></g>
-${mull}
-<rect x="0" y="${P(0, 1.9, ZB)[1].toFixed(1)}" width="${W}" height="7" fill="#04070B"/>
-<rect x="0" y="0" width="${W}" height="${yHead.toFixed(1)}" fill="url(#${id}ce)"/>${fixtures}
-<rect x="0" y="${ySill.toFixed(1)}" width="${W}" height="${(yFloor - ySill).toFixed(1)}" fill="#060B12"/>
-<rect x="0" y="${yFloor.toFixed(1)}" width="${W}" height="${(H - yFloor).toFixed(1)}" fill="url(#${id}fl)"/>${streaks}
-${rows}
+<rect width="${W}" height="${H}" fill="#020406"/>
+<rect x="0" y="${yHead.toFixed(1)}" width="${W}" height="${(ySill - yHead).toFixed(1)}" fill="url(#${id}sky)"/>
+<g clip-path="url(#${id}gl)"><g filter="url(#${id}c)">${towers}</g><g filter="url(#${id}bk)">${bokeh}</g><g filter="url(#${id}bb)">${bokehBig}</g></g>
+<g filter="url(#${id}m)">${mull}<rect x="0" y="${P(0, 2.0, ZB)[1].toFixed(1)}" width="${W}" height="8" fill="#03060A"/></g>
+<rect x="0" y="0" width="${W}" height="${(yHead + 2).toFixed(1)}" fill="url(#${id}ce)"/>
+<rect x="0" y="${(ySill - 2).toFixed(1)}" width="${W}" height="${(yFloor - ySill + 4).toFixed(1)}" fill="#04080E"/>
+<rect x="0" y="${yFloor.toFixed(1)}" width="${W}" height="${(H - yFloor).toFixed(1)}" fill="url(#${id}fl)"/>
+<rect x="0" y="${(yHead - 40).toFixed(1)}" width="${W}" height="${(yFloor - yHead + 150).toFixed(1)}" fill="url(#${id}fog)"/>
+<ellipse cx="${aisle[0].toFixed(1)}" cy="${(aisle[1] + 40).toFixed(1)}" rx="${(W * 0.17).toFixed(1)}" ry="${(H * 0.16).toFixed(1)}" fill="#2B6FA6" opacity=".22" filter="url(#${id}ai)"/>
+<g filter="url(#${id}far)">${far}</g>
+${mid}
+<g filter="url(#${id}near)">${near}</g>
 </svg>`;
     const sbs = [...host.querySelectorAll('.sb')].map((e) => [e, +(e.getAttribute('opacity') || 1)]);
     let last = -1;
@@ -206,6 +210,84 @@ ${rows}
       el: host,
       // k: standby glow multiplier (slow breathing)
       set(k) { if (Math.abs(k - last) < 0.004) return; last = k; sbs.forEach(([e, o]) => e.setAttribute('opacity', (o * k).toFixed(3))); },
+    };
+  };
+
+  // ================================================================ close-up of the phone
+  // Tight shot from above the nightstand: the phone has real volume (extruded edge, glass reflection)
+  // and its lock screen lights up with a readable « Nouvelle demande » notification.
+  Q.phoneShot = (parent, W, H) => {
+    const id = 'pc' + uid++;
+    const cx = W / 2, cy = H * 0.535, S = Math.min(W / 540, H / 760) * 1.02;
+    const M = `matrix(${(0.978 * S).toFixed(4)} ${(-0.129 * S).toFixed(4)} ${(0.208 * S).toFixed(4)} ${(0.606 * S).toFixed(4)} 0 0)`;
+    const body = (dy, fill, extra = '') => `<g transform="translate(${cx} ${cy + dy}) ${M}"><rect x="-180" y="-370" width="360" height="740" rx="58" fill="${fill}" ${extra}/></g>`;
+    let side = '';
+    const T = 17 * S;
+    for (let i = 12; i >= 1; i--) { const k = i / 12; side += body(T * k, k > 0.82 ? '#03050A' : k > 0.3 ? '#131C27' : '#243242'); }
+    const edge = H * 0.115; // back edge of the nightstand
+    const host = Q.div(parent, 'qr-abs', { width: W + 'px', height: H + 'px' });
+    host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block">
+<defs>
+  <linearGradient id="${id}tb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C1622"/><stop offset=".5" stop-color="#08101A"/><stop offset="1" stop-color="#04080D"/></linearGradient>
+  <radialGradient id="${id}gl" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${(W * 0.78).toFixed(0)}">
+    <stop offset="0" stop-color="#7FEFE2" stop-opacity=".85"/><stop offset=".3" stop-color="#2FB0DE" stop-opacity=".4"/><stop offset=".7" stop-color="#1C5F9A" stop-opacity=".1"/><stop offset="1" stop-color="#1C5F9A" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="${id}wp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#103E48"/><stop offset=".55" stop-color="#0F2F52"/><stop offset="1" stop-color="#0A1B33"/></linearGradient>
+  <linearGradient id="${id}rf" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".16"/><stop offset=".55" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="${id}ic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FD3C4"/><stop offset=".5" stop-color="#2BBFB3"/><stop offset="1" stop-color="#2FB0DE"/></linearGradient>
+  <filter id="${id}b8" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="8"/></filter>
+  <filter id="${id}b22" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="${(24 * S).toFixed(1)}"/></filter>
+  <clipPath id="${id}scr"><rect x="-166" y="-356" width="332" height="712" rx="45"/></clipPath>
+</defs>
+<rect width="${W}" height="${H}" fill="#04070C"/>
+<rect width="${W}" height="${edge}" fill="#05090F"/>
+<rect width="${W}" height="${edge}" fill="url(#${id}gl)" class="lit" data-o=".55" opacity="0"/>
+<g filter="url(#${id}b8)"><ellipse cx="${W * 0.16}" cy="${edge - 8}" rx="${W * 0.13}" ry="${H * 0.02}" fill="#020406"/><rect x="${W * 0.145}" y="-10" width="${W * 0.03}" height="${edge}" fill="#020406"/></g>
+<rect y="${edge}" width="${W}" height="${H - edge}" fill="url(#${id}tb)"/>
+<rect y="${edge}" width="${W}" height="${H - edge}" fill="url(#${id}gl)" class="lit" data-o=".62" opacity="0"/>
+<rect y="${edge - 1.5}" width="${W}" height="3" fill="#1B2B3B"/>
+<g transform="translate(${cx + 26 * S} ${cy + 46 * S}) ${M}" filter="url(#${id}b22)"><rect x="-180" y="-370" width="360" height="740" rx="58" fill="#000" opacity=".75"/></g>
+<g transform="translate(${cx} ${cy + T * 0.6}) ${M}" filter="url(#${id}b22)" class="lit" data-o=".42" opacity="0"><rect x="-200" y="-390" width="400" height="780" rx="70" fill="#5FE9DC"/></g>
+${side}
+${body(0, '#0A0F16', 'stroke="#3B4D60" stroke-width="2.5"')}
+<g transform="translate(${cx} ${cy}) ${M}">
+  <rect x="-166" y="-356" width="332" height="712" rx="45" fill="#03060A"/>
+  <g clip-path="url(#${id}scr)">
+    <g class="scr" opacity="0">
+      <rect x="-166" y="-356" width="332" height="712" fill="url(#${id}wp)"/>
+      <text x="0" y="-258" text-anchor="middle" font-family="Inter" font-weight="540" font-size="62" letter-spacing="-2" fill="#EAF6F8">2 h 14</text>
+      <rect x="-46" y="326" width="92" height="7" rx="3.5" fill="#fff" opacity=".5"/>
+    </g>
+    <g class="note" opacity="0">
+      <rect x="-150" y="-212" width="300" height="142" rx="30" fill="#F4F7F9"/>
+      <rect x="-134" y="-176" width="70" height="70" rx="19" fill="url(#${id}ic)"/>
+      <g transform="translate(-118 -160) scale(1.6)" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 11.2 12 4l8.4 7.2"/><path d="M5.8 9.6V19.5h12.4V9.6"/><path d="M10 19.5v-5.2h4v5.2"/></g>
+      <text x="-50" y="-172" font-family="Inter" font-weight="600" font-size="19" fill="#5B6875">Nouvelle demande</text>
+      <text x="-50" y="-134" font-family="Inter" font-weight="750" font-size="33" letter-spacing="-.8" fill="#111A22">Évaluation</text>
+      <text x="-50" y="-103" font-family="Inter" font-weight="540" font-size="22" fill="#5B6875">Sainte Julie</text>
+    </g>
+    <polygon points="-40,-356 120,-356 -60,356 -220,356" fill="url(#${id}rf)"/>
+  </g>
+  <rect x="-166" y="-356" width="332" height="712" rx="45" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="3"/>
+  <rect x="-34" y="-340" width="68" height="18" rx="9" fill="#020406"/>
+</g>
+</svg>`;
+    const lits = [...host.querySelectorAll('.lit')].map((e) => [e, +e.dataset.o]);
+    const scr = host.querySelector('.scr'), note = host.querySelector('.note');
+    let last = '';
+    return {
+      el: host,
+      // wake: screen brightness 0…1; note: notification 0…1 (slides down into place)
+      set(wake, n) {
+        const key = wake.toFixed(3) + '|' + n.toFixed(3);
+        if (key === last) return;
+        last = key;
+        const light = Math.min(1.15, wake * (0.45 + 0.55 * Math.min(1, n)));
+        lits.forEach(([e, o]) => e.setAttribute('opacity', (o * light).toFixed(3)));
+        scr.setAttribute('opacity', wake.toFixed(3));
+        note.setAttribute('opacity', Math.min(1, n * 1.6).toFixed(3));
+        note.setAttribute('transform', `translate(0 ${((1 - n) * -46).toFixed(2)})`);
+      },
     };
   };
 })();
