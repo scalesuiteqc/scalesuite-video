@@ -44,11 +44,11 @@ try {
     const planArgs = [path.join(HERE, 'mb-qui-repond.py'), 'plan', o.out, String(n)];
     if (o.thr) planArgs.push(o.thr);
     const fast = JSON.parse(execFileSync('python3', planArgs, { encoding: 'utf8', maxBuffer: 1 << 26 }).trim().split('\n').pop());
-    console.log(`motion: ${fast.length}/${n} frames need the full shutter (${(100 * fast.length / n).toFixed(0)} %)`);
+    console.log(`motion: ${fast.length}/${n} frames need the full shutter (${(100 * fast.length / n).toFixed(0)} %), ${fast.filter((f) => f[1] > mb).length} of them on a whip pan`);
     const sub = path.join(o.out, 'sub');
     fs.mkdirSync(sub, { recursive: true });
     const jobs = [];
-    for (const i of fast) for (let j = 1; j < mb; j++) jobs.push({ t: start + i / fps + (j / mb) * (0.5 / fps), file: path.join(sub, `${String(i).padStart(5, '0')}-${j}.jpg`), jpeg: true });
+    for (const [i, k0] of fast) for (let k = Math.max(mb, k0 > mb ? k0 : mb), j = 1; j < k; j++) jobs.push({ t: start + i / fps + (j / k) * (0.5 / fps), file: path.join(sub, `${String(i).padStart(5, '0')}-${j}.jpg`), jpeg: true });
     await run(jobs, 'stage 2');
     console.log(execFileSync('python3', [path.join(HERE, 'mb-qui-repond.py'), 'merge', o.out, String(mb)], { encoding: 'utf8', maxBuffer: 1 << 26 }).trim().split('\n').pop());
     fs.rmSync(sub, { recursive: true, force: true });

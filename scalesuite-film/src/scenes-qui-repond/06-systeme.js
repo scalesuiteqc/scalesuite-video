@@ -141,9 +141,11 @@
   function render(u) {
     const end = QR.DUR.s6;
     // ---- camera: three lateral whips, then a push through the list, then the exit whip
-    const whip = (i) => Q.k(u, M[i] - T.whip, T.whipDur, Q.E.p4io);
-    const camX = L.step * (whip(1) + whip(2) + whip(3)) + Q.W * 0.9 * Q.k(u, end - T.exit, T.exit, Q.E.in);
+    const camAt = (v) => { const w = (i) => Q.k(v, M[i] - T.whip, T.whipDur, Q.E.p4io); return L.step * (w(1) + w(2) + w(3)) + Q.W * 0.9 * Q.k(v, end - T.exit, T.exit, Q.E.in); };
+    const camX = camAt(u);
     R.world.style.transform = `translateX(${(-camX).toFixed(2)}px)`;
+    const camV = Math.abs(camX - camAt(u - 1 / 60)); // px per frame at 60 i/s
+    R.world.style.filter = camV > 12 ? `blur(${Math.min(5, camV * 0.03).toFixed(2)}px)` : 'none';
     const push = Q.k(u, M[4] - T.whip, T.whipDur, Q.E.p4io);
     R.st.forEach((s, i) => {
       const x = (i > 3 ? 3 : i) * L.step - camX;
