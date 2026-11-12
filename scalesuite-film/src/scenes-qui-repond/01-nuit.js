@@ -65,7 +65,6 @@
     const vign = Q.div(b, 'layer', { background: 'radial-gradient(115% 115% at 50% 52%, rgba(3,6,10,0) 42%, rgba(3,6,10,.72) 100%)' });
     const clock = Q.typed(b, [{ t: '2 h 14' }], { size: L.clockSize, weight: 560, caret: true });
     clock.el.style.letterSpacing = '-.045em';
-    clock.el.style.textShadow = '0 0 70px rgba(63,211,198,.35), 0 0 22px rgba(63,211,198,.18)';
     const cards = L.cards.map((c) => Object.assign({ el: Q.card(b, c) }, c));
     R = { a, b, night, group, words, gap, world, room, vign, clock, cards };
   }
