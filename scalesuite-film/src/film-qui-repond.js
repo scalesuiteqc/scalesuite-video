@@ -12,6 +12,7 @@
     for (const w of [500, 540, 600, 650, 700, 720, 800]) await document.fonts.load(`${w} 64px Inter`);
     await document.fonts.ready;
     QR.scenes.forEach((s) => { s.layer = SS.el('div', 'layer', stage); s.layer.style.transformOrigin = '50% 50%'; s.build(s.layer); });
+    await Promise.all([...document.images].map((im) => im.decode().catch(() => {}))); // photos are decoded before the first frame
     const grain = SS.el('div', 'layer', stage);
     Object.assign(grain.style, { backgroundImage: `url(${SS.grain(256, 256, 10)})`, pointerEvents: 'none', opacity: 0.5 });
     const last = QR.scenes[QR.scenes.length - 1];

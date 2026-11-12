@@ -1,60 +1,72 @@
-/* Scene 8 · La preuve (7 beats, 36,11 – 40,0 s). Back in the dark.
-   A mechanical counter rolls up to « 124 » and stops on beat 1, with « demandes générées pour Groupe
-   Mackay / en moins de 7 mois. ». On beat 3: « [54 $] de budget Google Ads par demande en moyenne. »,
-   chip on beat 4. Blurred request cards drift in the background.
-   QR.OPT.clientName (00-timing.js): false replaces the client's name by « une de nos équipes clientes »
-   (to use until Groupe Mackay has confirmed).
-   Content rules: 54 $ is the Google Ads budget per request (paid to Google), not a ScaleSuite price.
-   A past result for one client, no promise of volume.
-   Exit: the light opens from the centre onto scene 9 in 0,5 s (same transition as scene 5). */
+/* Scene 8 · La preuve : a case study in four beats. The voice: « Pour le Groupe Mackay : 124 demandes depuis
+   avril, à 54 $ de pub par demande. »
+   One idea at a time, each figure with its counter and its short line, then the four together in a sober grid:
+     1  [124]             demandes reçues depuis avril 2026            ON « cent vingt quatre »
+     2  [54 $]            de budget Google Ads par demande, en moyenne ON « cinquante quatre dollars »
+     3  [1 clic sur 20]   devient une demande                          during the end of the sentence
+     4  [1 personne sur 10] qui voit l’annonce clique                  during the end of the sentence
+   Footnote with the periods. No halo. Hard cut to scene 9.
+   QR.OPT.clientName = false → no client name (« Une de nos équipes clientes »).
+   QR.OPT.quote = {text, name, title} → shows the quote slot; it stays OFF (null) until the real quote arrives.
+   Content rules: past results of one client, no promise of volume; 54 $ is Google Ads budget paid to Google,
+   not a ScaleSuite price. François Mackay authorised the use of the name on 31 October 2026. */
 (function () {
-  const SS = window.SS, Q = SS.Q, QR = SS.QR, b = QR.b;
+  const SS = window.SS, Q = SS.Q, QR = SS.QR;
+  const cue = (w) => QR.sync('s8', w, QR.cue('s8', w));
+  QR.OPT.quote = QR.OPT.quote || null;
 
-  const T = {
-    fig: 0.02, land: b(1),
-    line: b(1),
-    cost: b(3), costChip: b(4),
-    open: b(7) - 0.5, openDur: 0.5,
-  };
-  const L = Q.pick(
-    { fig: 340, figY: 320, line: 56, lineY: 602, cost: 50, costY: 782, halo: [1300, 700] },
-    { fig: 300, figY: 640, line: 48, lineY: 912, cost: 42, costY: 1080, halo: [1000, 700] },
-  );
-  const NAME = () => (QR.OPT.clientName ? 'pour Groupe Mackay' : 'pour une de nos équipes clientes');
-  const BG = [ // background cards: x, y (fractions of the frame), scale, blur, rotation, drift phase
-    [0.1, 0.2, 1.3, 13, -6, 0.2], [0.87, 0.16, 0.95, 9, 5, 1.4], [0.06, 0.74, 0.9, 9, 4, 2.3],
-    [0.93, 0.7, 1.4, 14, -5, 3.1], [0.3, 0.93, 0.8, 8, -3, 4.2], [0.7, 0.95, 0.85, 8, 6, 5.0],
+  const T = { head: cue('pour'), n1: cue('n124'), n2: cue('n54'), count: 0.5 };
+  T.grid1 = T.n2 - 0.22; T.grid2 = T.n2 + 0.78; T.n3 = T.n2 + 0.9; T.n4 = T.n2 + 1.14; T.foot = T.n3;
+  const STATS = [
+    { n: 124, fmt: (v) => String(Math.round(v)), label: 'demandes reçues depuis avril 2026' },
+    { n: 54, fmt: (v) => Math.round(v) + ' $', label: 'de budget Google Ads par demande, en moyenne' },
+    { text: '1 clic sur 20', label: 'devient une demande' },
+    { text: '1 personne sur 10', label: 'qui voit l’annonce clique' },
   ];
-  const CITIES = [['Évaluation', 'Sainte Julie'], ['Vendre mon condo', 'Laval'], ['Maison à vendre', 'Lévis']];
+  const NAME = () => (QR.OPT.clientName ? 'Groupe Mackay' : 'Une de nos équipes clientes');
+  const FOOT = () => [(QR.OPT.clientName ? 'Groupe Mackay, client ScaleSuite. ' : 'Client ScaleSuite. ') + 'Données Google Ads. Demandes et budget depuis avril 2026.',
+    'Taux de conversion : campagne Vendeurs, du 9 avril au 10 octobre 2026. Taux de clics : trois campagnes, du 9 juin au 9 juillet 2026.'];
+  const L = Q.pick(
+    { headY: 150, hero: { x: 960, y: 610, s: 1.45 }, cells: [[540, 340], [1380, 340], [540, 650], [1380, 650]], num: 104, label: 36, footY: 934, foot: 22 },
+    { headY: 300, hero: { x: 540, y: 900, s: 1.3 }, cells: [[540, 560], [540, 820], [540, 1080], [540, 1340]], num: 84, label: 32, footY: 1560, foot: 22 },
+  );
 
   let R;
   function build(layer) {
     Q.night(layer);
-    const cards = BG.map((c, i) => ({ el: Q.card(layer, { title: CITIES[i % 3][0], city: CITIES[i % 3][1], turq: i % 3 === 1 }), c }));
-    Q.div(layer, 'layer', { background: 'radial-gradient(70% 70% at 50% 48%, rgba(7,13,20,.86) 0%, rgba(7,13,20,.5) 60%, rgba(7,13,20,.2) 100%)' });
-    const box = Q.div(layer, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px' });
-    const halo = Q.halo(box, L.halo[0], L.halo[1]);
-    const fig = Q.figure(box, { digits: '124', size: L.fig, turns: [0, 1, 2] });
-    const line = Q.phrase(box, [[{ t: 'demandes générées ' + NAME() }], [{ t: 'en moins de 7 mois.' }]], { size: L.line, weight: 600, lh: 1.32 });
-    const cost = Q.phrase(box, [[{ t: '54 $', chip: true }, { t: 'de budget Google Ads par demande en moyenne.' }]], { size: L.cost, weight: 560 });
-    const light = Q.lightDisc(layer);
-    R = { cards, halo, fig, line, cost, light };
+    const head = Q.phrase(layer, [[{ t: NAME() }]], { size: 44, weight: 700, color: '#9FB3C2' });
+    const stats = STATS.map((s) => {
+      const el = Q.div(layer, 'qr-abs', { textAlign: 'center', whiteSpace: 'nowrap' });
+      const chip = SS.el('span', 'qr-chip', el);
+      Object.assign(chip.style, { fontSize: L.num * (s.n ? 1 : 0.78) + 'px', fontWeight: 800, letterSpacing: '-.03em', lineHeight: 1.12, fontFeatureSettings: "'tnum' 1", minWidth: s.n ? '1.6em' : '0' });
+      chip.textContent = s.text || s.fmt(s.n);
+      const lb = SS.el('div', '', el);
+      Object.assign(lb.style, { marginTop: '14px', fontSize: L.label + 'px', fontWeight: 650, letterSpacing: '-.02em', color: Q.C.white });
+      lb.textContent = s.label;
+      return { el, chip, s };
+    });
+    const foot = Q.src(layer, FOOT(), L.foot);
+    let quote = null;
+    if (QR.OPT.quote) { // slot for François Mackay's quote: off until the real text arrives (no invented quote)
+      quote = Q.div(layer, 'qr-abs', { textAlign: 'center', whiteSpace: 'nowrap', color: Q.C.white });
+      quote.innerHTML = `<div style="font-size:34px;font-weight:650;letter-spacing:-.02em">« ${QR.OPT.quote.text} »</div><div style="margin-top:8px;font-size:24px;color:#9FB3C2">${QR.OPT.quote.name}, ${QR.OPT.quote.title}</div>`;
+    }
+    R = { head, stats, foot, quote };
   }
 
   function render(u) {
-    R.cards.forEach((c, i) => {
-      const [fx, fy, s, bl, r, ph] = c.c, k = Q.k(u, 0.04 + i * 0.04, 0.8, Q.E.out);
-      Q.st(c.el, { x: fx * Q.W + Math.sin(u * 0.5 + ph) * 16, y: fy * Q.H + (1 - k) * 60 + Math.cos(u * 0.42 + ph) * 12 - u * 7 * s, r: r + Math.sin(u * 0.3 + ph) * 1.2, s, o: k * 0.42, blur: bl });
+    R.head.put(Q.CX, L.headY, u, { at: [T.head] });
+    const at = [T.n1, T.n2, T.n3, T.n4], toGrid = [T.grid1, T.grid2, null, null];
+    R.stats.forEach((st, i) => {
+      const kin = Q.k(u, at[i], 0.36, Q.E.springSoft), g = toGrid[i] == null ? 1 : Q.k(u, toGrid[i], 0.42, Q.E.inOut);
+      const c = L.cells[i];
+      Q.st(st.el, { x: Q.lerp(L.hero.x, c[0], g), y: Q.lerp(L.hero.y, c[1], g) + (1 - kin) * 30, s: Q.lerp(L.hero.s, 1, g) * Q.lerp(0.86, 1, kin), o: Q.k(u, at[i], 0.1, Q.E.sine), blur: (1 - Q.k(u, at[i], 0.22, Q.E.out)) * 8 });
+      if (st.s.n) st.chip.textContent = st.s.fmt(st.s.n * Q.k(u, at[i], T.count, Q.E.p4));
     });
-    const fin = Q.k(u, T.fig, 0.36, Q.E.out), land = Q.env(u, T.land - 0.02, 0.06, T.land + 0.04, 0.25);
-    Q.st(R.fig.el, { x: Q.CX, y: L.figY, s: Q.lerp(0.86, 1, fin) * (1 + 0.035 * land), o: Q.k(u, T.fig, 0.12, Q.E.sine), blur: (1 - Q.k(u, T.fig, 0.24, Q.E.out)) * 10 });
-    R.fig.roll(u, T.fig, (T.land - T.fig) / 0.86, 0.04);
-    const hk = Q.k(u, T.land, 0.7, Q.E.out);
-    Q.st(R.halo, { x: Q.CX, y: L.figY, s: Q.lerp(0.55, 1, hk) * (1 + 0.03 * Math.sin((u - T.land) * 2.4)), o: hk * 0.9 });
-    R.line.put(Q.CX, L.lineY, u, { at: [T.line] });
-    R.cost.put(Q.CX, L.costY, u, { at: [T.cost], chip: T.costChip });
-    R.light.set(Q.clamp((u - T.open) / T.openDur));
+    const kf = Q.k(u, T.foot, 0.4, Q.E.out);
+    Q.st(R.foot, { x: Q.CX, y: L.footY + (1 - kf) * 12, o: Q.k(u, T.foot, 0.3, Q.E.sine) * 0.62 });
+    if (R.quote) Q.st(R.quote, { x: Q.CX, y: L.footY - 90, o: Q.k(u, T.n4 + 0.2, 0.3, Q.E.sine) });
   }
 
-  QR.scene({ id: 's8', build, render, cuts: [0, T.land, T.cost] });
+  QR.scene({ id: 's8', build, render, cuts: [0, T.n1, T.n2] });
 })();

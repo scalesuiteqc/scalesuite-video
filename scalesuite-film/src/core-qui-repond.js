@@ -180,7 +180,7 @@
         const m = `radial-gradient(circle at 50% 50%, rgba(0,0,0,0) ${Math.max(0, r - feather).toFixed(1)}px, #000 ${r.toFixed(1)}px)`;
         dark.style.webkitMaskImage = m; dark.style.maskImage = m;
         veil.style.opacity = (0.92 * Q.E.sine(Q.clamp(k))).toFixed(3);
-        Q.st(ring, { x: Q.CX, y: Q.CY, s: Math.max(0.001, r / 100), o: on && k < 0.999 ? 0.85 * Q.E.sine(Q.clamp(k)) : 0, blur: Math.min(16, Math.abs(v) * 0.05) });
+        Q.st(ring, { x: Q.CX, y: Q.CY, s: Math.max(0.001, r / 100), o: 0 }); // brief v2: no ring on the iris
       },
     };
   };

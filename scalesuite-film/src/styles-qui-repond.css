@@ -119,7 +119,10 @@ body.qr #stage { color: var(--qr-white); font-feature-settings: 'cv11' 1, 'ss03'
 .ip { position: absolute; left: 0; top: 0; width: 360px; height: 740px; border-radius: 62px;
   background: linear-gradient(145deg, #9BA1A8 0%, #4A4F56 22%, #1C1F23 55%, #7C828A 100%);
   box-shadow: 0 70px 110px -40px rgba(10,60,56,.5), 0 26px 46px -22px rgba(10,40,52,.45); font-family: 'Inter', sans-serif; }
-.ip .bz { position: absolute; inset: 3px; border-radius: 59px; background: #050608; }
+/* one identity per person, the same at every appearance: seller = natural titanium, broker = black, leader = grey */
+.ip.nat { background: linear-gradient(145deg, #F1ECE3 0%, #C9C2B6 24%, #9C958A 58%, #E4DED4 100%); }
+.ip.blk { background: linear-gradient(145deg, #5A5E64 0%, #26282C 24%, #0B0C0E 58%, #44474C 100%); }
+.ip .bz { position: absolute; inset: 5px; border-radius: 57px; background: #050608; }
 .ip .scr { position: absolute; inset: 11px; border-radius: 51px; overflow: hidden; background: #fff; color: #000; letter-spacing: -.01em; }
 .ip .isl { position: absolute; left: 50%; top: 22px; width: 104px; height: 30px; margin-left: -52px; border-radius: 15px; background: #000; z-index: 9; }
 .ip .sb { position: absolute; left: 0; right: 0; top: 0; height: 54px; z-index: 8; display: flex; justify-content: space-between; align-items: center;
@@ -175,6 +178,15 @@ body.qr #stage { color: var(--qr-white); font-feature-settings: 'cv11' 1, 'ss03'
 .tp .hd b { position: absolute; left: 18px; top: 66px; font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
 .tp .hd i { position: absolute; right: 18px; top: 70px; width: 20px; height: 14px; background: linear-gradient(#111 0 2px, transparent 2px 6px, #111 6px 8px, transparent 8px 12px, #111 12px 14px); }
 .tp .kc { margin-top: 120px; text-align: center; font-size: 11.5px; font-weight: 700; letter-spacing: .09em; color: #DF1B2F; }
+.tp .sub { margin: 6px 26px 0; text-align: center; font-size: 13.5px; line-height: 1.35; color: #4A5160; white-space: normal; }
+.tp .ok { margin: 150px 26px 0; text-align: center; font-size: 21px; font-weight: 800; letter-spacing: -.02em; line-height: 1.25; white-space: normal; }
+.tp .okc { width: 64px; height: 64px; border-radius: 50%; background: #E6F6EC; margin: 0 auto 16px; display: grid; place-items: center; }
+.tp .okc svg { width: 34px; height: 34px; }
+.ip .bn.top { position: absolute; left: 10px; right: 10px; top: 56px; z-index: 7; box-sizing: border-box; padding: 12px 14px 13px 12px; border-radius: 24px; background: rgba(250,250,252,.96); color: #000; display: flex; gap: 11px; box-shadow: 0 18px 40px -14px rgba(0,0,0,.4), 0 0 0 1px rgba(0,0,0,.05); }
+.ip .bn.top .ic2 { width: 40px; height: 40px; border-radius: 10px; background: #34C759; flex: none; display: grid; place-items: center; margin-top: 2px; } .ip .bn.top .ic2 svg { width: 24px; height: 24px; }
+.ip .bn.top .bt { font-size: 15px; font-weight: 700; display: flex; justify-content: space-between; } .ip .bn.top .bt span { font-weight: 450; color: #6C6C70; font-size: 13px; }
+.ip .bn.top .bx { font-size: 15px; line-height: 1.28; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.im .av svg { width: 30px; height: 30px; }
 .tp .h1 { margin: 6px 20px 0; text-align: center; font-size: 22px; font-weight: 800; letter-spacing: -.025em; line-height: 1.18; white-space: normal; }
 .tp .cd { margin: 14px 14px 0; padding: 14px 16px 16px; border-radius: 18px; background: #fff; border: 1px solid #E6E8EF; }
 .tp .lb { font-size: 12.5px; font-weight: 700; margin: 0 0 5px; } .tp .lb + .fd { margin-bottom: 10px; }

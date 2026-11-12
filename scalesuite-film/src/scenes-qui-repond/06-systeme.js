@@ -43,7 +43,11 @@
     query: 'vendre ma maison laval',
     adTitle: 'Vendre ma maison à Laval | Équipe Belvédère', adDesc: 'Des courtiers de Laval qui connaissent votre secteur. Parlez de votre projet à un courtier de l’équipe.',
     adLinks: ['Nous joindre', 'Notre équipe'],
-    pageKicker: 'NOUS JOINDRE', pageTitle: 'Prêt à concrétiser votre projet?', pageBtn: 'Envoyer ma demande',
+    pageKicker: 'NOUS JOINDRE', pageTitle: 'Vendre votre maison à Laval', pageSub: 'Parlez de votre projet à un courtier de l’Équipe Belvédère.', pageBtn: 'Envoyer ma demande',
+    pageThanks: 'Merci Sophie, votre demande est envoyée.',
+    // the seller has not saved the team's number: her phone shows it the way iOS writes an unknown sender
+    // (the hyphen of the iOS number format is a justified exception to the no-hyphen rule)
+    teamNumber: '+1 (450) 555-0199',
     fields: [['Nom complet *', 'Sophie Gagnon'], ['Courriel *', 'sophie.gagnon@exemple.ca'], ['Téléphone *', '450 555 0142'], ['Message (optionnel)', 'Bonjour, je pense vendre ma maison à Laval cette année.']],
     alertPreview: 'Nouvelle demande de vendeur. Sophie Gagnon, 450 555 0142',
     alert: 'Nouvelle demande de vendeur.<br>Sophie Gagnon<br>450 555 0142<br>sophie.gagnon@exemple.ca<br>« Bonjour, je pense vendre ma maison à Laval cette année. »<span class="sp"></span>Après l’appel, répondez :<br>1 Joint, 2 Pas de réponse, 3 Plus tard, 4 Rencontre, 5 Hors cible',
@@ -78,13 +82,16 @@
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="#5F6368" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/></svg>',
     send: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 10.5 13.5M21 3l-6.6 18-3.9-7.5L3 9.6z"/></svg>',
   };
-  function phone(parent, time, dark) {
-    const el = Q.div(parent, 'ip');
+  // who: 'nat' seller (natural titanium), 'blk' broker (black), '' leader (grey)
+  function phone(parent, time, dark, who) {
+    const el = Q.div(parent, 'ip' + (who ? ' ' + who : ''));
     el.innerHTML = `<div class="bz"></div><div class="scr"><div class="sb" style="color:${dark ? '#fff' : '#000'}"><span class="tm">${time}</span><span class="rt">${ICON.sig}${ICON.wifi}${ICON.bat}</span></div><div class="isl"></div></div><div class="gl"></div>`;
     const scr = el.querySelector('.scr'), sb = el.querySelector('.sb');
     return { el, sb, tm: el.querySelector('.tm'), view: (cls, html) => { const v = document.createElement('div'); v.className = 'view ' + cls; v.innerHTML = html; scr.insertBefore(v, sb); return v; } };
   }
-  const messages = (stamp) => `<div class="hd"><span class="bk">${ICON.back}</span><span class="av">${COPY.initials}</span><div class="nm">${COPY.team} <span>›</span></div></div>
+  const PERSON = '<svg viewBox="0 0 30 30" fill="#fff"><circle cx="15" cy="11" r="5.6"/><path d="M4.5 27c1.2-5.6 5.4-8.6 10.5-8.6S24.3 21.4 25.5 27z"/></svg>';
+  // unknown: the contact is a bare number with the generic grey avatar (seller's phone)
+  const messages = (stamp, unknown) => `<div class="hd"><span class="bk">${ICON.back}</span><span class="av">${unknown ? PERSON : COPY.initials}</span><div class="nm">${unknown ? COPY.teamNumber : COPY.team} <span>›</span></div></div>
     <div class="th"><div class="thi"><div class="st"><b>Message texte</b><br>Aujourd’hui ${stamp}</div></div></div><div class="bar"><span class="pl">+</span><span class="fl"><span class="tx"></span><i>Message texte</i></span></div>`;
   const lock = (time, text) => `<div class="dt">${COPY.date}</div><div class="tm2">${time}</div><div class="bn"><span class="ic2">${ICON.bubble}</span><span style="flex:1;min-width:0"><div class="bt">${COPY.team}<span>maintenant</span></div><div class="bx">${text}</div></span></div>`;
   const portalCard = () => `<div class="t">${COPY.listTitle}</div><div class="s">${COPY.listSub}</div>` + COPY.rows.map((r) =>
@@ -99,28 +106,33 @@
     const texts = TEXT.map((t, i) => Q.phrase(st[i], t.lines, { size: L.size, weight: 750, color: Q.C.ink, align: 'left', lh: 1.26 }));
 
     // ---- 0 · seller: search result, then the team's page
-    const A = phone(st[0], HOURS.search);
+    const A = phone(st[0], HOURS.search, false, 'nat');
     const search = A.view('gs', `<div class="q">${ICON.search}${COPY.query}</div><div class="tabs"><span class="on">Tous</span><span>Images</span><span>Vidéos</span><span>Actualités</span></div>
       <div class="ad"><div class="sp">Commandité</div><div class="site"><span class="fav">B</span><span><div class="sn">${COPY.team}</div><div class="su">${COPY.domain} › vendre</div></span></div>
       <div class="tt">${COPY.adTitle}</div><div class="ds">${COPY.adDesc}</div><div class="sl">${COPY.adLinks.map((x) => `<span>${x}</span>`).join('')}</div></div>
       <div class="org"><div style="width:42%"></div><div style="width:88%;height:17px"></div><div style="width:96%"></div><div style="width:70%"></div><div style="width:38%;margin-top:22px"></div><div style="width:80%;height:17px"></div><div style="width:92%"></div></div>`);
     const ripple = SS.el('div', '', search);
     Object.assign(ripple.style, { position: 'absolute', left: '120px', top: '212px', width: '90px', height: '90px', marginLeft: '-45px', marginTop: '-45px', borderRadius: '50%', background: 'rgba(26,115,232,.2)' });
-    const page = A.view('tp', `<div class="hd"><b>${COPY.team}</b><i></i></div><div class="kc">${COPY.pageKicker}</div><div class="h1">${COPY.pageTitle}</div><div class="cd">` +
+    const page = A.view('tp', `<div class="hd"><b>${COPY.team}</b><i></i></div><div class="kc">${COPY.pageKicker}</div><div class="h1">${COPY.pageTitle}</div><div class="sub">${COPY.pageSub}</div><div class="cd">` +
       COPY.fields.map((f, i) => `<div class="lb">${f[0]}</div><div class="fd${i === 3 ? ' ta' : ''}"><span></span></div>`).join('') + `<div class="bt">${COPY.pageBtn}${ICON.send}</div></div>`);
     // ---- 1 · broker: banner, then the alert
-    const B1 = phone(st[1], HOURS.alert, true);
+    const B1 = phone(st[1], HOURS.alert, true, 'blk');
     const b1msg = B1.view('im', messages(HOURS.alert));
     const alBub = SS.el('div', 'bub', b1msg.querySelector('.thi')); alBub.innerHTML = COPY.alert; alBub.style.top = BUB_TOP + 'px';
     const alH = alBub.offsetHeight;
     const b1lock = B1.view('lk', lock(HOURS.alert, COPY.alertPreview));
-    // ---- 2 · seller: banner, then the confirmation
-    const A2 = phone(st[2], HOURS.confirm, true);
-    const a2msg = A2.view('im', messages(HOURS.confirm));
+    // ---- 2 · seller: her phone is unlocked (she has just sent the form). The page thanks her, the banner of the
+    //          text drops over it, then the conversation with an unknown number
+    const A2 = phone(st[2], HOURS.confirm, false, 'nat');
+    A2.view('tp', `<div class="hd"><b>${COPY.team}</b><i></i></div><div class="ok"><div class="okc"><svg viewBox="0 0 24 24" fill="none" stroke="#1E9E57" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>${COPY.pageThanks}</div>`);
+    const a2bn = document.createElement('div');
+    a2bn.className = 'bn top';
+    a2bn.innerHTML = `<span class="ic2">${ICON.bubble}</span><span style="flex:1;min-width:0"><div class="bt">${COPY.teamNumber}<span>maintenant</span></div><div class="bx">${COPY.confirm}</div></span>`;
+    A2.el.querySelector('.scr').insertBefore(a2bn, A2.sb);
+    const a2msg = A2.view('im', messages(HOURS.confirm, true));
     const confBub = SS.el('div', 'bub', a2msg.querySelector('.thi')); confBub.innerHTML = COPY.confirm; confBub.style.top = BUB_TOP + 'px';
-    const a2lock = A2.view('lk', lock(HOURS.confirm, COPY.confirm));
     // ---- 3 · broker, six minutes later: he replies « 1 », the system confirms
-    const B3 = phone(st[3], HOURS.reply);
+    const B3 = phone(st[3], HOURS.reply, false, 'blk');
     const b3msg = B3.view('im', messages(HOURS.alert));
     const thi = b3msg.querySelector('.thi');
     const rb = SS.el('div', 'bub', thi); rb.innerHTML = COPY.alert; rb.style.top = BUB_TOP + 'px';
@@ -144,7 +156,7 @@
     st[4].style.transformOrigin = `${L.px}px ${L.top + 420}px`;
     st[5].style.transformOrigin = `${L.list5.x}px ${L.list5.y}px`;
     R = { world, st, texts, A, search, ripple, page, fds: [...page.querySelectorAll('.fd span')], btn: page.querySelector('.bt'), B1, b1lock, b1bn: b1lock.querySelector('.bn'), alBub,
-      A2, a2lock, a2bn: a2lock.querySelector('.bn'), confBub, B3, one, dl, ack, tx: b3msg.querySelector('.tx'), ph: b3msg.querySelector('.fl i'), P, tag: pv.querySelector('.tg'),
+      A2, a2bn, a2msg, confBub, B3, one, dl, ack, tx: b3msg.querySelector('.tx'), ph: b3msg.querySelector('.fl i'), P, tag: pv.querySelector('.tg'),
       card5, frame, fr: frame.querySelector('rect'), ftt: frame.querySelector('.tt'), flk: frame.querySelector('.lk2') };
   }
 
@@ -201,8 +213,12 @@
     pop(R.alBub, u, T.alertOpen + 0.1);
     // ---- 2 · seller (14 h 04): banner, then the confirmation
     setPhone(R.A2, 0, Q.buzz(u, T.confBn + 0.03, 0.28, 17) * 4);
-    unlock(R.A2, R.a2lock, R.a2bn, u, T.confBn, T.confOpen);
-    pop(R.confBub, u, T.confOpen + 0.1);
+    const kb = Q.k(u, T.confBn, 0.42, Q.E.springSoft), ko = Q.k(u, T.confOpen, 0.32, Q.E.inOut);
+    R.a2bn.style.transform = `translateY(${((1 - kb) * -150 - ko * 150).toFixed(2)}px)`;
+    R.a2bn.style.opacity = (Q.k(u, T.confBn, 0.1, Q.E.sine) * (1 - ko)).toFixed(3);
+    R.a2msg.style.transform = `translateY(${((1 - ko) * 100).toFixed(2)}%)`;
+    R.a2msg.style.visibility = ko <= 0.001 ? 'hidden' : 'visible';
+    pop(R.confBub, u, T.confOpen + 0.12);
     // ---- 3 · broker (14 h 10): « 1 », « Distribué », the system confirms
     setPhone(R.B3, 0);
     const typing = u >= T.typeOne && u < T.sendOne;
