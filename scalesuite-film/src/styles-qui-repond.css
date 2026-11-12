@@ -1,0 +1,47 @@
+/* « Qui répond à 2 h du matin? » : additions on top of styles.css (V2) and styles-v3.css, both loaded
+   read-only. Two canvases (1920×1080 and 1080×1920), sized by film-qui-repond.js. No will-change. */
+:root {
+  --qr-night: #070D14; --qr-night2: #0B1622; --qr-white: #F2F7F9;
+  --qr-turq: #2BBFB3; --qr-blue: #2FB0DE; --qr-chip-ink: #06211F;
+  --qr-card: #F4F7F9; --qr-card-ink: #111A22; --qr-card-soft: #5B6875;
+}
+body.qr, body.qr #stage { background: var(--qr-night); }
+body.qr #stage { color: var(--qr-white); font-feature-settings: 'cv11' 1, 'ss03' 1; }
+.qr-abs { position: absolute; left: 0; top: 0; }
+
+/* highlight chip: turquoise rectangle behind the key word, dark text on top */
+.qr-chip { display: inline-block; background: var(--qr-turq); color: var(--qr-chip-ink); border-radius: .14em;
+  padding: .04em .2em .07em; margin: 0 .02em; white-space: nowrap; }
+
+/* typed line */
+.qr-line { position: absolute; left: 0; top: 0; white-space: pre; transform-origin: 0 50%; line-height: 1.16; letter-spacing: -.025em; }
+.qr-caret { position: absolute; top: 50%; width: .11em; height: 1.04em; margin-top: -.52em; border-radius: .055em; background: var(--qr-white); }
+
+/* giant rolling figures */
+.qr-fig { position: absolute; left: 0; top: 0; display: flex; align-items: flex-start; white-space: nowrap; line-height: 1;
+  font-weight: 800; letter-spacing: -.045em; font-feature-settings: 'tnum' 1, 'cv11' 1; color: #fff; }
+.qr-fig .win { display: inline-block; overflow: hidden; height: 1em;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%); }
+.qr-fig .strip { display: flex; flex-direction: column; }
+.qr-fig .strip > span { display: block; height: 1em; line-height: 1em; text-align: center; }
+
+/* notification card */
+.qr-card { position: absolute; left: 0; top: 0; box-sizing: border-box; display: flex; align-items: center; gap: 22px;
+  width: 452px; height: 136px; padding: 0 28px 0 24px; border-radius: 28px; background: var(--qr-card); color: var(--qr-card-ink); white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,.35), 0 34px 70px -22px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.06); }
+.qr-card .ic { width: 84px; height: 84px; border-radius: 22px; flex: none; display: grid; place-items: center;
+  background: linear-gradient(150deg, #2FD3C4 0%, #2BBFB3 45%, #2FB0DE 100%); }
+.qr-card .ic svg { width: 46px; height: 46px; display: block; }
+.qr-card .lb { font-size: 22px; font-weight: 600; letter-spacing: -.005em; color: var(--qr-card-soft); line-height: 1.2; }
+.qr-card .ti { font-size: 33px; font-weight: 720; letter-spacing: -.025em; line-height: 1.16; }
+.qr-card .ct { font-size: 24px; font-weight: 540; letter-spacing: -.01em; color: var(--qr-card-soft); line-height: 1.25; }
+.qr-card.turq { background: linear-gradient(150deg, #37D2C4 0%, #2BBFB3 60%, #2AB6C4 100%); color: #05211E; }
+.qr-card.turq .lb, .qr-card.turq .ct { color: rgba(5,33,30,.72); }
+.qr-card.turq .ic { background: #06211F; }
+
+/* source line under a statistic */
+.qr-src { position: absolute; left: 0; top: 0; text-align: center; white-space: nowrap; font-weight: 500; letter-spacing: 0; line-height: 1.35; color: var(--qr-white); }
+
+/* framed shot (question scene) */
+.qr-panel { position: absolute; left: 0; top: 0; overflow: hidden; background: #05090E;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 50px 120px -30px rgba(0,0,0,.9), 0 0 140px -30px rgba(43,191,179,.28); }
