@@ -39,7 +39,7 @@ if __name__ == '__main__':
     mode, d = sys.argv[1], sys.argv[2]
     if mode == 'plan':
         n = int(sys.argv[3])
-        thr = float(sys.argv[4]) if len(sys.argv) > 4 else 3.0
+        thr = float(sys.argv[4]) if len(sys.argv) > 4 else 6.0
         files = [os.path.join(d, f'{i:05d}.png') for i in range(n)]
         with Pool(4) as p:
             im = p.map(small, files, chunksize=32)

@@ -25,7 +25,7 @@
       while (i + 1 < s.cuts.length && u >= s.cuts[i + 1]) i++;
       const d = u - s.cuts[i], carry = i > 0 ? CAM.push * (s.cuts[i] - s.cuts[i - 1]) : 0;
       const k = CAM.base + CAM.push * d + carry * (1 - Q.E.out(Q.clamp(d / CAM.relax)));
-      const x = CAM.dx * Math.sin(t * 0.61 + s.t0), y = CAM.dy * Math.sin(t * 0.47 + s.t0 * 1.7 + 1);
+      const x = CAM.dx * Math.sin(t * 0.61), y = CAM.dy * Math.sin(t * 0.47 + 1); // same drift for every scene: seamless hand-offs
       s.layer.style.transform = `translate(${x.toFixed(3)}px,${y.toFixed(3)}px) scale(${k.toFixed(5)})`;
     };
     // EPS: scene boundaries are beats (irrational in seconds), never missed by a float rounding error

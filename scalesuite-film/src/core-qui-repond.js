@@ -148,7 +148,9 @@
   // what the disc reveals starts dimmed and reaches its full brightness only at the end.
   // lightDisc: the day backdrop opens from the centre. irisClose: the night closes in from the edges.
   const ringEl = (layer) => Q.div(layer, 'qr-abs', { width: '200px', height: '200px', borderRadius: '50%', boxSizing: 'border-box', border: `9px solid ${Q.C.turqHi}` });
-  const RMAX = () => Math.hypot(Q.W, Q.H) / 2 + 60;
+  // the feather is 30 % of the radius: the ring must travel far enough for its SOLID part to reach the corners
+  // (otherwise the corners are still half covered on the last frame and the next scene pops in)
+  const RMAX = () => (Math.hypot(Q.W, Q.H) / 2) * 1.5;
   Q.lightDisc = (layer) => {
     const disc = Q.div(layer, 'layer');
     Q.day(disc);
