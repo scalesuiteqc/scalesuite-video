@@ -152,7 +152,14 @@
     QR.ORDER.forEach((id) => {
       const vo = QR.VO[id]; if (!vo || !vo.words) return;
       let cur = null;
+      // subtitle units: « 2 h » is ONE unit (the chip covers both), and the subtitles carry no quotation marks
+      const units = [];
       vo.words.forEach(([text, t0, t1, ci]) => {
+        const prev = units[units.length - 1];
+        if (text === 'h' && prev && prev[0] === '2' && prev[3] === ci) { prev[0] = '2 h'; prev[2] = t1; return; }
+        units.push([text.replace(/^« /, '').replace(/ »/, ''), t0, t1, ci]);
+      });
+      units.forEach(([text, t0, t1, ci]) => {
         if ((opt.skip || []).includes(id + ':' + ci)) return;
         const len = cur ? cur.words.reduce((s, w) => s + w.text.length + 1, 0) : 0;
         if (!cur || cur.ci !== ci || len + text.length > o.maxChars) { cur = { id, ci, words: [], t0: QR.START[id] + t0 }; groups.push(cur); }
