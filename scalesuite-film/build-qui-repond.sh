@@ -13,7 +13,12 @@ FORMAT=${2:-16x9}
 OUT=../brag-output
 WORK=$OUT/work-qui-repond
 NAME=scalesuite-qui-repond-$FORMAT
-CUTS=$(node -e "const b=60/108;console.log([4,7,15].map(n=>(n*b).toFixed(4)).join(','))")   # the three intended hard cuts (beats 4, 7 and 15)
+# sound first: audio/mix-qui-repond.sh writes the final mix (voice + score + effects) to $WORK/music.wav and the timeline to $WORK/cues.json
+[ -f "$WORK/cues.json" ] || ./audio/mix-qui-repond.sh
+# the intended hard cuts: to the bedroom, to the question, to « Rappelle… », to the light on « le Système », to the call to action
+CUTS=$(python3 -c "
+import json;c=json.load(open('$WORK/cues.json'));S=c['start'];v=c['vo']
+print(','.join(f'{x:.4f}' for x in [S['s1']+v['s1']['cues']['trois']['t']+0.95,S['s2'],S['s3'],S['s5']+v['s5']['cues']['systeme']['t'],S['s9']]))")
 mkdir -p "$WORK" "$OUT/previews"
 AUDIO=()
 [ -f "$WORK/music.wav" ] && AUDIO=(-i "$WORK/music.wav" -map 0:v -map 1:a -c:a aac -b:a 192k -shortest)
@@ -29,27 +34,36 @@ ffmpeg -hide_banner -loglevel error -y -framerate 60 -i "$F/%05d.png" "${AUDIO[@
   -vf "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p" "${ENC[@]}" -pix_fmt yuv420p \
   -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -movflags +faststart "$DEST"
 {
-  echo "« Qui répond à 2 h du matin? » · $FORMAT · $MODE · 108 BPM, 81 temps"
+  echo "« Qui répond à 2 h du matin? » · $FORMAT · $MODE · voice-led timeline, score at 108 BPM"
   echo
   echo "== Rendered frames (before encoding) =="
   python3 render/check-frames-qui-repond.py "$F" 60 "$CUTS" || true
   echo
   echo "== Encoded file =="
   python3 render/check-frames-qui-repond.py "$DEST" 60 "$CUTS" || true
+  echo
+  echo "== Voice sync (key words and figures: 2 frames ; other cue words: 4 frames) =="
+  node render/sync-qui-repond.mjs || true
+  echo
+  echo "== Scene 6 hours =="
+  node render/hours-qui-repond.mjs || true
+  echo
+  echo "== Sound (target: -14 LUFS integrated, true peak at most -1 dBTP) =="
+  ffmpeg -hide_banner -nostats -i "$DEST" -af ebur128=peak=true -f null - 2>&1 | grep -E "^ +I:|Peak:" | tail -2 || true
 } | tee "$REPORT"
 
 if [ "$MODE" = preview ]; then
   # timestamped contact sheet: one row per scene, frames taken on beats (seconds = beats × 60 / 108)
   ROWS=(
-    "1 · La nuit (temps 0–7)|0.60,1.20,2.10,2.50,3.10,3.80"
-    "2 · La question (temps 7–15)|4.30,5.00,5.90,6.50,7.30,7.90"
-    "3 · La vitesse (temps 15–22)|8.90,9.50,10.05,10.40,11.20,12.10"
-    "4 · Un seul courtier (temps 22–33)|12.60,13.60,15.00,16.30,17.00,17.90"
-    "5 · Révélation (temps 33–39)|18.60,19.00,19.30,20.30,21.00,21.45"
-    "6 · Le système (temps 39–59)|23.00,23.80,25.60,27.90,30.00,32.20"
-    "7 · Compte rendu (temps 59–65)|33.00,33.60,34.60,35.40,35.80,36.00"
-    "8 · La preuve (temps 65–72)|36.40,37.00,37.90,38.60,39.30,39.75"
-    "9 · Appel à l'action (temps 72–81)|40.40,41.00,41.90,42.90,43.60,44.90"
+    "1 · La nuit|0.70,1.80,3.00,3.30,3.90,4.25"
+    "2 · La question|4.80,5.30,5.90,6.50,7.20,7.90"
+    "3 · La vitesse|8.60,9.60,10.20,10.75,11.40,12.60"
+    "4 · Un seul courtier|13.50,14.30,15.90,17.20,18.90,20.60"
+    "5 · Voici|21.50,22.10,22.40,22.80,23.60,24.80"
+    "6 · Le système|25.60,27.33,30.60,34.60,37.40,38.80"
+    "7 · Compte rendu|43.80,44.40,45.00,45.40,45.70,45.85"
+    "8 · La preuve|46.40,47.80,50.20,52.40,54.20,55.00"
+    "9 · Appel à l'action|55.60,56.10,56.90,57.80,58.60,59.30"
   )
   ALL="" NAMES="" ARGS=()
   for i in "${!ROWS[@]}"; do

@@ -32,7 +32,8 @@ CHUNKS = {
     6: [(27.19, 29.76, 'F'), (30.24, 32.04, 'S'), (32.33, 32.97, 'W'), (33.16, 34.39, 'W'), (35.03, 36.54, 'S'), (36.69, 37.06, 'W'),
         (37.42, 38.51, 'W'), (39.03, 40.52, 'S'), (41.00, 42.26, 'S'), (42.71, 44.65, 'S'), (45.08, 46.96, 'S')],
     7: [(47.57, 48.27, 'F'), (48.44, 49.56, 'W')],
-    8: [(50.19, 51.05, 'F'), (51.29, 53.12, 'W'), (53.23, 55.19, 'W')],
+    # scene 8 comes from the second take (vo-08-v2: the client against the market), times in THAT file
+    8: [(47.70, 48.61, 'F'), (48.80, 50.62, 'W'), (50.75, 51.94, 'W'), (52.03, 52.85, 'W'), (53.22, 54.05, 'S'), (54.14, 55.66, 'W')],
     9: [(55.84, 56.76, 'F'), (57.04, 58.92, 'W')],
 }
 # cue words in SOURCE seconds. key=True: highlighted key words and figures (tolerance 2 frames), else 4 frames.
@@ -45,11 +46,11 @@ CUES = {
     6: {'google': 27.19, 'surLaPage': (28.45, True), 'chaque': 30.24, 'parTexto': (32.33, True), 'soixante': (33.62, True), 'leVendeur': 35.03,
         'toutDeSuite': (36.69, True), 'leJour': 37.42, 'tonCourtier': 39.03, 'tuSais': (41.00, True), 'desDemandes': 42.71, 'jamais': (45.08, True)},
     7: {'chaque': 47.57, 'compteRendu': (48.44, True)},
-    8: {'pour': 50.19, 'n124': (51.29, True), 'n54': (53.35, True)},
+    8: {'pour': 47.70, 'n138': (48.80, True), 'n51': (50.95, True), 'moins64': (53.42, True)},
     9: {'commente': 55.84, 'cinqMinutes': (56.25, True), 'pis': 57.04},
 }
 PRE = {n: 0.08 for n in CHUNKS}
-POST = {1: 1.1, 2: 0.6, 3: 0.5, 4: 0.2, 5: 1.0, 6: 0.2, 7: 0.24, 8: 0.24, 9: 1.0}
+POST = {1: 1.1, 2: 0.6, 3: 0.5, 4: 0.2, 5: 1.0, 6: 0.2, 7: 0.24, 8: 1.3, 9: 1.0}  # scene 8: 1,2 s held on the final grid
 # The five breaths (everything else stays tight):
 #   scene 1: 1,1 s after the voice for the bedroom shot (clock, three cards)
 #   scene 2: 0,45 s after « pour vrai? », 0,45 s after « Toi? », 0,6 s after « Ou ton équipe? » (POST)
@@ -59,8 +60,19 @@ POST = {1: 1.1, 2: 0.6, 3: 0.5, 4: 0.2, 5: 1.0, 6: 0.2, 7: 0.24, 8: 0.24, 9: 1.0
 PRE[5] = 0.6
 BREATH = {(2, 2): 0.45, (2, 3): 0.45, (4, 4): 0.5}   # (scene, chunk index) → pause before that chunk, film seconds  # scene 9 keeps time for the final logo
 
-raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', SRC, '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True).stdout
-x = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768
+def load(path):
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True).stdout
+    return np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768
+
+
+x = load(SRC)
+# scenes taken from another take: {scene: file next to the main take}. Levels are matched to the main take.
+ALT = {8: os.path.join(os.path.dirname(os.path.abspath(SRC)), 'vo-08-v2.mp3')}
+ALTX = {}
+for sc_, path_ in ALT.items():
+    if os.path.exists(path_):
+        y_ = load(path_); r0 = np.sqrt(np.mean(x[np.abs(x) > 0.02] ** 2)); r1 = np.sqrt(np.mean(y_[np.abs(y_) > 0.02] ** 2))
+        ALTX[sc_] = y_ * (r0 / r1)
 os.makedirs(OUT, exist_ok=True)
 
 
@@ -69,8 +81,8 @@ def save(path, y):
     w.writeframes((np.clip(y, -1, 1) * 32767).astype(np.int16).tobytes()); w.close()
 
 
-def faded(a, b):
-    y = x[int((a - EDGE) * SR):int((b + EDGE) * SR)].copy()
+def faded(a, b, src):
+    y = src[int((a - EDGE) * SR):int((b + EDGE) * SR)].copy()
     n = int(0.012 * SR)
     y[:n] *= np.linspace(0, 1, n); y[-n:] *= np.linspace(1, 0, n)
     return y
@@ -84,7 +96,7 @@ for sc, chunks in CHUNKS.items():
             gap = BREATH.get((sc, ci), min(a - prev, GAP[g])) * SPEED    # so that the pause is at most GAP in film time
             parts.append(np.zeros(int(gap * SR), dtype=np.float32)); pos += gap
         src2loc.append((a - EDGE, b + EDGE, pos))
-        y = faded(a, b); parts.append(y); pos += len(y) / SR; prev = b
+        y = faded(a, b, ALTX.get(sc, x)); parts.append(y); pos += len(y) / SR; prev = b
     tmp = os.path.join(OUT, f'_s{sc}.wav'); dst = os.path.join(OUT, f'vo-{sc:02d}.wav')
     save(tmp, np.concatenate(parts))
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', tmp, '-af', f'atempo={SPEED}', '-ar', str(SR), dst], check=True)

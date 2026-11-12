@@ -38,6 +38,10 @@
   // and the time of every cue word. QR.BEATS above is kept as the fallback when there is no voice;
   // 108 BPM remains the grid of the score and of the transitions.
   QR.VO = SS.VO || null;
+  // PROVISIONAL (until the new take vo-08-v2 is cut by audio/vo-qui-repond.py): scene 8 now compares the client
+  // with the market, and its sentence is longer. These estimated times stand in for the real ones.
+  QR.PROVISIONAL = { s8: { dur: 8.9, voice: [0.08, 7.6], cues: { pour: { t: 0.11, key: false }, n138: { t: 1.2, key: true }, n51: { t: 3.3, key: true }, moins64: { t: 5.7, key: true } } } };
+  if (QR.VO && !QR.VO.s8.cues.n138) Object.assign(QR.VO, QR.PROVISIONAL); else QR.PROVISIONAL = null;
   QR.cue = (scene, word) => QR.VO[scene].cues[word].t; // seconds from the scene start
   QR.ORDER = Object.keys(QR.BEATS);
   QR.DUR = {};
