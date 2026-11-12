@@ -1,8 +1,8 @@
 /* Scene 8 · La preuve : a case study in four beats. The voice: « Pour le Groupe Mackay : 124 demandes depuis
    avril, à 54 $ de pub par demande. »
    One idea at a time, each figure with its counter and its short line, then the four together in a sober grid:
-     1  [124]             demandes reçues depuis avril 2026            ON « cent vingt quatre »
-     2  [54 $]            de budget Google Ads par demande, en moyenne ON « cinquante quatre dollars »
+     1  [138]             demandes reçues depuis avril 2026            ON the figure in the voice
+     2  [51 $]            de budget Google Ads par demande, en moyenne ON the figure in the voice
      3  [1 clic sur 20]   devient une demande                          during the end of the sentence
      4  [1 personne sur 10] qui voit l’annonce clique                  during the end of the sentence
    Footnote with the periods. No halo. Hard cut to scene 9.
@@ -18,8 +18,8 @@
   const T = { head: cue('pour'), n1: cue('n124'), n2: cue('n54'), count: 0.5 };
   T.grid1 = T.n2 - 0.22; T.grid2 = T.n2 + 0.78; T.n3 = T.n2 + 0.9; T.n4 = T.n2 + 1.14; T.foot = T.n3;
   const STATS = [
-    { n: 124, fmt: (v) => String(Math.round(v)), label: 'demandes reçues depuis avril 2026' },
-    { n: 54, fmt: (v) => Math.round(v) + ' $', label: 'de budget Google Ads par demande, en moyenne' },
+    { n: 138, fmt: (v) => String(Math.round(v)), label: 'demandes reçues depuis avril 2026' },
+    { n: 51, fmt: (v) => Math.round(v) + ' $', label: 'de budget Google Ads par demande, en moyenne' },
     { text: '1 clic sur 20', label: 'devient une demande' },
     { text: '1 personne sur 10', label: 'qui voit l’annonce clique' },
   ];
