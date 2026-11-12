@@ -1,0 +1,89 @@
+« Qui répond à 2 h du matin? » · 16x9 · preview · voice-led timeline, score at 108 BPM
+
+== Rendered frames (before encoding) ==
+CONTROLS  pv60-16x9  ·  3560 frames at 60 fps (59.33 s)
+FROZEN    OK: 0 run(s) of more than 3 identical frames
+          identical pairs of consecutive frames: 0 / 3559 ; smallest mean change between two frames: 0.0006 / 255
+JUMPS     OK: 0 isolated spike(s) outside the 5 intended cut(s)
+          intended cut at 3.114 s: change 10.3
+          intended cut at 4.330 s: change 37.5
+          intended cut at 8.119 s: change 8.4
+          intended cut at 22.224 s: change 160.8
+          intended cut at 55.244 s: change 217.2
+FLASH     largest brightness step outside the cuts: 19.4 / 255 in one frame, at 27.78 s
+
+== Encoded file ==
+CONTROLS  scalesuite-qui-repond-16x9-preview-60fps.mp4  ·  3560 frames at 60 fps (59.33 s)
+FROZEN    FAIL: 2 run(s) of more than 3 identical frames
+          21.57 s → 21.68 s (7 frames)
+          21.68 s → 21.80 s (7 frames)
+          identical pairs of consecutive frames: 12 / 3559 ; smallest mean change between two frames: 0.0000 / 255
+JUMPS     OK: 0 isolated spike(s) outside the 5 intended cut(s)
+          intended cut at 3.114 s: change 10.8
+          intended cut at 4.330 s: change 38.9
+          intended cut at 8.119 s: change 8.9
+          intended cut at 22.224 s: change 161.7
+          intended cut at 55.244 s: change 218.1
+FLASH     largest brightness step outside the cuts: 19.5 / 255 in one frame, at 27.78 s
+
+== Voice sync (key words and figures: 2 frames ; other cue words: 4 frames) ==
+SYNC      word on screen against the voice (frames at 60 i/s)
+          ok   s1.tuViens             +0.0 (tolerance 4)
+          ok   s1.trois               +0.0 (tolerance 2)
+          ok   s1.deuxHeures          +0.0 (tolerance 4)
+          ok   s2.qui                 +0.0 (tolerance 4)
+          ok   s2.pourVrai            +0.0 (tolerance 2)
+          ok   s2.toi                 +0.0 (tolerance 4)
+          ok   s2.equipe              +0.0 (tolerance 4)
+          ok   s3.rappelle            +0.0 (tolerance 4)
+          ok   s3.cinqMinutes         +0.0 (tolerance 2)
+          ok   s3.plutot              +0.0 (tolerance 4)
+          ok   s3.cent                +0.0 (tolerance 2)
+          ok   s3.plusDeChances       +0.0 (tolerance 4)
+          ok   s4.n79                 +0.0 (tolerance 2)
+          ok   s4.desVendeurs         +0.0 (tolerance 4)
+          ok   s4.unSeul              +0.0 (tolerance 2)
+          ok   s4.ceCourtier          +0.0 (tolerance 4)
+          ok   s4.toi                 +0.0 (tolerance 4)
+          ok   s4.attends             +0.0 (tolerance 4)
+          ok   s4.passe               +0.0 (tolerance 2)
+          ok   s5.voici               +0.0 (tolerance 2)
+          ok   s5.systeme             +0.0 (tolerance 4)
+          ok   s5.cinqMinutes         +0.0 (tolerance 2)
+          ok   s6.google              +0.0 (tolerance 4)
+          ok   s6.surLaPage           +0.0 (tolerance 2)
+          ok   s6.chaque              +0.0 (tolerance 4)
+          ok   s6.parTexto            +0.0 (tolerance 2)
+          ok   s6.soixante            +0.0 (tolerance 2)
+          ok   s6.leVendeur           +0.0 (tolerance 4)
+          ok   s6.toutDeSuite         +0.0 (tolerance 2)
+          ok   s6.leJour              +0.0 (tolerance 4)
+          ok   s6.tonCourtier         +0.0 (tolerance 4)
+          ok   s6.tuSais              +0.0 (tolerance 2)
+          ok   s6.desDemandes         +0.0 (tolerance 4)
+          ok   s6.jamais              +0.0 (tolerance 2)
+          ok   s7.chaque              +0.0 (tolerance 4)
+          ok   s7.compteRendu         +0.0 (tolerance 2)
+          ok   s8.pour                +0.0 (tolerance 4)
+          ok   s8.n138                +0.0 (tolerance 2)
+          ok   s8.n51                 +0.0 (tolerance 2)
+          ok   s8.moins64             +0.0 (tolerance 2)
+          ok   s9.commente            +0.0 (tolerance 4)
+          ok   s9.cinqMinutes         +0.0 (tolerance 2)
+          ok   s9.pis                 +0.0 (tolerance 4)
+SYNC      OK: 43/43 cues within tolerance
+
+== Scene 6 hours ==
+HOURS     scene 6, one story:
+          ok   search   14 h 03
+          ok   page     14 h 04
+          ok   alert    14 h 04
+          ok   confirm  14 h 04
+          ok   reply    14 h 10
+          ok   portal   14 h 10
+          hours written on screen: 14 h 03 ×1, 14 h 04 ×8, 14 h 10 ×2, 10 h 22 ×2, 16 h 48 ×2, 9 h 15 ×2
+HOURS     OK: story hours in order, alert within the minute ; other hours belong to earlier requests of the list
+
+== Sound (target: -14 LUFS integrated, true peak at most -1 dBTP) ==
+    I:         -14.0 LUFS
+    Peak:       -1.4 dBFS

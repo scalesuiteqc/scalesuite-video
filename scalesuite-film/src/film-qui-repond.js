@@ -14,7 +14,7 @@
     QR.scenes.forEach((s) => { s.layer = SS.el('div', 'layer', stage); s.layer.style.transformOrigin = '50% 50%'; s.build(s.layer); });
     await Promise.all([...document.images].map((im) => im.decode().catch(() => {}))); // photos are decoded before the first frame
     const grain = SS.el('div', 'layer', stage);
-    Object.assign(grain.style, { backgroundImage: `url(${SS.grain(256, 256, 10)})`, pointerEvents: 'none', opacity: 0.5 });
+    Object.assign(grain.style, { backgroundImage: `url(${SS.grain(256, 256, 10)})`, pointerEvents: 'none', opacity: 0.7 });
     const last = QR.scenes[QR.scenes.length - 1];
 
     // Global virtual camera: every scene is always moving, holds included. A slow continuous push
@@ -33,6 +33,10 @@
     const EPS = 1e-7;
     SS.renderFrame = (t) => {
       Q.ambient(t);
+      // living grain: it shifts at every frame (a function of the frame number), so no two frames are ever identical,
+      // even on the black before « Voici », and even after encoding
+      const fi = Math.floor(t * 60 + 1e-6);
+      grain.style.backgroundPosition = `${(fi * 73) % 256}px ${(fi * 151) % 256}px`;
       for (const s of QR.scenes) {
         const on = t >= s.t0 - EPS && (t < s.t1 - EPS || (s === last && t <= s.t1 + 1e-6));
         s.layer.style.display = on ? '' : 'none';
