@@ -32,7 +32,7 @@
     alertBn: C.chaque + 0.12, alertOpen: C.texto - 0.12,
     confBn: C.vendeur + 0.12, confOpen: C.suite - 0.12,
     typeOne: C.courtier + 0.45, sendOne: C.courtier + 0.75, delivered: C.courtier + 0.95, ack: C.courtier + 1.2,
-    joint: C.sais + 0.45,
+    joint: cue('rappele') - 0.15, // the status « Joint » lands as the voice says « rappelé »
     frame: C.demandes + 0.3, frameDur: 0.7, lock: C.jamais,
     exit: 0.26,
   };
@@ -100,6 +100,7 @@
 
   let R;
   function build(layer) {
+    if (!Q.wide) layer.classList.add('qr-tall'); // 9:16: the alert and the confirmation read on a phone (24 px and more)
     Q.day(layer);
     const world = Q.div(layer, 'qr-abs', { width: '0', height: '0' });
     const st = [0, 1, 2, 3, 4, 4].map((i) => Q.div(world, 'qr-abs', { left: i * L.step + 'px', width: Q.W + 'px', height: Q.H + 'px' }));

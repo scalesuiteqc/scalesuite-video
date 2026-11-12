@@ -6,8 +6,9 @@ Cuts the single ElevenLabs take into scenes, tightens the pauses (0,3 s at most 
   <out>/vo-track.wav            the whole voice laid on the film timeline
   src/scenes-qui-repond/vo-timing.js   scene durations and the time of every cue word (film seconds)
 No sentence ever crosses a scene boundary: a scene starts PRE seconds before its sentence and ends POST
-seconds after it. Word times come from the pauses and the loudness envelope of the take (no speech model
-is reachable from this environment): key words are marked on syllable onsets by hand, in SOURCE seconds."""
+seconds after it. Word times come from a syllable alignment (no speech model is reachable from this environment): the
+pronounced syllables of each word are counted, the syllable nuclei are the peaks of the energy envelope of the
+voice band (300 to 3 000 Hz), and syllables are matched to peaks chunk by chunk, between the detected silences."""
 import json
 import os
 import subprocess
@@ -36,36 +37,59 @@ CHUNKS = {
     8: [(47.70, 48.61, 'F'), (48.80, 50.62, 'W'), (50.75, 51.94, 'W'), (52.03, 52.85, 'W'), (53.22, 54.05, 'S'), (54.14, 55.66, 'W')],
     9: [(55.84, 56.76, 'F'), (57.04, 58.92, 'W')],
 }
-# cue words in SOURCE seconds. key=True: highlighted key words and figures (tolerance 2 frames), else 4 frames.
+# cue words: (chunk index, word index inside the chunk[, key]). key=True: highlighted key words and figures
+# (tolerance 2 frames), else 4 frames. The time of a cue is the start of that word, found by the syllable alignment.
 CUES = {
-    1: {'deuxHeures': 0.06, 'tuViens': 1.44, 'trois': (2.29, True)},
-    2: {'qui': 4.53, 'pourVrai': (5.47, True), 'toi': 6.70, 'equipe': 7.61},
-    3: {'rappelle': 9.38, 'cinqMinutes': (9.69, True), 'plutot': 10.53, 'cent': (11.85, True), 'plusDeChances': 12.22},
-    4: {'n79': (14.74, True), 'desVendeurs': 15.85, 'unSeul': (17.11, True), 'ceCourtier': 18.46, 'toi': 19.98, 'attends': 20.98, 'passe': (22.35, True)},
-    5: {'voici': (24.15, True), 'systeme': 24.60, 'cinqMinutes': (25.40, True)},
-    6: {'google': 27.19, 'surLaPage': (28.45, True), 'chaque': 30.24, 'parTexto': (32.33, True), 'soixante': (33.62, True), 'leVendeur': 35.03,
-        'toutDeSuite': (36.69, True), 'leJour': 37.42, 'tonCourtier': 39.03, 'tuSais': (41.00, True), 'desDemandes': 42.71, 'jamais': (45.08, True)},
-    7: {'chaque': 47.57, 'compteRendu': (48.44, True)},
-    8: {'pour': 47.70, 'n138': (48.80, True), 'n51': (50.95, True), 'moins64': (53.42, True)},
-    9: {'commente': 55.84, 'cinqMinutes': (56.25, True), 'pis': 57.04},
+    1: {'deuxHeures': (0, 0), 'tuViens': (1, 0), 'trois': (2, 0, True)},
+    2: {'qui': (0, 0), 'pourVrai': (1, 0, True), 'toi': (2, 0), 'equipe': (3, 0)},
+    3: {'rappelle': (0, 0), 'cinqMinutes': (0, 2, True), 'plutot': (1, 0), 'trente': (1, 2, True), 'cent': (2, 2, True), 'plusDeChances': (2, 4)},
+    4: {'n79': (0, 0, True), 'desVendeurs': (0, 1), 'unSeul': (1, 0, True), 'ceCourtier': (2, 0), 'toi': (3, 3), 'attends': (4, 0), 'trenteMinutes': (4, 1, True), 'passe': (5, 1, True)},
+    5: {'voici': (0, 0, True), 'systeme': (0, 2), 'cinqMinutes': (0, 4, True)},
+    6: {'google': (0, 0), 'surLaPage': (0, 5, True), 'chaque': (1, 0), 'parTexto': (2, 0, True), 'soixante': (3, 3, True), 'leVendeur': (4, 0),
+        'toutDeSuite': (5, 0, True), 'leJour': (6, 0), 'tonCourtier': (7, 0), 'unChiffre': (7, 4, True), 'tuSais': (8, 0, True), 'rappele': (8, 5, True),
+        'desDemandes': (9, 0), 'jamais': (10, 0, True), 'revendues': (10, 3, True)},
+    7: {'chaque': (0, 0), 'compteRendu': (1, 0, True)},
+    8: {'pour': (0, 0), 'n138': (1, 0, True), 'n51': (2, 1, True), 'moins64': (4, 1, True)},
+    9: {'commente': (0, 0), 'cinqMinutes': (0, 1, True), 'pis': (1, 0)},
 }
-# what each chunk says, as written in the subtitles (one string per chunk, same order as CHUNKS). Word times inside
-# a chunk are spread in proportion to the length of each word as it is SPOKEN (figures count as their words).
+# What each chunk says, as written in the subtitles (one string per chunk, same order as CHUNKS). Figures are always
+# written in digits; a non-breaking space keeps « 79 % », « 51 $ », « Mackay : » as ONE subtitle word. « | » starts a
+# new subtitle group inside a chunk (so that a group already written on screen can be hidden on its own).
+N = ' '
 TEXTS = {
     1: ['2 h du matin.', 'Tu viens de recevoir', '3 demandes de vendeurs.'],
     2: ['Qui leur répond,', 'pour vrai?', 'Toi?', 'Ou ton équipe?'],
-    3: ['Rappelle en 5 minutes', 'plutôt qu’en 30,', 'pis t’as 100 fois plus de chances de joindre le vendeur.'],
-    4: ['79 % des vendeurs ne contactent', 'qu’un seul courtier.', 'Ce courtier là,', 'ce devrait être toi.', 'Attends 30 minutes,', 'pis il est passé à autre chose.'],
+    3: ['Rappelle en 5 minutes', 'plutôt qu’en 30,', 'pis t’as 100 fois | plus de chances de joindre le vendeur.'],
+    4: [f'79{N}% | des vendeurs ne contactent', 'qu’un seul courtier.', 'Ce courtier là,', 'ce devrait être toi.', 'Attends 30 minutes,', 'pis il est passé à autre chose.'],
     5: ['Voici le Système Vendeurs 5 minutes.'],
     6: ['Google Ads amène les vendeurs sur la page de ton équipe.', 'Chaque demande arrive au bon courtier,', 'par texto,', 'en moins de 60 secondes.',
         'Le vendeur reçoit une confirmation', 'tout de suite,', 'le jour comme la nuit.', 'Ton courtier répond avec un chiffre.', 'Tu sais qui a été rappelé.',
         'Des demandes qui appartiennent à ton équipe.', 'Jamais partagées ni revendues.'],
     7: ['Chaque semaine,', 'un compte rendu écrit.'],
-    8: ['Pour le Groupe Mackay :', '138 demandes depuis avril,', 'à 51 $ de pub', 'par demande.', 'C’est 64 %', 'de moins que la moyenne du marché.'],
-    9: ['Commente « 5 minutes »,', 'pis je te prépare le diagnostic de ton secteur.'],
+    8: [f'Pour le Groupe Mackay{N}:', '138 demandes | depuis avril,', f'à 51{N}$ de pub', 'par demande.', f'C’est 64{N}%', 'de moins que la moyenne du marché.'],
+    9: [f'Commente «{N}5 minutes{N}»,', 'pis je te prépare le diagnostic de ton secteur.'],
 }
-SPOKEN = {'2': 'deux', 'h': 'heures', '3': 'trois', '5': 'cinq', '30,': 'trente', '30': 'trente', '100': 'cent', '79': 'soixantedixneuf', '%': 'pourcent', '60': 'soixante',
-          '138': 'centtrentehuit', '51': 'cinquanteetun', '$': 'dollars', '64': 'soixantequatre', ':': '', '«': '', '»,': ''}
+# Syllables PRONOUNCED by each word (same shape as TEXTS, « | » left out): figures read in full (79 % = soi xante dix
+# neuf pour cent, 51 $ = cin quante et un do llars, 138 = cent trente huit), mute e dropped where the voice drops it
+# (« chaque demande », « trente minutes »), kept where it is heard (« joindre le », « être toi », « autre chose »).
+SYL = {
+    1: ['1 1 1 2', '1 1 1 3', '1 2 1 2'],
+    2: ['1 1 2', '1 1', '1', '1 1 2'],
+    3: ['2 1 1 2', '2 1 1', '1 1 1 1 1 1 1 1 2 1 2'],
+    4: ['6 1 2 1 2', '1 1 2', '1 2 1', '1 2 2 1', '2 1 2', '1 1 1 2 1 2 1'],
+    5: ['2 1 2 2 1 2'],
+    6: ['2 1 2 1 2 1 1 1 1 1 2', '1 2 2 1 1 2', '1 2', '1 1 1 2 2', '1 2 2 1 4', '1 1 1', '1 1 1 1 1', '1 2 2 2 1 1', '1 1 1 1 2 3',
+        '1 2 1 3 1 1 2', '2 3 1 3'],
+    7: ['1 2', '1 1 2 2'],
+    8: ['1 1 1 2', '3 2 2 2', '1 6 1 1', '1 2', '1 6', '1 1 1 1 2 1 2'],
+    9: ['2 1 2', '1 1 1 2 1 3 1 1 2'],
+}
+# Corrections by ear: (scene, chunk index, word index) → seconds added to the start of that word (film time).
+FIX = {}
+# The key words listed for the listening check: label → (scene, chunk index, word index)
+KEYWORDS = [('cinq minutes', 3, 0, 2), ('trente', 3, 1, 2), ('cent', 3, 2, 2), ('79 %', 4, 0, 0), ('un seul', 4, 1, 0), ('trente minutes', 4, 4, 1),
+            ('Voici', 5, 0, 0), ('soixante secondes', 6, 3, 3), ('tout de suite', 6, 5, 0), ('un chiffre', 6, 7, 4), ('rappelé', 6, 8, 5),
+            ('revendues', 6, 10, 3), ('138', 8, 1, 0), ('51 $', 8, 2, 1), ('64 %', 8, 4, 1), ('cinq minutes (fin)', 9, 0, 1)]
 PRE = {n: 0.08 for n in CHUNKS}
 POST = {1: 1.1, 2: 0.6, 3: 0.5, 4: 0.2, 5: 1.0, 6: 0.2, 7: 0.24, 8: 1.3, 9: 1.0}  # scene 8: 1,2 s held on the final grid
 # The five breaths (everything else stays tight):
@@ -105,6 +129,76 @@ def faded(a, b, src):
     return y
 
 
+ER = 1000  # envelope rate (Hz)
+
+
+def envelope(y):
+    """Energy envelope of the voice band (300 to 3 000 Hz), smoothed (Gaussian, sigma 16 ms), at 1 kHz."""
+    n = len(y); f = np.fft.rfft(y); fr = np.fft.rfftfreq(n, 1 / SR)
+    f[(fr < 300) | (fr > 3000)] = 0
+    e = np.abs(np.fft.irfft(f, n)) ** 2
+    e = e[:len(e) // (SR // ER) * (SR // ER)].reshape(-1, SR // ER).mean(axis=1)
+    g = np.exp(-0.5 * (np.arange(-48, 49) / 16.0) ** 2); g /= g.sum()
+    return np.sqrt(np.convolve(e, g, mode='same'))
+
+
+LAMBDA = 0.35   # weight of the regular-rhythm prior against the height of the peaks
+
+
+def nuclei(e, n):
+    """n syllable nuclei for n syllables. Candidates: every peak of the envelope (weight = its prominence), plus
+    a 20 ms grid of weightless candidates for nuclei that the envelope does not separate (two vowels in a row).
+    A dynamic programme picks the n candidates, in order, that are the most prominent while keeping the
+    intervals close to the mean syllable length of the chunk. Returns (indices, peaks found naturally)."""
+    idx = [i for i in range(1, len(e) - 1) if e[i] > e[i - 1] and e[i] >= e[i + 1] and e[i] > 0.04 * e.max()]
+
+    def prom(i):
+        l = i
+        while l > 0 and e[l - 1] <= e[i]: l -= 1
+        r = i
+        while r < len(e) - 1 and e[r + 1] <= e[i]: r += 1
+        base = max(e[l:i + 1].min() if l > 0 else 0.0, e[i:r + 1].min() if r < len(e) - 1 else 0.0)
+        return e[i] - base
+    pr = {i: prom(i) for i in idx}
+    natural = [i for i in idx if pr[i] > 0.07 * e.max()]
+    top = max(pr.values()) if pr else 1.0
+    cand = sorted(set(idx) | set(range(10, len(e) - 10, 20)))
+    ref = float(np.median([e[i] for i in natural])) if natural else float(e.max())
+    # a weightless candidate may stand on a shoulder of the envelope, not in a dip between two syllables
+    w = np.array([min(1.0, (pr[c] / top) ** 0.5) if c in pr else -0.6 * (1 - min(1.0, e[c] / (0.6 * ref))) for c in cand]); pos = np.array(cand, dtype=float)
+    d = len(e) / n
+    best = w - LAMBDA * ((pos - d / 2) / d) ** 2; back = []
+    for k in range(1, n):
+        gap = (pos[None, :] - pos[:, None])                      # gap[i, j] = pos[j] - pos[i]
+        sc_ = best[:, None] - LAMBDA * ((gap - d) / d) ** 2
+        sc_[gap < 60] = -1e9                                     # two nuclei are at least 60 ms apart
+        back.append(sc_.argmax(axis=0)); best = sc_.max(axis=0) + w
+    best = best - LAMBDA * ((len(e) - pos - d / 2) / d) ** 2
+    j = int(best.argmax()); pk = [j]
+    for b in reversed(back): j = int(b[j]); pk.append(j)
+    return [cand[j] for j in reversed(pk)], len(natural)
+
+
+def align(y, c0, c1, syl):
+    """Word starts (s, scene-local, before PRE) of a chunk [c0, c1]: each word starts at the end of the dip of the
+    envelope before its first syllable nucleus; the first word starts with the chunk."""
+    e = envelope(y[int(c0 * SR):int(c1 * SR)])
+    pk, natural = nuclei(e, sum(syl))
+    starts, si = [], 0
+    for wi, k in enumerate(syl):
+        if wi == 0: starts.append(c0)
+        else:
+            a, b = pk[si - 1], pk[si]
+            m = min(15, (b - a) // 3)   # the dip is looked for strictly between the two nuclei
+            seg = e[a + m:b - m + 1]; lo = float(seg.min())
+            # the word starts where the envelope leaves the dip and rises to its first nucleus (end of the dip)
+            below = np.nonzero(seg <= lo + 0.1 * (e[b] - lo))[0]
+            starts.append(c0 + (a + m + int(below[-1] if len(below) else np.argmin(seg))) / ER)
+        si += k
+    return starts, natural
+
+
+report, PER = [], {}
 timing, track, t0 = {}, [], 0.0
 for sc, chunks in CHUNKS.items():
     parts, src2loc, pos, prev = [], [], 0.0, None   # pos: seconds in the compacted scene BEFORE the speed-up
@@ -127,17 +221,23 @@ for sc, chunks in CHUNKS.items():
             if a <= ts <= b:
                 return round(PRE[sc] + (p + ts - a) / SPEED, 3)
         raise ValueError(f'cue at {ts} is outside the speech chunks of scene {sc}')
+    words, per, grp = [], [], 0   # subtitles: [text, start, end, group index], seconds from the scene start
+    for ci, ((a, b, g), text, syl) in enumerate(zip(chunks, TEXTS[sc], SYL[sc])):
+        toks = text.split(' '); syl = [int(k) for k in syl.split(' ')]
+        assert len([k for k in toks if k != '|']) == len(syl), (sc, ci, text)
+        c0, c1 = loc(a) - PRE[sc], loc(b) - PRE[sc]
+        st, natural = align(y, c0, c1, syl)
+        st = [round(PRE[sc] + v + FIX.get((sc, ci, wi), 0), 3) for wi, v in enumerate(st)]
+        report.append((sc, ci, sum(syl), natural, text))
+        row, wi = [], 0
+        for k in toks:
+            if k == '|': grp += 1; continue
+            row.append([k.replace(N, ' '), st[wi], st[wi + 1] if wi + 1 < len(st) else round(PRE[sc] + c1, 3), grp]); wi += 1
+        per.append(row); words += row; grp += 1
     cues = {}
     for k, v in CUES[sc].items():
-        ts, key = (v if isinstance(v, tuple) else (v, False))
-        cues[k] = {'t': loc(ts), 'key': key}
-    words = []   # subtitles: [text, start, end, chunk index], seconds from the scene start
-    for ci, ((a, b, g), text) in enumerate(zip(chunks, TEXTS[sc])):
-        toks = text.split(' '); wts = [max(0, len(SPOKEN.get(k, k))) for k in toks]; tot = float(sum(wts)); acc = 0.0
-        for k, wt in zip(toks, wts):
-            if wt == 0 and words and words[-1][3] == ci:   # silent punctuation joins the previous word
-                words[-1][0] += ' ' + k; continue
-            words.append([k, loc(a + (b - a) * acc / tot), loc(a + (b - a) * (acc + wt) / tot), ci]); acc += wt
+        cues[k] = {'t': per[v[0]][v[1]][1], 'key': len(v) > 2 and v[2]}
+    PER[sc] = per
     timing[f's{sc}'] = {'dur': dur, 'voice': [PRE[sc], round(PRE[sc] + voice, 3)], 'cues': cues, 'words': words}
     track.append(np.zeros(int(round((t0 + PRE[sc]) * SR)) - sum(len(p) for p in track), dtype=np.float32)); track.append(y)
     t0 += dur
@@ -153,3 +253,14 @@ print('scene  start    dur   voice')
 for k, v in timing.items():
     print(f'{k:>5} {t:6.2f} {v["dur"]:6.2f} {v["voice"][1] - v["voice"][0]:6.2f}'); t += v['dur']
 print(f'total {t:.2f} s (voice speed ×{SPEED})')
+print('\nsyllables per chunk (expected / peaks found naturally):')
+for sc, ci, n, nat, text in report:
+    print(f'  s{sc}:{ci:<2} {n:>2} / {nat:<2} {"" if n == nat else "≠ "}{text}')
+starts = {}; t = 0.0
+for k, v in timing.items(): starts[int(k[1:])] = t; t += v['dur']
+lines = ['Mots clés : temps dans le film (début du mot)', '']
+for label, sc, ci, wi in KEYWORDS:
+    tt = starts[sc] + PER[sc][ci][wi][1]
+    lines.append(f'{label:<20} {tt:6.2f} s   image {round(tt * 60):>4} à 60 i/s   « {" ".join(w[0] for w in PER[sc][ci])} »')
+open(os.path.join(OUT, 'mots-cles.txt'), 'w').write('\n'.join(lines) + '\n')
+print('\n' + '\n'.join(lines))

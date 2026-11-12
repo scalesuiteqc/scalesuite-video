@@ -15,7 +15,7 @@
     night: cue('deuxHeures'),   // « 2 h du matin. » centred, on those words
     nightOut: tu - 0.2,
     // « Tu viens de recevoir [3] demandes de vendeurs. »: one word after the other, the chip ON « trois »
-    words: [tu, tu + 0.16, tu + 0.3, tu + 0.42, trois, trois + 0.28, trois + 0.55, trois + 0.66],
+    words: QR.VO.s1.words.slice(4).map((w) => w[1]), // each word ON its syllables (the eight words after « 2 h du matin. »)
     wordDur: 0.34,
     digitDur: 0.36,
     cut: trois + 0.95,          // hard cut to the bedroom as the sentence ends

@@ -1,0 +1,18 @@
+Mots clés : temps dans le film (début du mot)
+
+cinq minutes           8.79 s   image  527 à 60 i/s   « Rappelle en 5 minutes »
+trente                 9.90 s   image  594 à 60 i/s   « plutôt qu’en 30, »
+cent                  10.79 s   image  647 à 60 i/s   « pis t’as 100 fois plus de chances de joindre le vendeur. »
+79 %                  13.12 s   image  787 à 60 i/s   « 79 % des vendeurs ne contactent »
+un seul               15.43 s   image  926 à 60 i/s   « qu’un seul courtier. »
+trente minutes        19.03 s   image 1142 à 60 i/s   « Attends 30 minutes, »
+Voici                 21.79 s   image 1307 à 60 i/s   « Voici le Système Vendeurs 5 minutes. »
+soixante secondes     31.25 s   image 1875 à 60 i/s   « en moins de 60 secondes. »
+tout de suite         33.89 s   image 2033 à 60 i/s   « tout de suite, »
+un chiffre            36.94 s   image 2216 à 60 i/s   « Ton courtier répond avec un chiffre. »
+rappelé               38.54 s   image 2313 à 60 i/s   « Tu sais qui a été rappelé. »
+revendues             42.75 s   image 2565 à 60 i/s   « Jamais partagées ni revendues. »
+138                   47.13 s   image 2828 à 60 i/s   « 138 demandes depuis avril, »
+51 $                  49.30 s   image 2958 à 60 i/s   « à 51 $ de pub »
+64 %                  51.75 s   image 3105 à 60 i/s   « C’est 64 % »
+cinq minutes (fin)    55.77 s   image 3346 à 60 i/s   « Commente « 5 minutes », »
