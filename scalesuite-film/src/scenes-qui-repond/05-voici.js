@@ -1,61 +1,58 @@
-/* Scene 5 · Révélation (6 beats, 18,33 – 21,67 s).
-   Giant « Voici » in the logo gradient (turquoise to blue), a radial pulse of concentric rings, the
-   ScaleSuite logo, then « Système Vendeurs [5 minutes] ».
-   Exit: the light opens from the centre in 0,5 s (Q.lightDisc: expo ring, brightness rising
-   progressively). The disc carries the exact backdrop of scene 6, so the hand-off is seamless. */
+/* Scene 5 · Voici. The voice: 0,6 s of complete silence on black, then « Voici le Système Vendeurs 5 minutes. »
+   1. Black. « Voici » in white, Inter 600, medium size, no gradient and no halo: it rises from a horizontal
+      mask while its tracking tightens.
+   2. HARD CUT on « le Système… » to the mint backdrop, full frame (no ring, no iris).
+   3. On the mint: the logo symbol arrives on a soft spring, the word « ScaleSuite » slides out from behind
+      it (light-background logo). Below, « Système Vendeurs [5 minutes] », the chip ON « 5 minutes ».
+   4. Held 0,8 s without voice, then the camera glides away towards scene 6, on the same backdrop. */
 (function () {
-  const SS = window.SS, Q = SS.Q, QR = SS.QR, b = QR.b;
+  const SS = window.SS, Q = SS.Q, QR = SS.QR;
+  const cue = (w) => QR.sync('s5', w, QR.cue('s5', w));
 
-  const T = {
-    dot: 0.0,                 // a turquoise point is born in the dark
-    word: 0.03, wordDur: 0.42, // « Voici » comes into focus
-    burst: b(1.5),            // it bursts into rings
-    rings: [b(1.5), b(1.5) + 0.11, b(1.5) + 0.22], ringDur: 0.85,
-    mark: b(2) - 0.12, markDur: 0.6, // logo mark wipe, in place on beat 2
-    letters: b(2),            // wordmark letters rise
-    name: b(3), nameChip: b(4), // « Système Vendeurs [5 minutes] »
-    open: b(6) - 0.5, openDur: 0.5, // the light opens
-  };
+  const T = { voici: cue('voici'), cut: cue('systeme'), five: cue('cinqMinutes'), glide: 0.26 };
   const L = Q.pick(
-    { word: 440, y: 520, logoH: 190, logoY: 470, name: 60, nameY: 670, ring: 420 },
-    { word: 300, y: 860, logoH: 110, logoY: 840, name: 46, nameY: 980, ring: 380 },
+    { word: 124, y: 540, logoH: 200, logoY: 470, name: 64, nameY: 678 },
+    { word: 110, y: 860, logoH: 120, logoY: 840, name: 50, nameY: 990 },
   );
 
   let R;
   function build(layer) {
-    Q.night(layer);
-    const glow = Q.div(layer, 'qr-abs', { width: L.word * 3.2 + 'px', height: L.word * 0.9 + 'px', filter: 'blur(60px)',
-      background: 'radial-gradient(closest-side, rgba(63,211,198,.85) 0%, rgba(47,176,222,.38) 55%, rgba(47,176,222,0) 100%)' });
-    const word = Q.div(layer, 'qr-abs', { fontSize: L.word + 'px', fontWeight: 800, letterSpacing: '-.05em', lineHeight: 1.1, whiteSpace: 'nowrap', padding: '0 .08em',
-      backgroundImage: `linear-gradient(96deg, #3FE0CD 0%, ${Q.C.logoA} 28%, ${Q.C.logoB} 60%, ${Q.C.blue} 100%)`, webkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' });
+    const dark = Q.div(layer, 'layer');
+    Q.night(dark);
+    const mask = Q.div(dark, 'qr-abs', { overflow: 'hidden', padding: '0 .2em', fontSize: L.word + 'px', lineHeight: 1.24 });
+    const word = SS.el('div', '', mask);
+    Object.assign(word.style, { fontWeight: 600, color: Q.C.white, whiteSpace: 'nowrap' });
     word.textContent = 'Voici';
-    const dot = Q.div(layer, 'qr-abs', { width: '44px', height: '44px', borderRadius: '50%', background: Q.C.turq, boxShadow: '0 0 60px rgba(63,211,198,.8)' });
-    const rings = T.rings.map(() => Q.div(layer, 'qr-abs', { width: L.ring + 'px', height: L.ring + 'px', borderRadius: '50%', boxSizing: 'border-box',
-      border: `${Math.round(L.ring * 0.11)}px solid ${Q.C.turq}` }));
-    const lbox = Q.div(layer, 'qr-abs');
-    const logo = SS.logo(lbox, L.logoH, { dark: true });
+    const light = Q.div(layer, 'layer');
+    Q.day(light);
+    const box = Q.div(light, 'qr-abs', { width: Q.W + 'px', height: Q.H + 'px' });
+    const lbox = Q.div(box, 'qr-abs');
+    const logo = SS.logo(lbox, L.logoH, {});
     Object.assign(lbox.style, { width: logo.w + 'px', height: logo.h + 'px' });
-    const name = Q.phrase(layer, [[{ t: 'Système Vendeurs' }, { t: '5 minutes', chip: true }]], { size: L.name, weight: 620 });
-    const light = Q.lightDisc(layer);
-    R = { glow, word, dot, rings, lbox, logo, name, light };
+    logo.mark(1);
+    const name = Q.phrase(box, [[{ t: 'Système Vendeurs' }, { t: '5 minutes', chip: true, g: 1 }]], { size: L.name, weight: 700, color: Q.C.ink });
+    R = { dark, mask, word, light, box, lbox, logo, name };
   }
 
   function render(u) {
-    const kin = Q.k(u, T.word, T.wordDur, Q.E.out), grow = Q.k(u, T.word, T.burst - T.word + 0.2, Q.E.sine), burst = Q.k(u, T.burst, 0.24, Q.E.in);
-    Q.st(R.word, { x: Q.CX, y: L.y, s: Q.lerp(0.72, 1, kin) * (1 + 0.07 * grow) * Q.lerp(1, 1.7, burst), o: Q.k(u, T.word, 0.14, Q.E.sine) * (1 - burst), blur: (1 - kin) * 26 + burst * 30 });
-    Q.st(R.glow, { x: Q.CX, y: L.y + L.word * 0.32, s: Q.lerp(0.6, 1, kin) * Q.lerp(1, 1.5, burst), o: kin * 0.85 * (1 - burst) });
-    const kd = Q.k(u, T.dot, 0.18, Q.E.spring);
-    Q.st(R.dot, { x: Q.CX, y: L.y, s: kd * Q.lerp(1, 4, Q.k(u, T.word, 0.2, Q.E.out)), o: kd * (1 - Q.k(u, T.word, 0.2, Q.E.sine)) });
-    R.rings.forEach((r, i) => {
-      const k = Q.k(u, T.rings[i], T.ringDur, Q.E.out), v = k - Q.k(u - 1 / 60, T.rings[i], T.ringDur, Q.E.out);
-      Q.st(r, { x: Q.CX, y: L.y, s: Q.lerp(0.08, 5.6 - i * 0.5, k), o: u < T.rings[i] ? 0 : (1 - Q.k(u, T.rings[i] + 0.1, T.ringDur - 0.1, Q.E.sine)) * 0.85, blur: Math.min(10, v * 160) });
-    });
-    Q.st(R.lbox, { x: Q.CX, y: L.logoY, s: Q.lerp(0.9, 1, Q.k(u, T.mark, 0.6, Q.E.out)), o: u >= T.mark ? 1 : 0 });
-    R.logo.mark(Q.clamp((u - T.mark) / T.markDur));
-    R.logo.word(u, T.letters, 0.03, 0.5);
-    R.name.put(Q.CX, L.nameY, u, { at: [T.name], chip: T.nameChip });
-    R.light.set(Q.clamp((u - T.open) / T.openDur));
+    const lit = u >= T.cut;
+    R.dark.style.display = lit ? 'none' : '';
+    R.light.style.display = lit ? '' : 'none';
+    if (!lit) {
+      const k = Q.k(u, T.voici, 0.4, Q.E.out);
+      Q.st(R.mask, { x: Q.CX, y: L.y, o: u >= T.voici - 0.02 ? 1 : 0 });
+      R.word.style.transform = `translateY(${((1 - k) * 105).toFixed(2)}%)`;
+      R.word.style.letterSpacing = Q.lerp(0.04, -0.02, k).toFixed(4) + 'em';
+      return;
+    }
+    const v = u - T.cut, end = QR.DUR.s5;
+    // the camera glides away to the first phone of scene 6
+    R.box.style.transform = `translateX(${(-Q.W * 0.9 * Q.k(u, end - T.glide, T.glide, Q.E.in)).toFixed(2)}px)`;
+    const km = Q.k(v, 0, 0.5, Q.E.springSoft), kw = Q.k(v, 0.14, 0.5, Q.E.out);
+    Q.st(R.lbox, { x: Q.CX + (1 - kw) * R.logo.w * 0.36, y: L.logoY, s: Q.lerp(0.7, 1, km), o: 1 });
+    R.logo.letters.forEach((g, i) => g.setAttribute('transform', `translate(${(-(1 - Q.k(v, 0.14 + i * 0.012, 0.46, Q.E.out)) * 420).toFixed(2)} 0)`));
+    R.name.put(Q.CX, L.nameY, u, { at: [T.cut + 0.06, T.five], chip: T.five });
   }
 
-  QR.scene({ id: 's5', build, render, cuts: [0, b(2)] });
+  QR.scene({ id: 's5', build, render, cuts: [0, T.cut] });
 })();

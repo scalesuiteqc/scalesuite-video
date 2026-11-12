@@ -49,7 +49,15 @@ CUES = {
     9: {'commente': 55.84, 'cinqMinutes': (56.25, True), 'pis': 57.04},
 }
 PRE = {n: 0.08 for n in CHUNKS}
-POST = {1: 0.18, 2: 0.18, 3: 0.2, 4: 0.2, 5: 0.2, 6: 0.2, 7: 0.24, 8: 0.24, 9: 1.0}  # scene 9 keeps time for the final logo
+POST = {1: 1.1, 2: 0.6, 3: 0.5, 4: 0.2, 5: 1.0, 6: 0.2, 7: 0.24, 8: 0.24, 9: 1.0}
+# The five breaths (everything else stays tight):
+#   scene 1: 1,1 s after the voice for the bedroom shot (clock, three cards)
+#   scene 2: 0,45 s after « pour vrai? », 0,45 s after « Toi? », 0,6 s after « Ou ton équipe? » (POST)
+#   scene 3: 0,5 s after « …joindre le vendeur. » so that the 100× settles (POST)
+#   scene 4: 0,5 s after « Ce courtier là, ce devrait être toi. »
+#   scene 5: 0,6 s of complete silence on black before « Voici » (PRE), and 0,8 s held on the logo after the voice (POST)
+PRE[5] = 0.6
+BREATH = {(2, 2): 0.45, (2, 3): 0.45, (4, 4): 0.5}   # (scene, chunk index) → pause before that chunk, film seconds  # scene 9 keeps time for the final logo
 
 raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', SRC, '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True).stdout
 x = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768
@@ -71,9 +79,9 @@ def faded(a, b):
 timing, track, t0 = {}, [], 0.0
 for sc, chunks in CHUNKS.items():
     parts, src2loc, pos, prev = [], [], 0.0, None   # pos: seconds in the compacted scene BEFORE the speed-up
-    for a, b, g in chunks:
+    for ci, (a, b, g) in enumerate(chunks):
         if prev is not None:
-            gap = min(a - prev, GAP[g]) * SPEED    # so that the pause is at most GAP in film time
+            gap = BREATH.get((sc, ci), min(a - prev, GAP[g])) * SPEED    # so that the pause is at most GAP in film time
             parts.append(np.zeros(int(gap * SR), dtype=np.float32)); pos += gap
         src2loc.append((a - EDGE, b + EDGE, pos))
         y = faded(a, b); parts.append(y); pos += len(y) / SR; prev = b

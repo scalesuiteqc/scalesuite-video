@@ -216,9 +216,9 @@ ${mid}
   // ================================================================ close-up of the phone
   // Tight shot from above the nightstand: the phone has real volume (extruded edge, glass reflection)
   // and its lock screen lights up with a readable « Nouvelle demande » notification.
-  Q.phoneShot = (parent, W, H) => {
+  Q.phoneShot = (parent, W, H, zoom = 1) => {
     const id = 'pc' + uid++;
-    const cx = W / 2, cy = H * 0.535, S = Math.min(W / 540, H / 760) * 1.02;
+    const cx = W / 2, cy = H * 0.535, S = Math.min(W / 540, H / 760) * 1.02 * zoom;
     const M = `matrix(${(0.978 * S).toFixed(4)} ${(-0.129 * S).toFixed(4)} ${(0.208 * S).toFixed(4)} ${(0.606 * S).toFixed(4)} 0 0)`;
     const body = (dy, fill, extra = '') => `<g transform="translate(${cx} ${cy + dy}) ${M}"><rect x="-180" y="-370" width="360" height="740" rx="58" fill="${fill}" ${extra}/></g>`;
     let side = '';
@@ -247,7 +247,7 @@ ${mid}
 <rect y="${edge}" width="${W}" height="${H - edge}" fill="url(#${id}gl)" class="lit" data-o=".62" opacity="0"/>
 <rect y="${edge - 1.5}" width="${W}" height="3" fill="#1B2B3B"/>
 <g transform="translate(${cx + 26 * S} ${cy + 46 * S}) ${M}" filter="url(#${id}b22)"><rect x="-180" y="-370" width="360" height="740" rx="58" fill="#000" opacity=".75"/></g>
-<g transform="translate(${cx} ${cy + T * 0.6}) ${M}" filter="url(#${id}b22)" class="lit" data-o=".42" opacity="0"><rect x="-200" y="-390" width="400" height="780" rx="70" fill="#5FE9DC"/></g>
+<g transform="translate(${cx} ${cy + T * 0.6}) ${M}" filter="url(#${id}b22)" class="lit" data-o=".14" opacity="0"><rect x="-200" y="-390" width="400" height="780" rx="70" fill="#5FE9DC"/></g>
 ${side}
 ${body(0, '#0A0F16', 'stroke="#3B4D60" stroke-width="2.5"')}
 <g transform="translate(${cx} ${cy}) ${M}">

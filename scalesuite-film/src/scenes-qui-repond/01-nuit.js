@@ -8,21 +8,24 @@
 (function () {
   const SS = window.SS, Q = SS.Q, QR = SS.QR;
 
-  const b = QR.b; // beats → seconds (108 BPM)
+  // every cue comes from the voice (vo-timing.js); QR.sync also feeds the sync control
+  const cue = (w) => QR.sync('s1', w, QR.cue('s1', w));
+  const tu = cue('tuViens'), trois = cue('trois');
   const T = {
-    black: b(0.5),         // first word
-    wordGap: b(0.25),      // one word every quarter beat
-    wordDur: 0.38,         // focus-in of one word
-    firstDur: 0.5,         // focus-in of the first word (bigger, blurrier)
-    digit: b(0.5) + 4 * b(0.25), // the digit rolls 0 → 3 as its chip arrives
-    digitDur: 0.42,
-    cut: b(4),             // hard cut to the bedroom, on the beat
-    light: b(4), lightDur: 0.4, // the phone screen wakes up
-    clock: b(4) + 0.03, clockCps: 26,
-    cards: [b(4.5), b(5), b(5.5)], // cascade, on the half beats
-    cardDur: 0.5,
-    zoom: 0.03,            // slow push-in over the whole shot
+    night: cue('deuxHeures'),   // « 2 h du matin. » centred, on those words
+    nightOut: tu - 0.2,
+    // « Tu viens de recevoir [3] demandes de vendeurs. »: one word after the other, the chip ON « trois »
+    words: [tu, tu + 0.16, tu + 0.3, tu + 0.42, trois, trois + 0.28, trois + 0.55, trois + 0.66],
+    wordDur: 0.34,
+    digitDur: 0.36,
+    cut: trois + 0.95,          // hard cut to the bedroom as the sentence ends
+    lightDur: 0.35,
+    clockCps: 30,
+    cardGaps: [0.12, 0.36, 0.6], // cascade after the cut
+    cardDur: 0.46,
+    zoom: 0.03,
   };
+  T.light = T.cut; T.clock = T.cut + 0.03; T.cards = T.cardGaps.map((g) => T.cut + g); T.digit = trois;
 
   const WORDS = ['Tu', 'viens', 'de', 'recevoir', '#', 'demandes', 'de', 'vendeurs.'];
   const L = Q.pick(
@@ -40,10 +43,11 @@
     // ---- a) the sentence
     const a = Q.div(layer, 'layer');
     Q.night(a);
+    const night = Q.phrase(a, [[{ t: '2 h du matin.' }]], { size: L.size, weight: 700 });
     const group = Q.div(a, 'qr-abs', { width: '0', height: '0' });
     const gap = L.size * 0.25;
     const words = WORDS.map((w) => {
-      const el = Q.div(group, 'qr-abs', { fontSize: L.size + 'px', fontWeight: 600, letterSpacing: '-.025em', lineHeight: 1.16, whiteSpace: 'nowrap', color: Q.C.white });
+      const el = Q.div(group, 'qr-abs', { fontSize: L.size + 'px', fontWeight: 700, letterSpacing: '-.025em', lineHeight: 1.16, whiteSpace: 'nowrap', color: Q.C.white });
       let fig = null;
       if (w === '#') {
         Object.assign(el.style, { width: L.size * 1.02 + 'px', height: L.size * 1.26 + 'px', background: Q.C.turq, borderRadius: L.size * 0.16 + 'px', overflow: 'hidden' });
@@ -63,7 +67,7 @@
     clock.el.style.letterSpacing = '-.045em';
     clock.el.style.textShadow = '0 0 70px rgba(63,211,198,.35), 0 0 22px rgba(63,211,198,.18)';
     const cards = L.cards.map((c) => Object.assign({ el: Q.card(b, c) }, c));
-    R = { a, b, group, words, gap, world, room, vign, clock, cards };
+    R = { a, b, night, group, words, gap, world, room, vign, clock, cards };
   }
 
   function render(u) {
@@ -72,21 +76,18 @@
     R.b.style.display = sentence ? 'none' : '';
 
     if (sentence) {
-      // layout progress of each word drives the centring; its own focus-in is a little longer
-      const lay = R.words.map((w, i) => Q.k(u, T.black + i * T.wordGap, 0.3, Q.E.out));
+      R.night.put(Q.CX, L.y, u, { at: [T.night], out: T.nightOut, outDur: 0.18 });
+      // layout progress of each word drives the centring
+      const lay = R.words.map((w, i) => Q.k(u, T.words[i], 0.26, Q.E.out));
       const total = R.words.reduce((s, w, i) => s + (w.w + R.gap) * lay[i], 0) - R.gap * lay[lay.length - 1];
       let x = -total / 2;
       R.words.forEach((w, i) => {
-        const at = T.black + i * T.wordGap, first = i === 0;
-        const k = Q.k(u, at, first ? T.firstDur : T.wordDur, Q.E.out);
-        const cx = x + (w.w * lay[i]) / 2 + (w.w * (1 - lay[i])) / 2;
-        Q.st(w.el, { x: cx, y: 0, s: Q.lerp(first ? 1.6 : 1.15, 1, k), o: Q.k(u, at, first ? 0.3 : 0.22, Q.E.sine), blur: Q.lerp(first ? 22 : 12, 0, k) });
+        const at = T.words[i], k = Q.k(u, at, T.wordDur, Q.E.out);
+        Q.st(w.el, { x: x + w.w / 2, y: 0, s: Q.lerp(1.15, 1, k), o: Q.k(u, at, 0.16, Q.E.sine), blur: Q.lerp(12, 0, k) });
         if (w.fig) w.fig.roll(u, T.digit, T.digitDur, 0);
         x += (w.w + R.gap) * lay[i];
       });
-      // the whole line eases back a touch while it builds (camera settling)
-      const z = Q.lerp(1.1, 1, Q.k(u, T.black, 1.6, Q.E.soft));
-      R.group.style.transform = `translate(${Q.CX}px,${L.y}px) scale(${z.toFixed(4)})`;
+      R.group.style.transform = `translate(${Q.CX}px,${L.y}px)`;
       return;
     }
 
@@ -116,5 +117,5 @@
     });
   }
 
-  QR.scene({ id: 's1', build, render, cuts: [0, T.cut] });
+  QR.scene({ id: 's1', build, render, cuts: [0, T.words[0], T.cut] });
 })();
