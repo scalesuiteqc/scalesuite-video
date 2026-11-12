@@ -11,7 +11,8 @@ export async function openFilmQR(browser, base, format = '16x9', scale = 1, shot
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.error('[page error]', e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.error('[console]', m.text()); });
-  await page.goto(`${base}/index-qui-repond.html?format=${format}`);
+  // QR_QUERY=client=0 node render/stills-qui-repond.mjs …  → extra page parameters (content variants)
+  await page.goto(`${base}/index-qui-repond.html?format=${format}${process.env.QR_QUERY ? '&' + process.env.QR_QUERY : ''}`);
   await page.waitForFunction(() => window.SS && (window.SS.ready || window.SS.error), null, { timeout: 60000 });
   const err = await page.evaluate(() => window.SS.error);
   if (err) throw new Error(err);

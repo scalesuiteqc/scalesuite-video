@@ -23,6 +23,9 @@
     clientName: true, // scene 8: true = « pour Groupe Mackay », false = « pour une de nos équipes clientes »
   };
 
+  // ?client=0 in the page address renders the variant without the client's name (see QR_QUERY in lib-qui-repond.mjs)
+  if (new URLSearchParams(location.search).get('client') === '0') QR.OPT.clientName = false;
+
   QR.ORDER = Object.keys(QR.DUR);
   QR.START = {};
   let t = 0;
