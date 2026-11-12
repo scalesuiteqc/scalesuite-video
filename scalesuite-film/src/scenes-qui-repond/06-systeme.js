@@ -30,7 +30,7 @@
     // 3
     night: 5.5, confirm: 5.98,
     // 4
-    list: 8.5, typeOne: 8.7, sendOne: 8.98, joint: 9.3,
+    scroll: 8.3, list: 8.55, typeOne: 8.75, sendOne: 9.02, joint: 9.34,
     // 5
     frame: 11.3, frameDur: 0.7, lock: 11.95,
     out: 12.9,
@@ -40,8 +40,9 @@
     pageTeam: 'ÉQUIPE EXEMPLE', pageTitle: 'Vendez votre propriété avec l’Équipe Exemple',
     fields: [['Adresse', '45 rue Exemple, Laval'], ['Nom', 'Paul Fictif'], ['Téléphone', '450 555 0142']], pageBtn: 'Envoyer ma demande',
     pageTime: '14 h 05',
-    alertFrom: 'ScaleSuite', alertTime: '14 h 06', alertStamp: 'Aujourd’hui 14 h 06',
-    alert: 'Nouvelle demande de vendeur.<br>Paul Fictif, Laval<br>450 555 0142',
+    // the alert leaves from the team's own number (Twilio): no mention of ScaleSuite in any text
+    alertFrom: 'Équipe Exemple', alertTime: '14 h 06', alertStamp: 'Aujourd’hui 14 h 06',
+    alert: 'Nouvelle demande de vendeur.<br>Paul Fictif, Laval<br>450 555 0142<span class="sp"></span>Après l’appel, répondez :<br>1\u00a0Joint, 2\u00a0Pas\u00a0de\u00a0réponse, 3\u00a0Plus\u00a0tard, 4\u00a0Rencontre, 5\u00a0Hors\u00a0cible',
     replyTime: '14 h 10', reply: '1',
     confirmFrom: 'Équipe Exemple', confirmTime: '2 h 14', confirmStamp: 'Aujourd’hui 2 h 14',
     confirm: 'Bonjour Marie, votre demande est bien reçue. Un courtier de l’Équipe Exemple communiquera avec vous.',
@@ -58,8 +59,8 @@
   ];
   const L = Q.pick(
     // phones are framed tight and cut by the bottom of the frame (ps = scale of the front phone)
-    { tx: 200, ty: 540, size: 62, ps: 1.3, ps4: 1.0, top: 176, front: { x: 1420 }, back: { x: 1565 }, front4: { x: 1560 }, off: 2250, backS: 0.8,
-      ad: { x: 1400, y: 470, s: 1.12 }, list: { x: 1254, y: 762, s: 1.15 }, list5: { x: 1390, y: 548, s: 1.25 }, tag: 28 },
+    { tx: 200, ty: 540, size: 62, ps: 1.3, ps4: 1.15, top: 176, front: { x: 1420 }, back: { x: 1565 }, front4: { x: 1516 }, off: 2250, backS: 0.8,
+      ad: { x: 1400, y: 470, s: 1.12 }, list: { x: 1238, y: 772, s: 1.1 }, list5: { x: 1390, y: 548, s: 1.25 }, tag: 28 },
     { tx: 70, ty: 430, size: 54, ps: 1.3, ps4: 1.1, top: 760, front: { x: 540 }, back: { x: 760 }, front4: { x: 720 }, off: 1500, backS: 0.8,
       ad: { x: 540, y: 1000, s: 1.3 }, list: { x: 400, y: 1380, s: 1.2 }, list5: { x: 540, y: 1180, s: 1.4 }, tag: 30 },
   );
@@ -71,7 +72,8 @@
     const scr = el.querySelector('.scr');
     return { el, scr, tm: el.querySelector('.tm'), view: (cls, html) => { const v = SS.el('div', 'view ' + cls, scr); v.innerHTML = html; return v; } };
   }
-  const msgView = (from, stamp, inp) => `<div class="hd"><span class="av">${from[0]}</span>${from}</div><div class="st">${stamp}</div>${inp ? '<div class="inp"><span class="tx"></span></div>' : ''}`;
+  const msgView = (from, stamp, inp) => `<div class="hd"><span class="av">${from[0]}</span>${from}</div><div class="th"><div class="thi"><div class="st">${stamp}</div></div></div>${inp ? '<div class="inp"><span class="tx"></span></div>' : ''}`;
+  const BUB_TOP = 54; // first bubble, under the date stamp
 
   let R;
   function build(layer) {
@@ -84,12 +86,16 @@
       COPY.fields.map((f) => `<div class="lb">${f[0]}</div><div class="fd"><span></span></div>`).join('') + `<div class="btn">${COPY.pageBtn}</div>`);
     const fds = [...page.querySelectorAll('.fd span')], btn = page.querySelector('.btn');
     const conf = A.view('qr-msg', msgView(COPY.confirmFrom, COPY.confirmStamp, false));
-    const confBub = SS.el('div', 'bub', conf); confBub.innerHTML = COPY.confirm; confBub.style.top = '142px';
+    const confBub = SS.el('div', 'bub', conf.querySelector('.thi')); confBub.innerHTML = COPY.confirm; confBub.style.top = BUB_TOP + 'px';
     // ---- broker's phone: the alert, then the reply
     const Bp = phone(layer);
     const al = Bp.view('qr-msg', msgView(COPY.alertFrom, COPY.alertStamp, true));
-    const alBub = SS.el('div', 'bub', al); alBub.innerHTML = COPY.alert; alBub.style.top = '142px';
-    const one = SS.el('div', 'bub out', al); one.textContent = COPY.reply; one.style.top = '282px';
+    const thi = al.querySelector('.thi');
+    const alBub = SS.el('div', 'bub', thi); alBub.innerHTML = COPY.alert; alBub.style.top = BUB_TOP + 'px';
+    const alH = alBub.offsetHeight;
+    const one = SS.el('div', 'bub out', thi); one.textContent = COPY.reply; one.style.top = BUB_TOP + alH + 12 + 'px';
+    // when the broker replies, the thread scrolls: the code menu stays visible right above the « 1 »
+    const scroll = Math.max(0, BUB_TOP + alH - 118);
     const inp = al.querySelector('.inp .tx');
     // labels above the phones
     const lab = (t) => Q.div(layer, 'qr-abs', { fontSize: L.tag + 'px', fontWeight: 700, letterSpacing: '-.01em', color: '#4E6B68', whiteSpace: 'nowrap' }, t);
@@ -112,17 +118,18 @@
       <div class="tt" style="position:absolute;left:32px;top:26px;font-size:28px;font-weight:780;letter-spacing:-.02em;color:#0A6A61;white-space:nowrap">${COPY.team}</div>
       <div class="lk" style="position:absolute;right:28px;top:20px;width:48px;height:48px;border-radius:14px;background:${Q.C.turq};display:grid;place-items:center"><span style="width:28px;height:28px;display:block">${SS.icon.lock('#04211E')}</span></div>`;
     layer.insertBefore(frame, list);
-    R = { texts, A, Bp, page, conf, confBub, al, alBub, one, inp, fds, btn, labA, labB, ad, ripple, list, tags, frame,
+    R = { texts, A, Bp, page, conf, confBub, al, alBub, one, inp, thi, scroll, fds, btn, labA, labB, ad, ripple, list, tags, frame,
       fr: frame.querySelector('rect'), ftt: frame.querySelector('.tt'), flk: frame.querySelector('.lk'), lh: lr.height, FH };
   }
 
   const mix = (a, b, k) => ({ x: Q.lerp(a.x, b.x, k), y: Q.lerp(a.y, b.y, k) });
   // a phone hangs from its top edge (L.top): whatever its scale, the status bar stays in the frame
-  function place(p, lab, x, dy, ps, f, extraO) {
+  // (speed: px travelled since the previous frame → motion blur on the long entrances and exits)
+  function place(p, lab, x, dy, ps, f, extraO, speed) {
     const s = Q.lerp(L.backS, 1, f) * ps, top = L.top + (1 - f) * 34 + dy;
-    Q.st(p.el, { x, y: top + 370 * s, s, o: Q.lerp(0.72, 1, f) * extraO, blur: (1 - f) * 4 });
+    Q.st(p.el, { x, y: top + 370 * s, s, o: Q.lerp(0.72, 1, f) * extraO, blur: (1 - f) * 4 + Math.min(7, speed * 0.16) });
     p.el.style.zIndex = f > 0.5 ? 3 : 2;
-    Q.st(lab, { x, y: top - 30, o: Q.clamp((f - 0.6) / 0.4) * extraO });
+    Q.st(lab, { x, y: top - 30, o: Q.clamp((f - 0.88) / 0.12) * extraO * (speed > 6 ? 0 : 1 - speed / 6) });
   }
 
   function render(u) {
@@ -138,16 +145,20 @@
     Q.st(R.ripple, { x: L.ad.x - 40, y: L.ad.y + 14, s: Q.lerp(0.2, 1.4, rp), o: u < T.tap ? 0 : 0.9 * (1 - rp) });
 
     // ---- phones: front factor of each (1 = front, sharp ; 0 = back, small and soft)
-    const s2 = Q.k(u, B[1], T.swap, Q.E.inOut), s3 = Q.k(u, B[2], T.swap, Q.E.inOut), s4 = Q.k(u, B[3], T.swap, Q.E.inOut);
-    const fA = 1 - s2 + s3, fB = 1 - s3 + s4;
-    const aIn = Q.k(u, T.phone, 0.62, Q.E.springSoft), aExit = Q.k(u, B[3], 0.5, Q.E.in);
-    let xA = Q.lerp(L.back.x, L.front.x, fA);
-    xA += aExit * (L.off - xA);
-    place(R.A, R.labA, xA, (1 - aIn) * 1000, L.ps, fA, u < T.phone ? 0 : 1);
-    const bIn = Q.k(u, B[1] + 0.04, 0.66, Q.E.out), bExit = Q.k(u, B[4], 0.46, Q.E.in);
-    let xB = Q.lerp(L.back.x, Q.lerp(L.front.x, L.front4.x, s4), fB);
-    xB += (1 - bIn) * (L.off - xB) + bExit * (L.off - xB);
-    place(R.Bp, R.labB, xB, 0, Q.lerp(L.ps, L.ps4, s4), fB, u < B[1] ? 0 : 1);
+    const phones = (v) => {
+      const s2 = Q.k(v, B[1], T.swap, Q.E.inOut), s3 = Q.k(v, B[2], T.swap, Q.E.inOut), s4 = Q.k(v, B[3], T.swap, Q.E.inOut);
+      const fA = 1 - s2 + s3, fB = 1 - s3 + s4;
+      const aIn = Q.k(v, T.phone, 0.62, Q.E.springSoft), aExit = Q.k(v, B[3], 0.5, Q.E.in);
+      let xA = Q.lerp(L.back.x, L.front.x, fA);
+      xA += aExit * (L.off - xA);
+      const bIn = Q.k(v, B[1] + 0.04, 0.66, Q.E.out), bExit = Q.k(v, B[4], 0.46, Q.E.in);
+      let xB = Q.lerp(L.back.x, Q.lerp(L.front.x, L.front4.x, s4), fB);
+      xB += (1 - bIn) * (L.off - xB) + bExit * (L.off - xB);
+      return { fA, fB, xA, dyA: (1 - aIn) * 1000, xB, psB: Q.lerp(L.ps, L.ps4, s4) };
+    };
+    const p = phones(u), q = phones(u - 1 / 30);
+    place(R.A, R.labA, p.xA, p.dyA, L.ps, p.fA, u < T.phone ? 0 : 1, Math.hypot(p.xA - q.xA, p.dyA - q.dyA));
+    place(R.Bp, R.labB, p.xB, 0, p.psB, p.fB, u < B[1] ? 0 : 1, Math.abs(p.xB - q.xB));
 
     // seller's phone: day page, then the night conversation
     const night = u >= T.night;
@@ -169,6 +180,7 @@
     R.alBub.style.transform = `scale(${Q.lerp(0.5, 1, ka).toFixed(4)})`;
     R.alBub.style.opacity = Q.k(u, T.alert, 0.14, Q.E.sine).toFixed(3);
     R.inp.textContent = u >= T.typeOne && u < T.sendOne ? COPY.reply : '';
+    R.thi.style.transform = `translateY(${(-R.scroll * Q.k(u, T.scroll, 0.5, Q.E.inOut)).toFixed(2)}px)`;
     const ko = Q.k(u, T.sendOne, 0.42, Q.E.spring);
     R.one.style.transform = `scale(${Q.lerp(0.4, 1, ko).toFixed(4)})`;
     R.one.style.opacity = Q.k(u, T.sendOne, 0.12, Q.E.sine).toFixed(3);

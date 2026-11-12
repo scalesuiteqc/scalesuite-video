@@ -15,7 +15,7 @@
     s6: 13.2,  // the system, five messages
     s7: 3.8,   // weekly report
     s8: 4.2,   // proof
-    s9: 4.6,   // call to action
+    s9: 5.0,   // call to action, final logo
   };
 
   // Content switches

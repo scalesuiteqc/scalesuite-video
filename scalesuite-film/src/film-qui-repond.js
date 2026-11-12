@@ -17,6 +17,7 @@
     const last = QR.scenes[QR.scenes.length - 1];
 
     SS.renderFrame = (t) => {
+      Q.ambient(t);
       for (const s of QR.scenes) {
         const on = t >= s.t0 && (t < s.t1 || (s === last && t <= s.t1 + 1e-6));
         s.layer.style.display = on ? '' : 'none';

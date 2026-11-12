@@ -58,22 +58,37 @@
   Q.div = (parent, cls, css) => { const e = SS.el('div', cls || 'qr-abs', parent); if (css) Object.assign(e.style, css); return e; };
 
   // ---- Night backdrop: near-black blue with a soft vignette -----------------------------------------
+  // Ambient layer: two very soft lights drift slowly behind everything (a function of the film time
+  // only, so two layers showing the same backdrop are identical at a cut).
+  Q.ambients = [];
+  const ambient = (bg, a, b) => {
+    const mk = (c) => Q.div(bg, 'qr-abs', { width: Q.W * 0.62 + 'px', height: Q.W * 0.62 + 'px', background: `radial-gradient(closest-side, ${c} 0%, rgba(0,0,0,0) 100%)` });
+    Q.ambients.push([mk(a), mk(b)]);
+  };
+  Q.ambient = (t) => Q.ambients.forEach(([a, b]) => {
+    a.style.transform = `translate(${(Q.W * 0.26 + Math.sin(t * 0.23 + 0.4) * Q.W * 0.045).toFixed(1)}px,${(Q.H * 0.3 + Math.cos(t * 0.19) * Q.H * 0.06).toFixed(1)}px) translate(-50%,-50%)`;
+    b.style.transform = `translate(${(Q.W * 0.76 + Math.cos(t * 0.21 + 1.3) * Q.W * 0.045).toFixed(1)}px,${(Q.H * 0.72 + Math.sin(t * 0.17 + 0.8) * Q.H * 0.06).toFixed(1)}px) translate(-50%,-50%)`;
+  });
   Q.night = (layer) => {
     layer.style.background = Q.C.night;
-    return Q.div(layer, 'layer', { background: `radial-gradient(120% 120% at 50% 46%, ${Q.C.night2} 0%, ${Q.C.night} 46%, #03060A 100%)` });
+    const bg = Q.div(layer, 'layer', { background: `radial-gradient(120% 120% at 50% 46%, ${Q.C.night2} 0%, ${Q.C.night} 46%, #03060A 100%)` });
+    ambient(bg, 'rgba(43,191,179,.075)', 'rgba(47,176,222,.07)');
+    return bg;
   };
 
   // ---- Light backdrop (solution scenes): pale turquoise, lighter in the centre -----------------------
   Q.day = (layer) => {
     layer.style.background = Q.C.mint;
-    return Q.div(layer, 'layer', { background: `radial-gradient(95% 105% at 50% 44%, ${Q.C.off} 0%, ${Q.C.mint} 58%, #D6F2EE 100%)` });
+    const bg = Q.div(layer, 'layer', { background: `radial-gradient(95% 105% at 50% 44%, ${Q.C.off} 0%, ${Q.C.mint} 58%, #D6F2EE 100%)` });
+    ambient(bg, 'rgba(255,255,255,.75)', 'rgba(43,191,179,.13)');
+    return bg;
   };
 
   // ---- Multi-line text block, left-aligned (light scenes) ---------------------------------------------
   // lines: [[{t: 'Google Ads amène'}], [{t: 'sur la page de ton équipe', chip: true}, {t: '.', glue: true}]]
   // Words come into focus one after the other; behind a key phrase the chip unfolds from left to right.
   Q.block = (parent, lines, opt) => {
-    const o = Object.assign({ size: 62, weight: 650, color: Q.C.ink, lh: 1.3, st: 0.055 }, opt);
+    const o = Object.assign({ size: 62, weight: 650, color: Q.C.ink, lh: 1.3, st: 0.042 }, opt); // stagger: a whole sentence in about half a second
     const root = Q.div(parent, 'qr-abs qr-block', { fontSize: o.size + 'px', fontWeight: o.weight, color: o.color, lineHeight: o.lh });
     const seq = []; // reading order: words, each chip registered at its first word
     lines.forEach((segs) => {

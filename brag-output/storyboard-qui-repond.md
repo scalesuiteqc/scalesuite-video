@@ -3,7 +3,7 @@
 Vidéo promo du Système Vendeurs 5 minutes · français (Québec), tutoiement · 30 i/s
 Fichiers : suffixe `qui-repond` partout (sources et sorties). Aucun fichier existant n'est modifié.
 
-- **Export A (à filmer)** : 1920 × 1080, scènes 1 à 9, **49,2 s**, sans bandeau, marges généreuses.
+- **Export A (à filmer)** : 1920 × 1080, scènes 1 à 9, **49,6 s**, sans bandeau, marges généreuses.
 - **Export B (direct)** : 1080 × 1920, mise en page verticale refaite, bandeau épinglé en scène 9, sous titres.
 - La scène 0 (face caméra, 3 s) est filmée par Mathieu. Les temps ci dessous partent de 0 au début de
   la scène 1 ; ajouter 3 s pour retrouver les temps du brief.
@@ -85,11 +85,12 @@ personnage.
 | 6 · Le système | 23,4 – 36,6 | 13,2 s | Cinq messages (détail plus bas) | Fond turquoise pâle. Texte à gauche, interface à droite qui glisse et se construit. La seconde partie de chaque phrase reçoit la puce. | Les demandes de la liste deviennent les pastilles de l'entonnoir. |
 | 7 · Compte rendu | 36,6 – 40,4 | 3,8 s | « Chaque semaine, [un compte rendu écrit]. » | Feuille « Compte rendu de la semaine » avec un entonnoir en pastilles : « 24 Demandes », flèche, « 19 Joints », flèche, « 7 Rencontres ». Flèches sans pourcentage. Étiquette « Exemple » bien visible. | Iris qui se referme : retour à la nuit. |
 | 8 · La preuve | 40,4 – 44,6 | 4,2 s | « 124 » + « demandes générées pour Groupe Mackay en moins de 7 mois. » + « [54 $] de budget Google Ads par demande en moyenne. » | Fond nuit, cartes floues en arrière plan, compteur mécanique jusqu'à 124. Variante sans le nom (« pour une de nos équipes clientes ») par la constante `QR.OPT.clientName`. | La lumière s'ouvre depuis le centre vers la scène 9. |
-| 9 · Appel à l'action | 44,6 – 49,2 | 4,6 s | « Commente [5 MINUTES]. » puis « Je te prépare le Diagnostic de ton secteur. » puis logo + « On livre, ou le mois est gratuit. » | **Fond menthe `#E8F9F7`, comme le site** : la lumière s'ouvre depuis le centre (même transition qu'en scène 5). Champ de commentaire générique où « 5 MINUTES » se tape, réponse en carte, logo final dans sa version fond clair (« Scale » en noir). Export B seulement : bandeau blanc épinglé en haut. | Fin. |
+| 9 · Appel à l'action | 44,6 – 49,6 | 5,0 s | « Commente [5 MINUTES]. » puis « Je te prépare le Diagnostic de ton secteur. » puis logo + « On livre, ou le mois est gratuit. » | **Fond menthe `#E8F9F7`, comme le site** : la lumière s'ouvre depuis le centre (même transition qu'en scène 5). Champ de commentaire générique où « 5 MINUTES » se tape, réponse en carte, logo final dans sa version fond clair (« Scale » en noir). Export B seulement : bandeau blanc épinglé en haut. | Fin. |
 
-Durées : 3,9 · 4,3 · 4,8 · 7,2 · 3,2 · 13,2 · 3,8 · 4,2 · 4,6 = **49,2 s** (table `QR.DUR` dans
+Durées : 3,9 · 4,3 · 4,8 · 7,2 · 3,2 · 13,2 · 3,8 · 4,2 · 5,0 = **49,6 s** (table `QR.DUR` dans
 `scenes-qui-repond/00-timing.js`). La scène 4 est passée de 6,6 à 7,2 s pour que chacune de ses trois
-phrases reste lisible environ 0,9 s après la frappe.
+phrases reste lisible environ 0,9 s après la frappe. La scène 9 est passée de 4,6 à 5,0 s pour tenir le
+logo final et sa promesse environ 1,2 s.
 
 ### Scène 6 en détail
 
@@ -113,11 +114,14 @@ dans l'objet `COPY` de `06-systeme.js`) :
 - Page (vouvoiement, titre neutre, aucune offre d'évaluation gratuite) : « ÉQUIPE EXEMPLE », « Vendez
   votre propriété avec l'Équipe Exemple », champs Adresse, Nom, Téléphone, bouton « Envoyer ma
   demande ». Heure du cellulaire : 14 h 05.
-- Texto d'alerte au courtier (14 h 06, expéditeur « ScaleSuite ») : « Nouvelle demande de vendeur.
-  Paul Fictif, Laval. 450 555 0142 »
+- Texto d'alerte au courtier (14 h 06, expéditeur « Équipe Exemple », avatar « É » : l'alerte part du
+  numéro Twilio de l'équipe, aucune mention de ScaleSuite dans les textos) : « Nouvelle demande de
+  vendeur. Paul Fictif, Laval. 450 555 0142. Après l'appel, répondez : 1 Joint, 2 Pas de réponse,
+  3 Plus tard, 4 Rencontre, 5 Hors cible »
 - Texto au vendeur (2 h 14, expéditeur « Équipe Exemple ») : « Bonjour Marie, votre demande est bien
   reçue. Un courtier de l'Équipe Exemple communiquera avec vous. » (aucun délai promis)
-- Réponse du courtier : « 1 » (14 h 10). La ligne de Paul Fictif passe à « Joint ».
+- Réponse du courtier : « 1 » (14 h 10). La conversation défile : le menu de codes reste visible juste
+  au dessus du « 1 ». La ligne de Paul Fictif passe à « Joint ».
 - Liste « Demandes » : Paul Fictif, Laval, « Joint » ; Marie Exemple, Sainte Julie, « Pas de
   réponse » ; Jean Démo, Lévis, « Rencontre ». Aucune colonne de délai, aucun classement.
 - Message 5 : la liste entre dans un cadre « Équipe Exemple » qui se ferme, avec un cadenas.
@@ -174,7 +178,7 @@ Trois lignes hiérarchisées, sans point médian : petite étiquette « Nouvelle
 
 ## Choix validés
 
-1. Durée d'environ 48 s : 49,2 s après la nouvelle intro et l'allongement de la scène 4.
+1. Durée d'environ 48 s : 49,6 s après la nouvelle intro et l'allongement des scènes 4 et 9.
 2. Carte « 18 % » retirée.
 3. Tout est généré dans la page : aucune photo, aucun personnage.
 4. Interfaces de la scène 6 : brouillons marqués « à confirmer » en attendant les captures. Texte
